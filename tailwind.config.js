@@ -12,7 +12,7 @@ export default {
     },
     colors: { ...colors },
     fontFamily: {
-      headings: ["Roboto Condensed", "sans-serif"],
+      headings: ["Barlow", "sans-serif"],
       plainText: ["Work Sans", "sans-serif"],
     },
     extend: {},
