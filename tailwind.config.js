@@ -11,6 +11,10 @@ export default {
       xl: "1440px",
     },
     colors: { ...colors },
+    fontFamily: {
+      headings: ["Roboto Condensed", "sans-serif"],
+      plainText: ["Work Sans", "sans-serif"],
+    },
     extend: {},
   },
   plugins: [],

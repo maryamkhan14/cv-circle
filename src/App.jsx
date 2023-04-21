@@ -1,9 +1,7 @@
-import { useState } from "react";
+import Navbar from "./components/Navbar";
 
 function App() {
-  return (
-    <div className="App bg-slate-500 text-yellow-400 w-screen h-screen"></div>
-  );
+  return <div className="App  w-screen h-screen flex"></div>;
 }
 
 export default App;
