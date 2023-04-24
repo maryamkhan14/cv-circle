@@ -2,6 +2,7 @@
 const colors = require("tailwindcss/colors");
 
 export default {
+  mode: "jit",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     screens: {
@@ -12,8 +13,8 @@ export default {
     },
     colors: { ...colors },
     fontFamily: {
-      headings: ["Barlow", "sans-serif"],
-      plainText: ["Work Sans", "sans-serif"],
+      headings: ["Work Sans", "sans-serif"],
+      plainText: ["Barlow", "sans-serif"],
     },
     extend: {},
   },
