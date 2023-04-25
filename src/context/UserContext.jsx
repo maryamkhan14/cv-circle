@@ -6,7 +6,12 @@ export const userContextReducer = (state, action) => {
     case "USER_SIGNED_IN":
       return {
         ...state,
-        user: { ...state.user, ...action.payload },
+        user: { ...state.user, ...action.payload.user },
+      };
+    case "USER_SIGNED_OUT":
+      return {
+        ...state,
+        user: {},
       };
     default:
       return state;

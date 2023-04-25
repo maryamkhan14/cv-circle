@@ -43,8 +43,15 @@ router.get(
   })
 );
 
-router.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect(process.env.FRONTEND_URL);
+router.post("/logout", function (req, res) {
+  req.sessionStore.clear((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).clearCookie("connect.sid", {
+      path: "/",
+    });
+    res.send({ status: res.statusCode });
+  });
 });
 module.exports = router;

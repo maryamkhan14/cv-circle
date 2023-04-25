@@ -9,7 +9,6 @@ const app = express();
 
 app.use(
   expressSession({
-    name: "test",
     secret: "keyboard cat",
     keys: ["lama"],
     maxAge: 24 * 60 * 60 * 100,

@@ -23,6 +23,10 @@ const LoggedIn = () => {
       })
       .then((resObject) => {
         dispatch({ type: "USER_SIGNED_IN", payload: { ...resObject.user } });
+        sessionStorage.setItem("uname", resObject.user.user.name);
+        sessionStorage.setItem("uid", resObject.user.user.id);
+        sessionStorage.setItem("email", resObject.user.user.email);
+        sessionStorage.setItem("profilePic", resObject.user.user.profilePic);
       })
       .catch((err) => {
         console.log(err);

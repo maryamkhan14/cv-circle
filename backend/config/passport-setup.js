@@ -21,6 +21,7 @@ passport.use(
           name: profile.displayName,
           id: profile.id,
           profilePic: profile.photos[0].value,
+          email: profile.emails[0].value,
         },
       });
     }
@@ -40,6 +41,7 @@ passport.use(
           name: profile.displayName,
           id: profile.id,
           profilePic: profile.photos[0].value,
+          email: profile.emails[0].value,
         },
       });
     }
