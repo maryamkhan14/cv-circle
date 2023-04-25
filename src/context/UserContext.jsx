@@ -4,7 +4,6 @@ export const UserContext = createContext();
 export const userContextReducer = (state, action) => {
   switch (action.type) {
     case "USER_SIGNED_IN":
-      console.log("received", action.payload);
       return {
         ...state,
         user: { ...state.user, ...action.payload },

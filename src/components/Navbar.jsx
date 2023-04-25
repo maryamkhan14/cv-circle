@@ -1,8 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const [hidden, setHidden] = useState(true);
+  const { user } = useContext(UserContext);
+
   return (
     <div className="bg-slate-50 flex p-7 flex-col md:flex-row justify-between items-center gap-5 shadow-md w-full ">
       <span className="flex items-center gap-3">
@@ -61,13 +64,23 @@ const Navbar = () => {
           </div>
         )}
       </div>
+
       <div
         className={`${
           hidden ? "hidden" : "flex"
         } md:flex flex-col md:flex-row items-center gap-5 md: gap-10`}
       >
-        <Link to="/login">Log in</Link>
-        <Link to="/signup">Sign up</Link>
+        {Object.keys(user).length > 0 ? (
+          <>
+            <Link to="/">Welcome, {user.user.name}!</Link>
+            <Link to="/">Log out</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Log in</Link>
+            <Link to="/signup">Sign up</Link>
+          </>
+        )}
       </div>
     </div>
   );

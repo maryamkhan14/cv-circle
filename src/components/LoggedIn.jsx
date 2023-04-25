@@ -5,7 +5,6 @@ import { UserContext } from "../context/UserContext";
 
 const LoggedIn = () => {
   const { user, dispatch } = useContext(UserContext);
-
   const navigate = useNavigate();
   const BaseURL = "http://localhost:5000/auth/success";
   const getUser = () => {
