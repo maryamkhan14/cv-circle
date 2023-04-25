@@ -1,18 +1,11 @@
 const passport = require("passport");
-const GithubStrategy = require("passport-github2");
+const GithubStrategy = require("passport-github2").Strategy;
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-
-passport.deserializeUser((id, done) => {
-  User.findById(id)
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((e) => {
-      done(new Error("Failed to deserialize an user"));
-    });
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 passport.use(
   new GithubStrategy(
@@ -28,3 +21,11 @@ passport.use(
     }
   )
 );
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});

@@ -2,12 +2,25 @@ const router = require("express").Router();
 const passport = require("passport");
 const passportSetup = require("../config/passport-setup");
 
+router.get("/auth/success", (req, res) => {
+  if (req.user) {
+    console.log("req");
+    console.log("got this far");
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: req.user,
+    });
+  } else {
+  }
+});
 router.get(
   "/github/signup",
   passport.authenticate("github", { scope: ["user"] })
 );
 
-router.get("/github/redirect", (req, res, next) => {
+/**
+router.get(process.env.GITHUB_CALLBACK_URL, (req, res, next) => {
   passport.authenticate(
     "github",
     { failureRedirect: "/github/error" },
@@ -31,5 +44,18 @@ router.get("/github/redirect", (req, res, next) => {
     }
   )(req, res, next);
 });
-router.get("/login");
+*/
+
+router.get(
+  process.env.GITHUB_CALLBACK_URL,
+  passport.authenticate("github", {
+    successRedirect: process.env.FRONTEND_URL,
+    failureRedirect: "/login/failed",
+  })
+);
+
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect(CLIENT_URL);
+});
 module.exports = router;
