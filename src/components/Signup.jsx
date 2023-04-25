@@ -1,44 +1,11 @@
 import React from "react";
-import axios from "axios";
-import { useEffect, useState } from "react";
 const Signup = () => {
-  const [user, setUser] = useState({});
-  const BaseURL = "http://localhost:5000/auth/success";
-  useEffect(() => {
-    const getUser = () => {
-      fetch(BaseURL, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) return response.json();
-          throw new Error("authentication has been failed!");
-        })
-        .then((resObject) => {
-          console.log(resObject);
-          setUser(resObject.user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getUser();
-  }, []);
   const signUpWithGithub = () => {
     window.location = "http://localhost:5000/github/signup";
   };
   const signUpWithGoogle = () => {
     window.location = "http://localhost:5000/google/signup";
   };
-  const signUpWithLinkedIn = () => {
-    window.location = "http://localhost:5000/linkedin/signup";
-  };
-
   return (
     <div className="flex items-stretch md:items-center justify-center w-full h-full">
       <div className=" bg-green-300 rounded flex items-stretch md:flex-row shadow-md border m-3 w-11/12 md:w-auto md:h-auto max-w-5/6 max-h-5/6">
@@ -52,7 +19,7 @@ const Signup = () => {
           <span className="flex flex-col items-center justify-center mt-12">
             <button
               type="button"
-              class=" w-4/5 text-slate-50 bg-slate-800 hover:bg-slate-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center mr-2 mb-2"
+              className=" w-4/5 text-slate-50 bg-slate-800 hover:bg-slate-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center mr-2 mb-2"
               onClick={signUpWithGithub}
             >
               <svg
@@ -74,7 +41,7 @@ const Signup = () => {
             </button>
             <button
               type="button"
-              class="w-4/5 text-slate-50 bg-orange-400 hover:bg-orange-400/90 focus:ring-4 focus:outline-none focus:ring-orange-300/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center mr-2 mb-2"
+              className="w-4/5 text-slate-50 bg-orange-400 hover:bg-orange-400/90 focus:ring-4 focus:outline-none focus:ring-orange-300/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center mr-2 mb-2"
               onClick={signUpWithGoogle}
             >
               <svg

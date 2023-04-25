@@ -16,7 +16,13 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     function (accessToken, refreshToken, profile, done) {
-      done(null, profile);
+      done(null, {
+        user: {
+          name: profile.displayName,
+          id: profile.id,
+          profilePic: profile.photos[0].value,
+        },
+      });
     }
   )
 );
@@ -29,9 +35,13 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log("found profile");
-      console.log(profile);
-      done(null, { user: profile });
+      done(null, {
+        user: {
+          name: profile.displayName,
+          id: profile.id,
+          profilePic: profile.photos[0].value,
+        },
+      });
     }
   )
 );

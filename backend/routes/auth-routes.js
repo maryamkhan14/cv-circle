@@ -32,7 +32,7 @@ router.get(
 
 router.get(
   "/google/signup",
-  passport.authenticate("google", { scope: ["profile"] })
+  passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
 router.get(
