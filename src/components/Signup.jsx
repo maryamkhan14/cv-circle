@@ -1,6 +1,9 @@
 import React from "react";
 
 const Signup = () => {
+  const signUpWithGithub = () => {
+    window.location = "http://localhost:5000/github/signup";
+  };
   return (
     <div className="flex items-stretch md:items-center justify-center w-full h-full">
       <div className=" bg-green-300 rounded flex items-stretch md:flex-row shadow-md border m-3 w-11/12 md:w-auto md:h-auto max-w-5/6 max-h-5/6">
@@ -15,6 +18,7 @@ const Signup = () => {
             <button
               type="button"
               class=" w-4/5 text-slate-50 bg-slate-800 hover:bg-slate-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center mr-2 mb-2"
+              onClick={signUpWithGithub}
             >
               <svg
                 className="w-5 h-5 mr-2 -ml-1"
