@@ -4,47 +4,23 @@ const passportSetup = require("../config/passport-setup");
 
 router.get("/auth/success", (req, res) => {
   if (req.user) {
-    console.log("req");
-    console.log("got this far");
     res.status(200).json({
       success: true,
       message: "Login successful",
       user: req.user,
     });
   } else {
+    res.status(400).json({
+      success: false,
+      message: "Login unsuccessful",
+    });
   }
 });
+
 router.get(
   "/github/signup",
   passport.authenticate("github", { scope: ["user"] })
 );
-
-/**
-router.get(process.env.GITHUB_CALLBACK_URL, (req, res, next) => {
-  passport.authenticate(
-    "github",
-    { failureRedirect: "/github/error" },
-    async (error, user, info) => {
-      if (error) {
-        return res.send({ message: error.message });
-      }
-      if (user) {
-        try {
-          //let result = await socialLogin(user.email);
-          // here your business logic for login user.
-          return res.send({
-            user: user,
-            message: "Login Successful",
-            status: res.statusCode,
-          });
-        } catch (error) {
-          return res.send({ message: error.message, status: res.statusCode });
-        }
-      }
-    }
-  )(req, res, next);
-});
-*/
 
 router.get(
   process.env.GITHUB_CALLBACK_URL,
@@ -54,8 +30,21 @@ router.get(
   })
 );
 
+router.get(
+  "/google/signup",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+
+router.get(
+  process.env.GOOGLE_CALLBACK_URL,
+  passport.authenticate("google", {
+    successRedirect: process.env.FRONTEND_URL,
+    failureRedirect: "/login/failed",
+  })
+);
+
 router.get("/logout", (req, res) => {
   req.logout();
-  res.redirect(CLIENT_URL);
+  res.redirect(process.env.FRONTEND_URL);
 });
 module.exports = router;

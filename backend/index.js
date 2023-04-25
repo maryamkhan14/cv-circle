@@ -9,8 +9,9 @@ const app = express();
 
 app.use(
   expressSession({
-    name: "user",
+    name: "test",
     secret: "keyboard cat",
+    keys: ["lama"],
     maxAge: 24 * 60 * 60 * 100,
   })
 );
@@ -25,7 +26,7 @@ app.use(
   })
 );
 
-app.use(routes);
+app.use("/", routes);
 
 app.listen("5000", () => {
   console.log("server running");
