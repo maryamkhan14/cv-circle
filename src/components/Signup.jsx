@@ -1,10 +1,10 @@
 import React from "react";
 const Signup = () => {
   const signUpWithGithub = () => {
-    window.location = "http://localhost:5000/github/signup";
+    window.location = "http://localhost:5000/github/auth";
   };
   const signUpWithGoogle = () => {
-    window.location = "http://localhost:5000/google/signup";
+    window.location = "http://localhost:5000/google/auth";
   };
   return (
     <div className="flex items-stretch md:items-center justify-center w-full h-full">

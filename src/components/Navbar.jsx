@@ -92,15 +92,16 @@ const Navbar = () => {
       >
         {Object.keys(user).length > 0 ? (
           <>
-            <p>Welcome, {user.name}!</p>
+            <Link to="/create-post" className="text-amber-800 font-semibold">
+              Create post
+            </Link>
             <Link to="/logged-out" className="text-amber-800 font-semibold">
               Log out
             </Link>
-            <Link to="/test">Test</Link>
             <span>
               <img
                 src={user.profilePic}
-                width={60}
+                width={40}
                 referrerPolicy="no-referrer"
                 className="rounded-full border-2 border-blue-800"
               />

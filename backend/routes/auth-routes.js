@@ -18,7 +18,7 @@ router.get("/auth/success", (req, res) => {
 });
 
 router.get(
-  "/github/signup",
+  "/github/auth",
   passport.authenticate("github", { scope: ["user"] })
 );
 
@@ -31,7 +31,7 @@ router.get(
 );
 
 router.get(
-  "/google/signup",
+  "/google/auth",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 

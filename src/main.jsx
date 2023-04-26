@@ -9,6 +9,7 @@ import { UserContextProvider } from "./context/UserContext";
 import "./main.css";
 import LoggedIn from "./components/LoggedIn";
 import LoggedOut from "./components/LoggedOut";
+import PostForm from "./components/PostForm";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/signup" element={<Signup />} />
           <Route path="/logged-in" element={<LoggedIn />} />
           <Route path="/logged-out" element={<LoggedOut />} />
+          <Route path="/create-post" element={<PostForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
