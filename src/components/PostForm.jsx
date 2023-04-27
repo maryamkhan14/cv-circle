@@ -15,8 +15,14 @@ const PostForm = () => {
 
   const createPost = (e) => {
     e.preventDefault();
-    if (attachment.type != "application/pdf") {
-      setAttachmentError("Error: Please only attach PDFs.");
+    if (
+      attachment.type != "image/png" &&
+      attachment.type != "image/jpg" &&
+      attachment.type != "image/jpeg"
+    ) {
+      setAttachmentError(
+        "Error: Please only attach .png, .jpg, or .jpeg files."
+      );
     } else {
       setPost({
         title: title,
@@ -61,7 +67,7 @@ const PostForm = () => {
       const cdnExtension = user.id + "/" + uuidv4();
       const { data, error } = await supabase.storage
         .from("images")
-        .upload(cdnExtension, attachment); // Cooper/ASDFASDFASDF uuid, taylorSwift.png -> taylorSwift.png
+        .upload(cdnExtension, attachment);
 
       if (data) {
         return {
@@ -81,6 +87,8 @@ const PostForm = () => {
       console.log("no attachment");
     }
   };
+  useEffect(() => console.log(attachment), [attachment]);
+
   return (
     <div className="flex items-stretch min-w-[80%] min-h-[80%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
       <form className="rounded flex flex-col justify-between gap-5 p-3 min-h-full w-full">
@@ -126,7 +134,7 @@ const PostForm = () => {
             htmlFor="attachment"
             className="font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center"
           >
-            Attach Your Resume
+            Attach Your Resume (only .png, .jpg, .jpeg allowed)
           </label>
 
           <input
@@ -134,7 +142,7 @@ const PostForm = () => {
             type="file"
             name="attachment"
             id="attachment"
-            accept=".pdf"
+            accept="image/png,image/jpg,image/jpeg"
             onChange={(e) => setAttachment(e.target.files[0])}
           />
           {attachment && (
@@ -146,7 +154,7 @@ const PostForm = () => {
         </span>
         <span className="flex self-center">
           <button
-            type="button"
+            type="submit"
             className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
             onClick={createPost}
           >

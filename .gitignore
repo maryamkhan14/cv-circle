@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
 db_setup.sql
 backend/node_modules/*
 backend/.env
