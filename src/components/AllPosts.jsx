@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 
 const AllPosts = () => {
   const [posts, setPosts] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortSelect, setSortSelect] = useState("");
   const getPosts = async () => {
     const { data, errors } = await supabase
       .from("posts")
@@ -15,7 +17,6 @@ const AllPosts = () => {
       console.log(errors);
       return null;
     } else {
-      console.log(data);
       setPosts(data);
     }
   };
@@ -27,13 +28,53 @@ const AllPosts = () => {
       .select();
     getPosts();
   };
+
   useEffect(() => {
-    getPosts();
-  }, []);
+    if (search != "") {
+      setPosts(posts.filter((post) => post.title.includes(search)));
+    } else {
+      getPosts();
+    }
+  }, [search]);
+
+  useEffect(() => {
+    if (sortSelect != "") {
+      console.log(sortSelect);
+      setPosts(
+        posts.sort((a, b) =>
+          a[sortSelect] > b[sortSelect]
+            ? 1
+            : b[sortSelect] > a[sortSelect]
+            ? -1
+            : 0
+        )
+      );
+    }
+  }, [sortSelect]);
+  useEffect(() => console.log(posts), [posts]);
   return (
-    <div className="flex  justify-center w-full h-full">
+    <div className="flex justify-center w-full h-full">
       <div className="rounded flex shadow-md border m-3 w-11/12 min-h-[90%] gap-2 backdrop-blur-xl flex-col  px-3 py-5 font-[700] text-center">
-        {posts &&
+        <span className="flex w-full justify-between mb-3 border-2 p-2">
+          <input
+            type="text"
+            placeholder="Search for a post..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="p-2 w-1/3"
+          />
+          <select
+            name="sort-select"
+            id="sort-select"
+            className="p-2"
+            onChange={(e) => setSortSelect(e.target.value)}
+          >
+            <option value="">Sort posts...</option>
+            <option value="created_at">Time Created</option>
+            <option value="upvotes">Upvotes</option>
+          </select>
+        </span>
+        {posts.length > 0 ? (
           posts.map((post) => (
             <div
               className="flex flex-row w-full border-2 bg-slate-50/80 p-3"
@@ -41,7 +82,7 @@ const AllPosts = () => {
             >
               <Link
                 to={`/post/${post && post.id}`}
-                className="flex flex-row w-full items-center justify-between"
+                className="flex flex-col md:flex-row w-full items-center justify-between"
               >
                 <span className="flex flex-col border p-3 rounded-full bg-amber-800/70 justify-center items-center">
                   <svg
@@ -66,7 +107,10 @@ const AllPosts = () => {
                 </p>
               </Link>
             </div>
-          ))}
+          ))
+        ) : (
+          <h2 className="text-2xl m-3">No posts yet!</h2>
+        )}
       </div>
     </div>
   );
