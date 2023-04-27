@@ -1,13 +1,17 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { supabase } from "../client";
+import { v4 as uuidv4 } from "uuid";
 
 const PostForm = () => {
+  const { user } = useContext(UserContext);
   const [post, setPost] = useState({});
   const [title, setTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [attachment, setAttachment] = useState({});
   const [attachmentError, setAttachmentError] = useState("");
+  const [postStatus, setPostStatus] = useState({});
 
   const createPost = (e) => {
     e.preventDefault();
@@ -19,13 +23,78 @@ const PostForm = () => {
         postContent: postContent,
         attachment: attachment,
       });
+      uploadPost();
     }
   };
-  useEffect(() => console.log(attachment), [attachment]);
+
+  const uploadPost = async () => {
+    const imgUploadResults = await uploadImage();
+    console.log(post);
+    if (imgUploadResults.success) {
+      await supabase
+        .from("posts")
+        .insert({
+          fk_uid: user.id,
+          title: title,
+          post_content: postContent,
+          img_cdn: imgUploadResults.cdnUrl,
+        })
+        .select();
+
+      setPostStatus({
+        success: true,
+        msg: "Post saved!",
+      });
+      setTitle("");
+      setPostContent("");
+      setPost({});
+    } else {
+      setPostStatus({
+        success: false,
+        msg: "An error occurred when uploading your post. Please refresh the page and try again.",
+      });
+    }
+  };
+
+  const uploadImage = async () => {
+    if (attachment) {
+      const cdnExtension = user.id + "/" + uuidv4();
+      const { data, error } = await supabase.storage
+        .from("images")
+        .upload(cdnExtension, attachment); // Cooper/ASDFASDFASDF uuid, taylorSwift.png -> taylorSwift.png
+
+      if (data) {
+        return {
+          success: true,
+          cdnUrl: import.meta.env.VITE_SUPABASE_BASE_CDN_URL + cdnExtension,
+          error: "",
+        };
+      } else {
+        console.log("error", error);
+        return {
+          success: false,
+          cdnUrl: "",
+          error: error,
+        };
+      }
+    } else {
+      console.log("no attachment");
+    }
+  };
   return (
     <div className="flex items-stretch min-w-[80%] min-h-[80%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
       <form className="rounded flex flex-col justify-between gap-5 p-3 min-h-full w-full">
         <h1 className="text-4xl font-semibold text-slate-900">Create a post</h1>
+        {postStatus &&
+          (postStatus.success ? (
+            <p className="font-semibold self-center text-blue-800 text-2xl">
+              {postStatus.msg}
+            </p>
+          ) : (
+            <p className="font-semibold self-center text-amber-800 text-2xl">
+              {postStatus.msg}
+            </p>
+          ))}
         <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
           <label htmlFor="title" className="font-medium">
             Title
@@ -68,7 +137,9 @@ const PostForm = () => {
             accept=".pdf"
             onChange={(e) => setAttachment(e.target.files[0])}
           />
-          {attachment && <p className="self-center">{attachment.name}</p>}
+          {attachment && (
+            <p className="self-center m-2 italic">{attachment.name}</p>
+          )}
           {attachmentError && (
             <p className="font-bold text-amber-800">{attachmentError}</p>
           )}
