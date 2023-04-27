@@ -11,6 +11,7 @@ import LoggedIn from "./components/LoggedIn";
 import LoggedOut from "./components/LoggedOut";
 import PostForm from "./components/PostForm";
 import AllPosts from "./components/AllPosts";
+import SinglePost from "./components/SinglePost";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/logged-in" element={<LoggedIn />} />
           <Route path="/logged-out" element={<LoggedOut />} />
           <Route path="/create-post" element={<PostForm />} />
+          <Route path="/post/:id" element={<SinglePost />} />
         </Route>
       </Routes>
     </BrowserRouter>
