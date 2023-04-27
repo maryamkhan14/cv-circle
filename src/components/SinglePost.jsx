@@ -70,11 +70,11 @@ const SinglePost = () => {
               Note: To see the image in full size, click it.
             </p>
 
-            <div className="w-full flex gap-2">
+            <div className="w-full flex gap-2 items-stretch">
               <span
                 className={`${
                   Object.keys(user).length > 0 && "hover:cursor-pointer"
-                } flex gap-2 border p-3 md:w-auto md:min-w-[15%] md:max-w-[20%] rounded-lg bg-amber-800 justify-center items-center`}
+                } flex gap-2 border p-3 md:w-auto md:min-w-[15%] md:max-w-[20%] h-full rounded-lg bg-amber-800 justify-center items-center`}
                 onClick={increaseUpvotes}
               >
                 <svg
@@ -93,12 +93,22 @@ const SinglePost = () => {
 
                 <p className="text-slate-50">{post && post.upvotes} upvotes</p>
               </span>
-              <button
-                className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
-                onClick={deletePost}
-              >
-                Delete
-              </button>
+              {Object.keys(user).length > 0 && user.id == post["fk_uid"] && (
+                <>
+                  <Link to={`/edit-post/${id}`}>
+                    <button className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center  h-full justify-center">
+                      Edit
+                    </button>
+                  </Link>
+
+                  <button
+                    className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
+                    onClick={deletePost}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
           </>
         )}

@@ -25,6 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/logged-out" element={<LoggedOut />} />
           <Route path="/create-post" element={<PostForm />} />
           <Route path="/post/:id" element={<SinglePost />} />
+          <Route path="/edit-post/:id" element={<PostForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
