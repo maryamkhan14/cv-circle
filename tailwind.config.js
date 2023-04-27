@@ -5,6 +5,9 @@ export default {
   mode: "jit",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    backgroundImage: {
+      swirls: "url('../src/assets/Taieri.png')",
+    },
     screens: {
       sm: "480px",
       md: "768px",
