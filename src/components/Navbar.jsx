@@ -92,6 +92,9 @@ const Navbar = () => {
       >
         {Object.keys(user).length > 0 ? (
           <>
+            <Link to="/all-posts" className="text-amber-800 font-semibold">
+              All posts
+            </Link>
             <Link to="/create-post" className="text-amber-800 font-semibold">
               Create post
             </Link>
@@ -109,6 +112,9 @@ const Navbar = () => {
           </>
         ) : (
           <>
+            <Link to="/all-posts" className="text-amber-800 font-semibold">
+              All posts
+            </Link>
             <Link to="/login" className="text-amber-800 font-semibold">
               Log in
             </Link>

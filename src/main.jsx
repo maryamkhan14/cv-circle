@@ -10,13 +10,14 @@ import "./main.css";
 import LoggedIn from "./components/LoggedIn";
 import LoggedOut from "./components/LoggedOut";
 import PostForm from "./components/PostForm";
+import AllPosts from "./components/AllPosts";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index={true} element={<App />} />
+          <Route index={true} element={<AllPosts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/logged-in" element={<LoggedIn />} />
