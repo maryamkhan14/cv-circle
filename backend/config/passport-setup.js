@@ -1,7 +1,7 @@
 const passport = require("passport");
 const GithubStrategy = require("passport-github2").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-
+const supabase = require("../client.js");
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -16,6 +16,16 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     function (accessToken, refreshToken, profile, done) {
+      supabase
+        .from("users")
+        .upsert({
+          uid: profile.id,
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          profilepic: profile.photos[0].value,
+        })
+        .select()
+        .then((data) => console.log(data));
       done(null, {
         user: {
           name: profile.displayName,
@@ -36,6 +46,16 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
     function (accessToken, refreshToken, profile, done) {
+      supabase
+        .from("users")
+        .upsert({
+          uid: profile.id,
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          profilepic: profile.photos[0].value,
+        })
+        .select()
+        .then((data) => console.log(data));
       done(null, {
         user: {
           name: profile.displayName,
