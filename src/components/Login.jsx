@@ -2,10 +2,10 @@ import React from "react";
 
 const Login = () => {
   const loginWithGithub = () => {
-    window.location = "http://localhost:5000/github/auth";
+    window.location = "http://localhost:5000/auth/github/auth";
   };
   const loginWithGoogle = () => {
-    window.location = "http://localhost:5000/google/auth";
+    window.location = "http://localhost:5000/auth/google/auth";
   };
   return (
     <div className="flex items-center justify-center w-full h-full">

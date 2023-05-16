@@ -73,7 +73,7 @@ const AllPosts = () => {
             <option value="upvotes">Upvotes</option>
           </select>
         </span>
-        {posts.length > 0 ? (
+        {posts && posts.length > 0 ? (
           posts.map((post) => (
             <div
               className="flex flex-row w-full border-2 bg-slate-50/80 p-3"

@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserContext";
 import { supabase } from "../client";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
-
+import axios from "axios";
 const PostForm = () => {
   const { user } = useContext(UserContext);
   const { id } = useParams();
@@ -18,11 +18,20 @@ const PostForm = () => {
 
   const createPost = (e) => {
     e.preventDefault();
+    if (attachment.type == "application/pdf") {
+      axios
+        .post("http://localhost:5000/file/upload", {
+          attachment: attachment,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
     if (
       attachment &&
       attachment.type != "image/png" &&
       attachment.type != "image/jpg" &&
-      attachment.type != "image/jpeg"
+      attachment.type != "image/jpeg" &&
+      attachment.type != "application/pdf"
     ) {
       setAttachmentError(
         "Error: Please only attach .png, .jpg, or .jpeg files."

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const passport = require("passport");
 const passportSetup = require("../config/passport-setup");
 
-router.get("/auth/success", (req, res) => {
+router.get("/success", (req, res) => {
   if (req.user) {
     res.status(200).json({
       success: true,
@@ -29,7 +29,13 @@ router.get(
     failureRedirect: "/login/failed",
   })
 );
-
+router.get(
+  process.env.GITHUB_CALLBACK_URL,
+  passport.authenticate("github", {
+    successRedirect: process.env.FRONTEND_URL,
+    failureRedirect: "/login/failed",
+  })
+);
 router.get(
   "/google/auth",
   passport.authenticate("google", { scope: ["email", "profile"] })
@@ -42,7 +48,6 @@ router.get(
     failureRedirect: "/login/failed",
   })
 );
-
 router.post("/logout", function (req, res) {
   req.sessionStore.clear((err) => {
     if (err) {

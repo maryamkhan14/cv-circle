@@ -2,7 +2,8 @@ const dotenv = require("dotenv").config();
 const expressSession = require("express-session");
 const express = require("express");
 const cors = require("cors");
-const routes = require("./routes/auth-routes");
+const authRoutes = require("./routes/auth-routes");
+const fileUploadRoutes = require("./routes/file-upload-routes");
 const passport = require("passport");
 const passportSetup = require("./config/passport-setup");
 const app = express();
@@ -25,7 +26,8 @@ app.use(
   })
 );
 
-app.use("/", routes);
+app.use("/auth", authRoutes);
+app.use("/file", fileUploadRoutes);
 
 app.listen("5000", () => {
   console.log("server running");
