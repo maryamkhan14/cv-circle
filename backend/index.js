@@ -1,6 +1,7 @@
 const dotenv = require("dotenv").config();
 const expressSession = require("express-session");
 const express = require("express");
+const expressFileUpload = require("express-fileupload");
 const cors = require("cors");
 const authRoutes = require("./routes/auth-routes");
 const fileUploadRoutes = require("./routes/file-upload-routes");
@@ -17,6 +18,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(expressFileUpload());
 
 app.use(
   cors({

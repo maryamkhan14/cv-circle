@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { supabase } from "../client";
-import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 const PostForm = () => {
@@ -18,14 +17,6 @@ const PostForm = () => {
 
   const createPost = (e) => {
     e.preventDefault();
-    if (attachment.type == "application/pdf") {
-      axios
-        .post("http://localhost:5000/file/upload", {
-          attachment: attachment,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    }
     if (
       attachment &&
       attachment.type != "image/png" &&
@@ -48,11 +39,11 @@ const PostForm = () => {
       setAttachmentError("Error: Please attach a resume.");
     }
   };
-
   const uploadPost = async () => {
     if (id) {
       if (attachment) {
-        const imgUploadResults = await uploadImage();
+        const imgUploadResults = await uploadFile();
+
         if (imgUploadResults.success) {
           await supabase
             .from("posts")
@@ -88,7 +79,7 @@ const PostForm = () => {
         setPost({});
       }
     } else {
-      const imgUploadResults = await uploadImage();
+      const imgUploadResults = await uploadFile();
       if (imgUploadResults.success) {
         await supabase
           .from("posts")
@@ -116,27 +107,21 @@ const PostForm = () => {
     }
   };
 
-  const uploadImage = async () => {
+  const uploadFile = async () => {
     if (attachment) {
-      const cdnExtension = user.id + "/" + uuidv4();
-      const { data, error } = await supabase.storage
-        .from("images")
-        .upload(cdnExtension, attachment);
-
-      if (data) {
-        return {
-          success: true,
-          cdnUrl: import.meta.env.VITE_SUPABASE_BASE_CDN_URL + cdnExtension,
-          error: "",
-        };
-      } else {
-        console.log("error", error);
-        return {
-          success: false,
-          cdnUrl: "",
-          error: error,
-        };
-      }
+      const formData = new FormData();
+      formData.append("attachmentFile", attachment);
+      formData.append("userId", user.id);
+      let { data, err } = await axios.post(
+        "http://localhost:5000/file/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return data ? data : err;
     } else {
       console.log("no attachment");
     }

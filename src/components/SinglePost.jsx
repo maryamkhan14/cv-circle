@@ -47,7 +47,7 @@ const SinglePost = () => {
   }, []);
   return (
     <div className="flex items-stretch w-11/12 min-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
-      <div className="rounded flex flex-col gap-5 p-3 min-h-full w-full">
+      <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
         {post && (
           <>
             <h1 className="text-4xl font-semibold text-slate-900">
@@ -63,7 +63,7 @@ const SinglePost = () => {
               <img
                 src={post["img_cdn"]}
                 referrerPolicy="no-referrer"
-                className="w-full md:w-2/5 lg:w-1/3"
+                className="border-blue border max-w-[5%]"
               />
             </Link>
             <p className="italic">
