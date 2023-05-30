@@ -5,8 +5,10 @@ const expressFileUpload = require("express-fileupload");
 const cors = require("cors");
 const authRoutes = require("./routes/auth-routes");
 const fileUploadRoutes = require("./routes/file-upload-routes");
+const postRoutes = require("./routes/post-routes");
 const passport = require("passport");
 const passportSetup = require("./config/passport-setup");
+
 const app = express();
 
 app.use(
@@ -19,7 +21,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(expressFileUpload());
-
+app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -29,6 +31,7 @@ app.use(
 );
 
 app.use("/auth", authRoutes);
+app.use("/post", postRoutes);
 app.use("/file", fileUploadRoutes);
 
 app.listen("5000", () => {
