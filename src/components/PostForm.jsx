@@ -10,9 +10,9 @@ const PostForm = () => {
   const [title, setTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [attachment, setAttachment] = useState(null);
+  const [existingPostImage, setExistingPostImage] = useState("");
   const [attachmentError, setAttachmentError] = useState("");
   const [postStatus, setPostStatus] = useState({});
-  const [existingPostImage, setExistingPostImage] = useState("");
 
   const updatePost = async (e) => {
     e.preventDefault();
@@ -119,13 +119,11 @@ const PostForm = () => {
     if (postId) {
       getPost(postId).then(({ data, err }) => {
         if (data) {
-          let existingPost = data[0];
-          console.log(existingPost);
-          setTitle(existingPost.title);
-          setPostContent(existingPost["post_content"]);
-          setExistingPostImage(existingPost["img_cdn"]);
+          let { title, post_content: postContent, img_cdn: imgCdn } = data[0];
+          setTitle(title);
+          setPostContent(postContent);
+          setExistingPostImage(imgCdn);
         } else {
-          console.log(err);
           setPostStatus({
             success: false,
             msg: "Could not find matching post.",

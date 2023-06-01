@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-
+import { getPost } from "../services";
 import { supabase } from "../client";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
@@ -11,14 +11,7 @@ const SinglePost = () => {
   const navigate = useNavigate();
 
   const [post, setPost] = useState({});
-  const getPost = async () => {
-    const { data, errors } = await supabase.from("posts").select().eq("id", id);
-    if (errors) {
-      return null;
-    } else {
-      return data;
-    }
-  };
+
   const increaseUpvotes = async () => {
     if (Object.keys(user).length > 0) {
       //TODO: Add error handling
@@ -43,7 +36,16 @@ const SinglePost = () => {
   };
 
   useEffect(() => {
-    getPost().then((result) => setPost(...result));
+    getPost(id).then(({ data, err }) => {
+      if (data) {
+        setPost(...data);
+      } else {
+        setPostStatus({
+          success: false,
+          msg: "Could not find matching post.",
+        });
+      }
+    });
   }, []);
   return (
     <div className="flex items-stretch w-11/12 min-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
