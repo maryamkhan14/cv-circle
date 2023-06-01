@@ -22,7 +22,20 @@ const PostForm = () => {
         postContent,
         postId,
       });
-      // update with no new attachment
+      if (data) {
+        clear();
+        setPostStatus({
+          success: true,
+          msg: "Post saved!",
+        });
+      } else {
+        clear();
+        setPostStatus({
+          success: false,
+          msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
+        });
+        console.log(err);
+      }
     } else {
       let cdnUrl = await getCdnUrl();
       let { data, err } = await uploadPost({
@@ -31,15 +44,21 @@ const PostForm = () => {
         cdnUrl,
         postId,
       });
-      // update with new attachment, handle data & error
+      if (data) {
+        clear();
+        setPostStatus({
+          success: true,
+          msg: "Post saved!",
+        });
+      } else {
+        clear();
+        setPostStatus({
+          success: false,
+          msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
+        });
+        console.log(err);
+      }
     }
-    //TODO: DRY
-    setPostStatus({
-      success: true,
-      msg: "Post saved!",
-    });
-    setTitle("");
-    setPostContent("");
   };
 
   const createPost = async (e) => {
@@ -59,6 +78,20 @@ const PostForm = () => {
         postContent,
         cdnUrl,
       });
+      if (data) {
+        clear();
+        setPostStatus({
+          success: true,
+          msg: "Post saved!",
+        });
+      } else {
+        clear();
+        setPostStatus({
+          success: false,
+          msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
+        });
+        console.log(err);
+      }
     } else {
       setAttachmentError(
         "Error: Please only attach .pdf, .png, .jpg, or .jpeg files."
@@ -75,6 +108,12 @@ const PostForm = () => {
     return data.cdnUrl;
   };
 
+  const clear = () => {
+    setTitle("");
+    setPostContent("");
+    setAttachment(null);
+  };
+
   // automatically populate fields if editing existing post
   useEffect(() => {
     if (postId) {
@@ -86,6 +125,7 @@ const PostForm = () => {
           setPostContent(existingPost["post_content"]);
           setExistingPostImage(existingPost["img_cdn"]);
         } else {
+          console.log(err);
           setPostStatus({
             success: false,
             msg: "Could not find matching post.",
