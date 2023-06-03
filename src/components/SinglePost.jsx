@@ -9,6 +9,7 @@ const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id } = useParams();
   const { error, setError } = useState(null);
+  const { upvoted, hasUpvoted } = useState(false);
   const navigate = useNavigate();
 
   const [post, setPost] = useState({});
@@ -42,36 +43,69 @@ const SinglePost = () => {
   useEffect(() => {
     getPost(id).then(({ data, err }) => {
       if (data) {
-        setPost(...data);
+        let {
+          id,
+          created_at: createdAt,
+          fk_uid: fkUid,
+          title,
+          post_content: postContent,
+          img_cdn: imgCdn,
+          upvote_count: upvoteCount,
+          upvotes,
+        } = data[0];
+        setPost({
+          id,
+          createdAt,
+          fkUid,
+          title,
+          postContent,
+          imgCdn,
+          upvoteCount,
+          upvotes,
+        });
       } else {
         // TODO: navigate to 404 page
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (post) {
+      console.log(post);
+      let { upvoteCount } = post;
+      console.log(upvoteCount);
+    }
+  }, [post]);
   return (
-    <div className="flex items-stretch w-11/12 min-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
+    <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
         {post && (
           <>
-            <h1 className="text-4xl font-semibold text-slate-900">
-              {post.title}
-            </h1>
-            <p className="text-xl"> {post["post_content"]}</p>
-            <Link
-              to={post["img_cdn"]}
-              className="hover:cursor-pointer"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src={post["img_cdn"]}
-                referrerPolicy="no-referrer"
-                className="border-blue border max-w-[5%]"
-              />
-            </Link>
-            <p className="italic">
-              Note: To see the image in full size, click it.
-            </p>
+            <span className="flex flex-col md:flex-row">
+              <span className="flex w-[70%] flex-col">
+                <h1 className="text-4xl font-semibold text-slate-900">
+                  {post.title}
+                </h1>
+                <p className="text-xl"> {post.postContent}</p>
+              </span>
+              <span className="flex flex-col  w-[90%] md:w-[30%] self-center md:self-end md:items-end ">
+                <Link
+                  to={post.imgCdn}
+                  className="hover:cursor-pointer w-full flex justify-center md:justify-end"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={post.imgCdn}
+                    referrerPolicy="no-referrer"
+                    className="border-blue border rounded-lg object-contain"
+                  />
+                </Link>
+                <p className="italic self-center">
+                  Note: To see the image in full size, click it.
+                </p>
+              </span>
+            </span>
 
             <div className="w-full flex gap-2 items-stretch">
               <span
@@ -94,7 +128,9 @@ const SinglePost = () => {
                   />
                 </svg>
 
-                <p className="text-slate-50">{post && post.upvotes} upvotes</p>
+                <p className="text-slate-50">
+                  {post && post.upvoteCount} upvotes
+                </p>
               </span>
               {Object.keys(user).length > 0 && user.id == post["fk_uid"] && (
                 <>

@@ -29,13 +29,13 @@ const upvotePost = async (postId, existingUpvotes) => {
     .from("posts")
     .update({ upvotes: existingUpvotes + 1 })
     .eq("id", postId)
-    .select("upvotes");
+    .select("upvote_count");
 };
 const getPost = async (postId) => {
   let { data, err } = await supabase
     .from("posts")
     .select(
-      `id, created_at, fk_uid, title, post_content, img_cdn, upvotes, upvotes(fk_uid) `
+      `id, created_at, fk_uid, title, post_content, img_cdn, upvote_count, upvotes(fk_uid) `
     )
     .eq("id", postId);
   console.log(data);
