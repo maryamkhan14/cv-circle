@@ -32,4 +32,20 @@ const getPost = async (postId) => {
     return null;
   }
 };
-export { uploadFile, uploadPost, getPost };
+const upvotePost = async (postId, upvotes) => {
+  if (postId) {
+    let result = await axios.post(
+      `http://localhost:5000/post/upvote/${postId}`,
+      upvotes,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return result;
+  } else {
+    return null;
+  }
+};
+export { uploadFile, uploadPost, getPost, upvotePost };

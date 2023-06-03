@@ -1,13 +1,14 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { getPost } from "../services";
+import { getPost, upvotePost } from "../services";
 import { supabase } from "../client";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id } = useParams();
+  const { error, setError } = useState(null);
   const navigate = useNavigate();
 
   const [post, setPost] = useState({});
@@ -15,13 +16,16 @@ const SinglePost = () => {
   const increaseUpvotes = async () => {
     if (Object.keys(user).length > 0) {
       //TODO: Add error handling
-      const { data: upvotedPost, errors } = await supabase
-        .from("posts")
-        .update({ upvotes: post.upvotes + 1 })
-        .eq("id", id)
-        .select();
+      const { data: newUpvotes, err } = await upvotePost(id, {
+        upvotes: post.upvotes,
+      });
 
-      setPost(...upvotedPost);
+      if (newUpvotes) {
+        //TODO: add upvotes to table so user can tell which posts they've upvoted
+        setPost({ ...post, ...newUpvotes[0] });
+      } else {
+        setError({ category: "upvote", msg: "Upvoting failed." });
+      }
     }
   };
 
@@ -40,10 +44,7 @@ const SinglePost = () => {
       if (data) {
         setPost(...data);
       } else {
-        setPostStatus({
-          success: false,
-          msg: "Could not find matching post.",
-        });
+        // TODO: navigate to 404 page
       }
     });
   }, []);
