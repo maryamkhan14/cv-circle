@@ -7,6 +7,18 @@ const uploadFile = async (formData) => {
   });
   return result;
 };
+const checkHasUpvoted = async (postId, userId) => {
+  let result = await axios.post(
+    `http://localhost:5000/post/hasUpvoted/${postId}`,
+    userId,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return result;
+};
 const uploadPost = async (post) => {
   if (post.postId) {
     let result = await axios.post("http://localhost:5000/post/update", post, {
@@ -32,11 +44,11 @@ const getPost = async (postId) => {
     return null;
   }
 };
-const upvotePost = async (postId, upvotes) => {
+const upvotePost = async (postId, upvoteCount) => {
   if (postId) {
     let result = await axios.post(
       `http://localhost:5000/post/upvote/${postId}`,
-      upvotes,
+      upvoteCount,
       {
         headers: {
           "Content-Type": "application/json",
@@ -48,4 +60,4 @@ const upvotePost = async (postId, upvotes) => {
     return null;
   }
 };
-export { uploadFile, uploadPost, getPost, upvotePost };
+export { uploadFile, uploadPost, getPost, upvotePost, checkHasUpvoted };

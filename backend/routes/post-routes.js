@@ -9,38 +9,50 @@ router.post("/create", async (req, res) => {
   res.send({ result });
 });
 router.post("/upvote/:postId", async (req, res) => {
-  let { data, err } = await upvotePost(req.params.postId, req.body.upvotes);
+  let { data, error } = await upvotePost(req.params.postId, req.body.userId);
   if (data) {
-    res.send(data);
+    res.send({ data });
   } else {
-    res.send(err);
+    console.log(error);
+    res.send(error);
   }
 });
 router.get("/:postId", async (req, res) => {
-  let { data, err } = await getPost(req.params.postId);
+  let { data, error } = await getPost(req.params.postId);
   if (data) {
     res.send(data);
   } else {
-    res.send(err);
+    res.send(error);
   }
 });
-const upvotePost = async (postId, existingUpvotes) => {
-  return await supabase
-    .from("posts")
-    .update({ upvotes: existingUpvotes + 1 })
-    .eq("id", postId)
-    .select("upvote_count");
+router.post("/hasUpvoted/:postId", async (req, res) => {
+  let { data, error } = await checkHasUpvoted(
+    req.params.postId,
+    req.body.userId
+  );
+
+  if (data) {
+    res.send(data);
+  } else {
+    res.send(error);
+  }
+});
+
+const upvotePost = async (postId, userId) => {
+  return await supabase.rpc("upvote", {
+    pid: postId,
+    uid: userId,
+  });
 };
+const checkHasUpvoted = async (postId, userId) => {
+  return await supabase
+    .from("upvotes")
+    .select()
+    .eq("fk_uid", userId)
+    .eq("fk_pid", postId);
+};
+
 const getPost = async (postId) => {
-  let { data, err } = await supabase
-    .from("posts")
-    .select(
-      `id, created_at, fk_uid, title, post_content, img_cdn, upvote_count, upvotes(fk_uid) `
-    )
-    .eq("id", postId);
-  console.log(data);
-  let { upvotes } = data[0];
-  console.log(upvotes);
   return await supabase.from("posts").select().eq("id", postId);
 };
 const updatePost = async ({ title, postContent, cdnUrl, postId }) => {

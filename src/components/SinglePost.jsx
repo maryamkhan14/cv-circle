@@ -1,39 +1,40 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { getPost, upvotePost } from "../services";
+import { getPost, upvotePost, checkHasUpvoted } from "../services";
 import { supabase } from "../client";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
-  const { id } = useParams();
-  const { error, setError } = useState(null);
-  const { upvoted, hasUpvoted } = useState(false);
+  const { id: postId } = useParams();
   const navigate = useNavigate();
 
   const [post, setPost] = useState({});
+  const [error, setError] = useState(null);
+  const [upvoted, setHasUpvoted] = useState(false);
 
   const increaseUpvotes = async () => {
     if (Object.keys(user).length > 0) {
       //TODO: Add error handling
-      const { data: newUpvotes, err } = await upvotePost(id, {
-        upvotes: post.upvotes,
+      const { data: newUpvotes, error } = await upvotePost(postId, {
+        userId: user.id,
       });
 
       if (newUpvotes) {
         //TODO: add upvotes to table so user can tell which posts they've upvoted
-        setPost({ ...post, ...newUpvotes[0] });
+        setPost({ ...post, upvoteCount: newUpvotes.data });
       } else {
+        console.log(error);
         setError({ category: "upvote", msg: "Upvoting failed." });
       }
     }
   };
 
   const deletePost = async () => {
-    const { data, errors } = await supabase.from("posts").delete().eq("id", id);
-    if (errors) {
-      console.log(errors);
+    const { data, error } = await supabase.from("posts").delete().eq("id", id);
+    if (error) {
+      console.log(error);
     } else {
       console.log(data);
     }
@@ -41,7 +42,7 @@ const SinglePost = () => {
   };
 
   useEffect(() => {
-    getPost(id).then(({ data, err }) => {
+    getPost(postId).then(({ data, err }) => {
       if (data) {
         let {
           id,
@@ -51,7 +52,6 @@ const SinglePost = () => {
           post_content: postContent,
           img_cdn: imgCdn,
           upvote_count: upvoteCount,
-          upvotes,
         } = data[0];
         setPost({
           id,
@@ -61,7 +61,6 @@ const SinglePost = () => {
           postContent,
           imgCdn,
           upvoteCount,
-          upvotes,
         });
       } else {
         // TODO: navigate to 404 page
@@ -69,13 +68,23 @@ const SinglePost = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (post) {
-      console.log(post);
-      let { upvoteCount } = post;
-      console.log(upvoteCount);
+  const setUpvotedStatus = async () => {
+    const { data, error } = await checkHasUpvoted(postId, {
+      userId: user.id,
+    });
+    if (data) {
+      setHasUpvoted(Object.keys(...data).length ? true : false);
+    } else {
+      //TODO: handle error
+      console.log(error);
     }
-  }, [post]);
+  };
+
+  useEffect(() => {
+    if (post && Object.keys(post).length && Object.keys(user).length) {
+      setUpvotedStatus();
+    }
+  }, [post.id]);
   return (
     <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
@@ -111,7 +120,9 @@ const SinglePost = () => {
               <span
                 className={`${
                   Object.keys(user).length > 0 && "hover:cursor-pointer"
-                } flex gap-2 border p-3 md:w-auto md:min-w-[15%] md:max-w-[20%] h-full rounded-lg bg-amber-800 justify-center items-center`}
+                } flex gap-2 border p-3 md:w-auto md:min-w-[15%] md:max-w-[20%] h-full rounded-lg ${
+                  upvoted ? "bg-amber-500" : "bg-amber-800"
+                } justify-center items-center`}
                 onClick={increaseUpvotes}
               >
                 <svg
@@ -132,9 +143,9 @@ const SinglePost = () => {
                   {post && post.upvoteCount} upvotes
                 </p>
               </span>
-              {Object.keys(user).length > 0 && user.id == post["fk_uid"] && (
+              {Object.keys(user).length > 0 && user.id == post.fkUid && (
                 <>
-                  <Link to={`/edit-post/${id}`}>
+                  <Link to={`/edit-post/${post.id}`}>
                     <button className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center  h-full justify-center">
                       Edit
                     </button>
