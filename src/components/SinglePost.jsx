@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { getPost, upvotePost, checkHasUpvoted, deletePost } from "../services";
-import { supabase } from "../client";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 const SinglePost = () => {
