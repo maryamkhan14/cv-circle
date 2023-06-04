@@ -1,12 +1,14 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getPost, uploadFile, uploadPost } from "../services";
 
 const PostForm = () => {
   const { user } = useContext(UserContext);
   const { id: postId } = useParams();
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [postContent, setPostContent] = useState("");
   const [attachment, setAttachment] = useState(null);
@@ -17,46 +19,28 @@ const PostForm = () => {
   const updatePost = async (e) => {
     e.preventDefault();
     if (!attachment) {
-      let { data, err } = await uploadPost({
+      let { data, error } = await uploadPost({
         title,
         postContent,
         postId,
       });
       if (data) {
-        clear();
-        setPostStatus({
-          success: true,
-          msg: "Post saved!",
-        });
+        handleSaveResult(true);
       } else {
-        clear();
-        setPostStatus({
-          success: false,
-          msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
-        });
-        console.log(err);
+        handleSaveResult(false, error);
       }
     } else {
       let cdnUrl = await getCdnUrl();
-      let { data, err } = await uploadPost({
+      let { data, error } = await uploadPost({
         title,
         postContent,
         cdnUrl,
         postId,
       });
       if (data) {
-        clear();
-        setPostStatus({
-          success: true,
-          msg: "Post saved!",
-        });
+        handleSaveResult(true);
       } else {
-        clear();
-        setPostStatus({
-          success: false,
-          msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
-        });
-        console.log(err);
+        handleSaveResult(false, error);
       }
     }
   };
@@ -72,25 +56,16 @@ const PostForm = () => {
       attachment.type == "application/pdf"
     ) {
       let cdnUrl = await getCdnUrl();
-      let { data, err } = await uploadPost({
+      let { data, error } = await uploadPost({
         userId: user.id,
         title,
         postContent,
         cdnUrl,
       });
       if (data) {
-        clear();
-        setPostStatus({
-          success: true,
-          msg: "Post saved!",
-        });
+        handleSaveResult(true);
       } else {
-        clear();
-        setPostStatus({
-          success: false,
-          msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
-        });
-        console.log(err);
+        handleSaveResult(false, error);
       }
     } else {
       setAttachmentError(
@@ -115,16 +90,34 @@ const PostForm = () => {
     setExistingPostImage("");
   };
 
+  const handleSaveResult = (success, error) => {
+    clear();
+    if (success) {
+      setPostStatus({
+        success: true,
+        msg: "Post saved!",
+      });
+      navigate(-1);
+    } else {
+      console.log(error);
+      setPostStatus({
+        success: false,
+        msg: "An issue happened when trying to save the post. Please refresh the page and try again.",
+      });
+    }
+  };
+
   // automatically populate fields if editing existing post
   useEffect(() => {
     if (postId) {
-      getPost(postId).then(({ data, err }) => {
+      getPost(postId).then(({ data, error }) => {
         if (data) {
           let { title, post_content: postContent, img_cdn: imgCdn } = data[0];
           setTitle(title);
           setPostContent(postContent);
           setExistingPostImage(imgCdn);
         } else {
+          console.log(error);
           setPostStatus({
             success: false,
             msg: "Could not find matching post.",
@@ -189,7 +182,7 @@ const PostForm = () => {
             type="file"
             name="attachment"
             id="attachment"
-            accept="image/png,image/jpg,image/jpeg"
+            accept="image/png,image/jpg,image/jpeg,application/pdf"
             onChange={(e) => setAttachment(e.target.files[0])}
           />
           {attachment && attachment.name ? (
