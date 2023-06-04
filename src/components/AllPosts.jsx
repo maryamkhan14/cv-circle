@@ -1,38 +1,51 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { supabase } from "../client";
+import { getAllPosts } from "../services";
 import { Link } from "react-router-dom";
 
 const AllPosts = () => {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [sortSelect, setSortSelect] = useState("");
-  const getPosts = async () => {
-    const { data, errors } = await supabase
-      .from("posts")
-      .select()
-      .order("created_at", { ascending: false });
-    if (errors) {
-      console.log(errors);
-      return null;
-    } else {
-      setPosts(data);
-    }
-  };
-  const increaseUpvotes = async (id, upvotesGiven) => {
-    const { data: upvotedPost, errors } = await supabase
-      .from("posts")
-      .update({ upvotes: upvotesGiven + 1 })
-      .eq("id", id)
-      .select();
-    getPosts();
+
+  const formatPosts = (posts) => {
+    console.log(posts);
+    return posts.map(
+      ({
+        id,
+        created_at: createdAt,
+        fk_uid: fkUid,
+        title,
+        post_content: postContent,
+        img_cdn: imgCdn,
+        upvote_count: upvoteCount,
+      }) => {
+        return {
+          id,
+          createdAt,
+          fkUid,
+          title,
+          postContent,
+          imgCdn,
+          upvoteCount,
+        };
+      }
+    );
   };
 
+  const loadPosts = async () => {
+    const { data, error } = await getAllPosts();
+    if (data) {
+      setPosts(formatPosts(data));
+    } else {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (search != "") {
       setPosts(posts.filter((post) => post.title.includes(search)));
     } else {
-      getPosts();
+      loadPosts();
     }
   }, [search]);
 
@@ -50,7 +63,6 @@ const AllPosts = () => {
       );
     }
   }, [sortSelect]);
-  useEffect(() => console.log(posts), [posts]);
   return (
     <div className="rounded flex shadow-md border m-3 w-11/12 gap-2 backdrop-blur-xl flex-col px-3 py-5 font-[700] text-center">
       <span className="flex w-full justify-between mb-3 border-2 p-2">
@@ -97,10 +109,10 @@ const AllPosts = () => {
                   />
                 </svg>
 
-                <p className="text-slate-50">{post && post.upvotes}</p>
+                <p className="text-slate-50">{post && post.upvoteCount}</p>
               </span>
               <h2 className="text-4xl">{post && post.title}</h2>
-              <p className="font-light italic">{post && post["created_at"]}</p>
+              <p className="font-light italic">{post && post.createdAt}</p>
             </Link>
           </div>
         ))

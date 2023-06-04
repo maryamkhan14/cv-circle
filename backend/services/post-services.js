@@ -1,21 +1,16 @@
 const supabase = require("../client.js");
-const upvotePost = async (postId, userId) => {
-  return await supabase.rpc("upvote", {
-    pid: postId,
-    uid: userId,
-  });
-};
-const checkHasUpvoted = async (postId, userId) => {
+
+const getAllPosts = async () => {
   return await supabase
-    .from("upvotes")
+    .from("posts")
     .select()
-    .eq("fk_uid", userId)
-    .eq("fk_pid", postId);
+    .order("created_at", { ascending: false });
 };
 
 const getPost = async (postId) => {
   return await supabase.from("posts").select().eq("id", postId);
 };
+
 const updatePost = async ({ title, postContent, cdnUrl, postId }) => {
   if (cdnUrl) {
     return await supabase
@@ -47,14 +42,31 @@ const createPost = async ({ userId, title, postContent, cdnUrl }) => {
     })
     .select();
 };
+
+const upvotePost = async (postId, userId) => {
+  return await supabase.rpc("upvote", {
+    pid: postId,
+    uid: userId,
+  });
+};
+
+const checkHasUpvoted = async (postId, userId) => {
+  return await supabase
+    .from("upvotes")
+    .select()
+    .eq("fk_uid", userId)
+    .eq("fk_pid", postId);
+};
+
 const deletePost = async (postId) => {
   return await supabase.from("posts").delete().eq("id", postId);
 };
 module.exports = {
-  upvotePost,
-  checkHasUpvoted,
   getPost,
+  getAllPosts,
   updatePost,
   createPost,
+  upvotePost,
+  checkHasUpvoted,
   deletePost,
 };
