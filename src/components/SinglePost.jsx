@@ -19,9 +19,8 @@ const SinglePost = () => {
       const { data: newUpvotes, error } = await upvotePost(postId, {
         userId: user.id,
       });
-
       if (newUpvotes) {
-        setPost({ ...post, upvoteCount: newUpvotes.data });
+        setPost({ ...post, upvoteCount: newUpvotes });
       } else {
         console.log(error);
         setError({ category: "upvote", msg: "Upvoting failed." });

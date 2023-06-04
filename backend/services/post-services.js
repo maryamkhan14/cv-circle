@@ -20,7 +20,8 @@ const updatePost = async ({ title, postContent, cdnUrl, postId }) => {
         post_content: postContent,
         img_cdn: cdnUrl,
       })
-      .eq("id", postId);
+      .eq("id", postId)
+      .select();
   } else {
     return await supabase
       .from("posts")
@@ -28,7 +29,8 @@ const updatePost = async ({ title, postContent, cdnUrl, postId }) => {
         title: title,
         post_content: postContent,
       })
-      .eq("id", postId);
+      .eq("id", postId)
+      .select();
   }
 };
 const createPost = async ({ userId, title, postContent, cdnUrl }) => {

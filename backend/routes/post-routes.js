@@ -10,62 +10,39 @@ const {
 } = require("../services/post-services.js");
 
 router.get("/:postId", async (req, res) => {
-  let { data, error } = await getPost(req.params.postId);
-  if (data) {
-    res.send(data);
-  } else {
-    res.send(error);
-  }
+  let result = await getPost(req.params.postId);
+  res.send(result);
 });
 router.get("/", async (req, res) => {
-  let { data, error } = await getAllPosts();
-  if (data) {
-    res.send(data);
-  } else {
-    res.send(error);
-  }
+  let result = await getAllPosts();
+  res.send(result);
 });
 
 router.post("/update", async (req, res) => {
   let result = await updatePost(req.body);
-  res.send({ result });
+  console.log(result);
+  res.send(result);
 });
 
 router.post("/create", async (req, res) => {
   let result = await createPost(req.body);
-  res.send({ result });
+  console.log(result);
+  res.send(result);
 });
 
 router.post("/upvote/:postId", async (req, res) => {
-  let { data, error } = await upvotePost(req.params.postId, req.body.userId);
-  if (data) {
-    res.send({ data });
-  } else {
-    console.log(error);
-    res.send(error);
-  }
+  let result = await upvotePost(req.params.postId, req.body.userId);
+  console.log(result);
+  res.send(result);
 });
 
 router.post("/hasUpvoted/:postId", async (req, res) => {
-  let { data, error } = await checkHasUpvoted(
-    req.params.postId,
-    req.body.userId
-  );
-
-  if (data) {
-    res.send(data);
-  } else {
-    res.send(error);
-  }
+  let result = await checkHasUpvoted(req.params.postId, req.body.userId);
+  res.send(result);
 });
 
 router.delete("/:postId", async (req, res) => {
-  let { data, error } = await deletePost(req.params.postId);
-
-  if (data) {
-    res.send(data);
-  } else {
-    res.send(error);
-  }
+  let result = await deletePost(req.params.postId);
+  res.send(result);
 });
 module.exports = router;
