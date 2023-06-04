@@ -26,6 +26,7 @@ const PostForm = () => {
       });
       if (data) {
         handleSaveResult(true);
+        navigate(-1);
       } else {
         handleSaveResult(false, error);
       }
@@ -39,6 +40,7 @@ const PostForm = () => {
       });
       if (data) {
         handleSaveResult(true);
+        navigate(-1);
       } else {
         handleSaveResult(false, error);
       }
@@ -79,8 +81,9 @@ const PostForm = () => {
     formData.append("attachmentFile", attachment);
     formData.append("userId", user.id);
 
-    let { data } = await uploadFile(formData);
-    return data.cdnUrl;
+    let { cdnUrl } = await uploadFile(formData);
+
+    return cdnUrl;
   };
 
   const clear = () => {
@@ -97,7 +100,6 @@ const PostForm = () => {
         success: true,
         msg: "Post saved!",
       });
-      navigate(-1);
     } else {
       console.log(error);
       setPostStatus({
