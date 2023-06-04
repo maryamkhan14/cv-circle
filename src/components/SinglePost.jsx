@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { getPost, upvotePost, checkHasUpvoted } from "../services";
+import { getPost, upvotePost, checkHasUpvoted, deletePost } from "../services";
 import { supabase } from "../client";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const SinglePost = () => {
   const [error, setError] = useState(null);
   const [upvoted, setHasUpvoted] = useState(false);
 
-  const increaseUpvotes = async () => {
+  const handleUpvoteClick = async () => {
     if (Object.keys(user).length > 0) {
       //TODO: Add error handling
       const { data: newUpvotes, error } = await upvotePost(postId, {
@@ -22,7 +22,6 @@ const SinglePost = () => {
       });
 
       if (newUpvotes) {
-        //TODO: add upvotes to table so user can tell which posts they've upvoted
         setPost({ ...post, upvoteCount: newUpvotes.data });
       } else {
         console.log(error);
@@ -31,18 +30,18 @@ const SinglePost = () => {
     }
   };
 
-  const deletePost = async () => {
-    const { data, error } = await supabase.from("posts").delete().eq("id", id);
-    if (error) {
-      console.log(error);
-    } else {
+  const handleDeleteClick = async () => {
+    const { data, error } = await deletePost(postId);
+    if (data) {
       console.log(data);
+    } else {
+      console.log(error);
     }
     navigate("/");
   };
 
   useEffect(() => {
-    getPost(postId).then(({ data, err }) => {
+    getPost(postId).then(({ data, error }) => {
       if (data) {
         let {
           id,
@@ -69,11 +68,12 @@ const SinglePost = () => {
   }, []);
 
   const setUpvotedStatus = async () => {
+    //TODO: Improve by implementing stored function that returns join of upvotes and posts
     const { data, error } = await checkHasUpvoted(postId, {
       userId: user.id,
     });
     if (data) {
-      setHasUpvoted(Object.keys(...data).length ? true : false);
+      setHasUpvoted(data.length && Object.keys(...data).length ? true : false);
     } else {
       //TODO: handle error
       console.log(error);
@@ -123,7 +123,7 @@ const SinglePost = () => {
                 } flex gap-2 border p-3 md:w-auto md:min-w-[15%] md:max-w-[20%] h-full rounded-lg ${
                   upvoted ? "bg-amber-500" : "bg-amber-800"
                 } justify-center items-center`}
-                onClick={increaseUpvotes}
+                onClick={handleUpvoteClick}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -143,6 +143,7 @@ const SinglePost = () => {
                   {post && post.upvoteCount} upvotes
                 </p>
               </span>
+              {console.log(user.id, post.fkUid)}
               {Object.keys(user).length > 0 && user.id == post.fkUid && (
                 <>
                   <Link to={`/edit-post/${post.id}`}>
@@ -153,7 +154,7 @@ const SinglePost = () => {
 
                   <button
                     className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
-                    onClick={deletePost}
+                    onClick={handleDeleteClick}
                   >
                     Delete
                   </button>

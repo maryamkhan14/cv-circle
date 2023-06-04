@@ -44,11 +44,11 @@ const getPost = async (postId) => {
     return null;
   }
 };
-const upvotePost = async (postId, upvoteCount) => {
+const upvotePost = async (postId, userId) => {
   if (postId) {
     let result = await axios.post(
       `http://localhost:5000/post/upvote/${postId}`,
-      upvoteCount,
+      userId,
       {
         headers: {
           "Content-Type": "application/json",
@@ -60,4 +60,19 @@ const upvotePost = async (postId, upvoteCount) => {
     return null;
   }
 };
-export { uploadFile, uploadPost, getPost, upvotePost, checkHasUpvoted };
+const deletePost = async (postId) => {
+  if (postId) {
+    let result = await axios.delete(`http://localhost:5000/post/${postId}`);
+    return result;
+  } else {
+    return null;
+  }
+};
+export {
+  uploadFile,
+  uploadPost,
+  getPost,
+  upvotePost,
+  checkHasUpvoted,
+  deletePost,
+};

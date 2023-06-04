@@ -112,6 +112,7 @@ const PostForm = () => {
     setTitle("");
     setPostContent("");
     setAttachment(null);
+    setExistingPostImage("");
   };
 
   // automatically populate fields if editing existing post
