@@ -21,6 +21,7 @@ const SinglePost = () => {
       });
       if (newUpvotes) {
         setPost({ ...post, upvoteCount: newUpvotes });
+        setUpvotedStatus(true);
       } else {
         console.log(error);
         setError({ category: "upvote", msg: "Upvoting failed." });
@@ -29,6 +30,7 @@ const SinglePost = () => {
   };
 
   const handleDeleteClick = async () => {
+    // TODO: add confirmation dialog
     const { data, error } = await deletePost(postId);
     if (data) {
       console.log(data);
@@ -88,14 +90,17 @@ const SinglePost = () => {
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
         {post && (
           <>
-            <span className="flex flex-col md:flex-row">
-              <span className="flex w-[70%] flex-col">
-                <h1 className="text-4xl font-semibold text-slate-900">
-                  {post.title}
-                </h1>
-                <p className="text-xl"> {post.postContent}</p>
+            <h1 className="text-4xl font-semibold text-slate-900">
+              {post.title}
+            </h1>
+            <span className="flex flex-col md:flex-row md:gap-10">
+              <span className="flex w-full md:w-[70%] flex-col">
+                <p className="text-xl break-words hyphens-auto" lang="en">
+                  {" "}
+                  {post.postContent}
+                </p>
               </span>
-              <span className="flex flex-col  w-[90%] md:w-[30%] self-center md:self-end md:items-end ">
+              <span className="flex flex-col w-[90%] md:w-[30%] self-center">
                 <Link
                   to={post.imgCdn}
                   className="hover:cursor-pointer w-full flex justify-center md:justify-end"
