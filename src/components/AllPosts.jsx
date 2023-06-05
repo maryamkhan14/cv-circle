@@ -111,7 +111,9 @@ const AllPosts = () => {
 
                 <p className="text-slate-50">{post && post.upvoteCount}</p>
               </span>
-              <h2 className="text-4xl">{post && post.title}</h2>
+              <h2 className="text-4xl truncate text-ellipsis max-w-[45%]">
+                {post && post.title}
+              </h2>
               <p className="font-light italic">{post && post.createdAt}</p>
             </Link>
           </div>
