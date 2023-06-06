@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { getPost, upvotePost, checkHasUpvoted, deletePost } from "../services";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import VoteDisplay from "./VoteDisplay";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
@@ -90,62 +91,50 @@ const SinglePost = () => {
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
         {post && (
           <>
-            <h1 className="text-4xl font-semibold text-slate-900">
-              {post.title}
-            </h1>
-            <span className="flex flex-col md:flex-row md:gap-10">
-              <span className="flex w-full md:w-[70%] flex-col">
-                <p className="text-xl break-words hyphens-auto" lang="en">
+            <span className="flex flex-col md:gap-10 ">
+              <span className="flex flex-col md:flex-row gap-5 pb-3 border-b border-slate-300 items-center">
+                <VoteDisplay
+                  postId={post.id}
+                  userId={user.id}
+                  existingUpvoteCount={post.upvoteCount}
+                />
+                <h1 className="text-4xl font-semibold text-slate-900">
+                  {post.title}
+                </h1>
+              </span>
+
+              <span className="flex flex-col pt-3 md:pt-0 md:flex-row gap-3 justify-between">
+                <p
+                  className="text-lg flex-1 break-words hyphens-auto pr-5"
+                  lang="en"
+                >
                   {" "}
                   {post.postContent}
                 </p>
-              </span>
-              <span className="flex flex-col w-[90%] md:w-[30%] self-center">
-                <Link
-                  to={post.imgCdn}
-                  className="hover:cursor-pointer w-full flex justify-center md:justify-end"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img
-                    src={post.imgCdn}
-                    referrerPolicy="no-referrer"
-                    className="border-blue border rounded-lg object-contain"
-                  />
-                </Link>
-                <p className="italic self-center">
-                  Note: To see the image in full size, click it.
-                </p>
+
+                <span className="flex flex-col pl-5 md:w-[25%] justify-center self-center">
+                  <Link
+                    to={post.imgCdn}
+                    className="hover:cursor-pointer w-full flex justify-center md:justify-end"
+                    target="_blank"
+                    aria-label="View image in full size"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={post.imgCdn}
+                      referrerPolicy="no-referrer"
+                      alt="Post image"
+                      className="border-blue border rounded-lg object-contain"
+                    />
+                  </Link>
+                  <p className="italic self-center">
+                    Note: To see the image in full size, click it.
+                  </p>
+                </span>
               </span>
             </span>
 
             <div className="w-full flex gap-2 items-stretch">
-              <span
-                className={`${
-                  Object.keys(user).length > 0 && "hover:cursor-pointer"
-                } flex gap-2 border p-3 md:w-auto md:min-w-[15%] md:max-w-[20%] h-full rounded-lg ${
-                  upvoted ? "bg-amber-500" : "bg-amber-800"
-                } justify-center items-center`}
-                onClick={handleUpvoteClick}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  className="w-6 h-6 stroke-slate-50"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-
-                <p className="text-slate-50">
-                  {post && post.upvoteCount} upvotes
-                </p>
-              </span>
               {console.log(user.id, post.fkUid)}
               {Object.keys(user).length > 0 && user.id == post.fkUid && (
                 <>

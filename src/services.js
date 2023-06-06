@@ -52,6 +52,7 @@ const uploadPost = async (post) => {
   }
 };
 const upvotePost = async (postId, userId) => {
+  console.log(postId, userId);
   if (postId) {
     let { data: upvoteCount } = await axios.post(
       `http://localhost:5000/post/upvote/${postId}`,
