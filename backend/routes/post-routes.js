@@ -25,6 +25,7 @@ router.post("/update", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
+  console.log(req.body);
   let result = await createPost(req.body);
   console.log(result);
   res.send(result);

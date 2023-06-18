@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPost, uploadFile, uploadPost } from "../services";
+import { getPost, testUploadPost, uploadFile, uploadPost } from "../services";
 
 const PostForm = () => {
   const { user } = useContext(UserContext);
@@ -18,6 +18,7 @@ const PostForm = () => {
 
   const updatePost = async (e) => {
     e.preventDefault();
+
     if (!attachment) {
       let { data, error } = await uploadPost({
         title,
@@ -49,6 +50,14 @@ const PostForm = () => {
 
   const createPost = async (e) => {
     e.preventDefault();
+    let result = await testUploadPost({
+      title,
+      postContent,
+      postId,
+      file: attachment,
+      userId: user.id,
+    });
+    console.log(result);
     if (!attachment) {
       setAttachmentError("Error: Please attach a resume.");
     } else if (
