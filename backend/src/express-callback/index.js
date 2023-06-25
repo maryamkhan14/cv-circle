@@ -22,10 +22,8 @@ export default function makeExpressCallback(controller) {
         res.set(httpResponse.headers);
       }
       res.type("json");
-      console.log("httpResponse", httpResponse);
       res.status(httpResponse.statusCode).send(httpResponse.body);
     } catch (e) {
-      console.log(e);
       res.status(500).send({ error: "An unknown error occurred." });
     }
   };
