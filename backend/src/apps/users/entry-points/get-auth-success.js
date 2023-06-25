@@ -2,16 +2,26 @@ export default function makeGetAuthSuccess() {
   return function (httpRequest) {
     if (httpRequest.user) {
       return {
-        success: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
         statusCode: 200,
-        message: "Login successful",
-        user: httpRequest.user,
+        body: {
+          success: true,
+          statusCode: 200,
+          message: "Login successful",
+          user: httpRequest.user,
+        },
       };
     } else {
       return {
-        success: false,
-        statusCode: 500,
-        message: "Login unsuccessful",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 400,
+        body: {
+          error: e.message,
+        },
       };
     }
   };
