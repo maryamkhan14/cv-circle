@@ -4,6 +4,7 @@ export default function passportSetup({
   githubStrategy,
 }) {
   passport.use(googleStrategy);
+  passport.use(githubStrategy);
   passport.serializeUser((user, done) => {
     done(null, { ...user.getDTO() });
   });
