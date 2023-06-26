@@ -11,7 +11,7 @@ export default function makePostPost({ createPost, handleAttachmentPreview }) {
           "Content-Type": "application/json",
           "Last-Modified": new Date(posted.modifiedOn).toUTCString(),
         },
-        statusCode: 201,
+        statusCode: 200,
         body: { posted },
       };
     } catch (e) {

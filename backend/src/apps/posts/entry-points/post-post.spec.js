@@ -25,7 +25,7 @@ describe("Controller for POST to /post endpoint", () => {
         "Content-Type": "application/json",
         "Last-Modified": new Date(request.modifiedOn).toUTCString(),
       },
-      statusCode: 201,
+      statusCode: 200,
       body: { posted: { ...post, imgCdn: previewImage.getCdn() } },
     };
     const actual = await postPost(request);
