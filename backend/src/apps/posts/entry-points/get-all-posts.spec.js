@@ -2,7 +2,7 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 import makeGetAllPosts from "./get-all-posts";
 describe("Controller for GET to /posts endpoint", () => {
   let retrievePosts = vi.fn(async () => {
-    return {};
+    return [];
   });
   let getAllPosts;
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe("Controller for GET to /posts endpoint", () => {
         "Content-Type": "application/json",
       },
       statusCode: 200,
-      body: { posts: {} },
+      body: { posts: [] },
     };
     const actual = await getAllPosts();
     expect(actual).toEqual(expected);
