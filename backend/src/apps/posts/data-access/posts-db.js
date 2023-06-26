@@ -8,8 +8,15 @@ export default function makePostsDb({ dbClient }) {
     remove,
   });
 
-  async function getAll() {}
-  async function getById() {}
+  async function getAll() {
+    return await supabase
+      .from("posts")
+      .select()
+      .order("created_at", { ascending: false });
+  }
+  async function getById(postId) {
+    return await supabase.from("posts").select().eq("id", postId);
+  }
   async function update() {}
   async function remove() {}
   async function insert({ userId, title, postContent, imgCdn }) {
