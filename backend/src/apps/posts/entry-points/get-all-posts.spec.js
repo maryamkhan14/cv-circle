@@ -8,7 +8,7 @@ describe("Controller for GET to /posts endpoint", () => {
   beforeEach(() => {
     getAllPosts = makeGetAllPosts({ retrievePosts });
   });
-  test("Successfully gets all posts", async () => {
+  test("Successfully makes a call to retrievePosts and formats response as expected", async () => {
     const expected = {
       headers: {
         "Content-Type": "application/json",
