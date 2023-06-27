@@ -3,13 +3,13 @@ import makeGetSinglePost from "./get-single-post";
 import { makeFakePostEntity } from "../__test__/fixtures/post";
 describe("Controller for GET to /post endpoint", () => {
   let post = { ...makeFakePostEntity().getDTO() };
-  let retrievePost = vi.fn(async () => {
+  let retrieveSinglePost = vi.fn(async () => {
     return post;
   });
 
   let getSinglePost;
   beforeEach(() => {
-    getSinglePost = makeGetSinglePost({ retrievePost });
+    getSinglePost = makeGetSinglePost({ retrieveSinglePost });
   });
 
   test("Successfully gets single post", async () => {

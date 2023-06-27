@@ -1,8 +1,8 @@
-export default function makeGetSinglePost({ retrievePost }) {
+export default function makeGetSinglePost({ retrieveSinglePost }) {
   return async function (httpRequest) {
     try {
-      const { postId } = httpRequest.params;
-      const post = await retrievePost(postId);
+      const { id } = httpRequest.params;
+      const post = await retrieveSinglePost(id);
       // return what res.send() should contain
       return {
         headers: {
