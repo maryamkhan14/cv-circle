@@ -12,9 +12,7 @@ export default function buildMakeImage({ cdnGenerator, extensionGenerator }) {
       getImageData: () => imageData,
       getCdn: () => cdn,
       setExtension: (newExtension) => {
-        console.log(newExtension);
         extension = newExtension;
-        console.log(extension);
       },
       setCdn: (newCdn) => (cdn = newCdn),
     });
