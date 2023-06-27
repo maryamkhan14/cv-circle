@@ -1,14 +1,16 @@
 import makePost from "../entities/post/index.js";
 export default function makeRetrievePosts({ postsDb }) {
   return async function retrievePosts() {
-    let posts = await postsDb.getAll();
-    let formattedPosts = posts.map((post) => {
-      makePost({
-        userId: post.uid,
-        title: post.title,
-        postContent: post.post_content,
-        imgCdn: post.img_cdn,
-      });
+    let { data: posts, error } = await postsDb.getAll();
+    if (error) {
+      throw new Error(
+        `Error retrieving posts: ${error.message}. Post retrieval failed.`
+      );
+    }
+    let formattedPosts = posts.map(({ userId, title, postContent, imgCdn }) => {
+      let post = makePost({ userId, title, postContent, imgCdn });
+
+      return post.getDTO();
     });
     return formattedPosts;
   };
