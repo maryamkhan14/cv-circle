@@ -24,4 +24,14 @@ describe("Create post use case", () => {
     expect(postsDb.insert).toBeCalledTimes(1);
     expect(post).toContain(postsDbInsertArgs);
   });
+  test("Throws error when database save fails", async () => {
+    let post = makeFakeRawPost({ id: null, createdAt: null });
+    let error = { message: "Post save error message" };
+    postsDb.insert.mockImplementation(async () => {
+      return { data: null, error };
+    });
+    expect(createPost(post)).rejects.toThrow(
+      `Error saving post to database: ${error.message}. Post creation failed.`
+    );
+  });
 });
