@@ -13,19 +13,21 @@ describe("Posts-relevant database tests", () => {
 
     let result = await postsDb.insert(toInsert);
 
-    const inserted = dbClient.insertSpy.mock.calls[0][0];
+    const postsDbInsertArgs = dbClient.insertSpy.mock.calls[0][0];
     expect(dbClient.from).toHaveBeenCalledWith("posts");
     expect(dbClient.from).toHaveBeenCalledTimes(1);
     expect(dbClient.insertSpy).toHaveBeenCalledTimes(1);
-    expect(inserted.fk_uid).toEqual(toInsert.userId);
-    expect(inserted.title).toEqual(toInsert.title);
-    expect(inserted.post_content).toEqual(toInsert.postContent);
-    expect(inserted.img_cdn).toEqual(toInsert.imgCdn);
-    expect(result).toEqual(inserted);
+    expect(postsDbInsertArgs.fk_uid).toEqual(toInsert.userId);
+    expect(postsDbInsertArgs.title).toEqual(toInsert.title);
+    expect(postsDbInsertArgs.post_content).toEqual(toInsert.postContent);
+    expect(postsDbInsertArgs.img_cdn).toEqual(toInsert.imgCdn);
+    expect(result).toEqual(toInsert);
   });
 
   test("Gets all posts successfully", async () => {
-    await postsDb.getAll();
+    let expected = [{ ...makeFakeRawPost() }];
+    let result = await postsDb.getAll();
     expect(dbClient.from).toHaveBeenCalledWith("posts");
+    expect(result).toEqual(expected);
   });
 });
