@@ -7,20 +7,11 @@ export default function makeRetrievePosts({ postsDb }) {
         `Error retrieving posts: ${error.message}. Post retrieval failed.`
       );
     }
-    let formattedPosts = posts.map(
-      ({ id, createdAt, userId, title, postContent, imgCdn }) => {
-        let post = makePost({
-          id,
-          createdAt,
-          userId,
-          title,
-          postContent,
-          imgCdn,
-        });
+    let formattedPosts = posts.map((rawPost) => {
+      let post = makePost(rawPost);
 
-        return post.getDTO();
-      }
-    );
+      return post.getDTO();
+    });
     return formattedPosts;
   };
 }
