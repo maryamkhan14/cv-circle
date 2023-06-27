@@ -22,7 +22,7 @@ export default function makePostsDb({ dbClient }) {
 
   async function getById(postId) {
     let result = await dbClient.from("posts").select().eq("id", postId);
-    return { ...result, data: formatDbResults(result.data) };
+    return { ...result, data: formatDbResults(...result.data) };
   }
 
   async function update() {}
