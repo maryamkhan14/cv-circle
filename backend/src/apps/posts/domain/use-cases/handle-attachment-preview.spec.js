@@ -13,7 +13,7 @@ describe("Create attachment preview use case", () => {
   beforeEach(() => {
     imagesDb = {
       insert: vi.fn(async () => {
-        return Promise.resolve(previewImage);
+        return await previewImage;
       }),
     };
     makePdfPreview = vi.fn(() => {
