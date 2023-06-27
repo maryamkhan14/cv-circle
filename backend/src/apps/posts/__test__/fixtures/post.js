@@ -54,6 +54,12 @@ export function makeFakePostEntity(overrides) {
     setImage: (cdn) => {
       imgCdn = cdn;
     },
+    setId: (newId) => {
+      id = newId;
+    },
+    setCreatedAt: (newCreatedAt) => {
+      createdAt = newCreatedAt;
+    },
     getDTO: () => {
       return { id, createdAt, userId, title, postContent, imgCdn };
     },

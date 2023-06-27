@@ -30,6 +30,20 @@ describe("post", () => {
     expect(fakePost.getImage()).toBe(null);
   });
 
+  test("can set creation timestamp", () => {
+    const post = makeFakeRawPost();
+    const fakePost = makePost(post);
+    fakePost.setCreatedAt(null);
+    expect(fakePost.getCreatedAt()).toBe(null);
+  });
+
+  test("can set post ID", () => {
+    const post = makeFakeRawPost();
+    const fakePost = makePost(post);
+    fakePost.setId(null);
+    expect(fakePost.getId()).toBe(null);
+  });
+
   test("can get DTO", () => {
     const post = makeFakeRawPost();
     const fakePost = makePost(post);

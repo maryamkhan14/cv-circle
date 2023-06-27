@@ -30,6 +30,12 @@ export default function buildMakePost() {
       setImage: (cdn) => {
         imgCdn = cdn;
       },
+      setId: (newId) => {
+        id = newId;
+      },
+      setCreatedAt: (newCreatedAt) => {
+        createdAt = newCreatedAt;
+      },
       getDTO: () => {
         return {
           id,
