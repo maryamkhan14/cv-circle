@@ -73,13 +73,14 @@ describe("Create attachment preview use case", () => {
 
   test("Throws error when database save fails", async () => {
     let file = { mimetype: "application/pdf" };
+    let error = { message: "Database save error" };
     imagesDb.insert.mockImplementation(async () => {
-      return Promise.resolve({ error: { message: "Big test error" } });
+      return { error, data: null };
     });
     expect(
       handleAttachmentPreview({ file, userId: FAKE_USER_ID })
     ).rejects.toThrow(
-      "Error uploading image preview to database: Big test error. Post creation failed."
+      `Error uploading image preview to database: ${error.message}. Post creation failed.`
     );
   });
 });
