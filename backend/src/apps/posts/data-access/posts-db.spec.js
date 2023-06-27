@@ -11,7 +11,7 @@ describe("Posts-relevant database tests", () => {
   test("Inserts a post successfully", async () => {
     const toInsert = makeFakeRawPost();
 
-    await postsDb.insert(toInsert);
+    let result = await postsDb.insert(toInsert);
 
     const inserted = dbClient.insertSpy.mock.calls[0][0];
     expect(dbClient.from).toHaveBeenCalledWith("posts");
@@ -21,5 +21,11 @@ describe("Posts-relevant database tests", () => {
     expect(inserted.title).toEqual(toInsert.title);
     expect(inserted.post_content).toEqual(toInsert.postContent);
     expect(inserted.img_cdn).toEqual(toInsert.imgCdn);
+    expect(result).toEqual(inserted);
+  });
+
+  test("Gets all posts successfully", async () => {
+    await postsDb.getAll();
+    expect(dbClient.from).toHaveBeenCalledWith("posts");
   });
 });
