@@ -12,7 +12,6 @@ describe("Posts-relevant database tests", () => {
     const toInsert = makeFakeRawPost();
 
     let result = await postsDb.insert(toInsert);
-
     const postsDbInsertArgs = dbClient.insertSpy.mock.calls[0][0];
     expect(dbClient.from).toHaveBeenCalledWith("posts");
     expect(dbClient.from).toHaveBeenCalledTimes(1);

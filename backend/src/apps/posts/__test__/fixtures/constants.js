@@ -5,6 +5,8 @@ const uniqueId = Object.freeze({
 });
 //TODO: Add constants for table names & rows
 const FAKE_USER_ID = 1;
+const FAKE_POST_ID = 1;
+const FAKE_POST_CREATED_AT = faker.date.anytime();
 const FAKE_POST_TITLE = faker.lorem.sentence();
 const FAKE_POST_CONTENT = faker.lorem.paragraph(3);
 const FAKE_IMAGE_EXTENSION = FAKE_USER_ID + "/" + uniqueId.makeId();
@@ -15,6 +17,8 @@ const FAKE_IMAGE_DATA =
 
 export {
   FAKE_USER_ID,
+  FAKE_POST_ID,
+  FAKE_POST_CREATED_AT,
   FAKE_POST_CONTENT,
   FAKE_POST_TITLE,
   FAKE_IMAGE_CDN,

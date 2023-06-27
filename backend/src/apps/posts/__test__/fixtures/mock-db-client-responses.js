@@ -1,10 +1,12 @@
 import { makeFakeRawPost } from "./post.js";
 
-let { userId, title, postContent, imgCdn } = makeFakeRawPost();
+let { id, createdAt, userId, title, postContent, imgCdn } = makeFakeRawPost();
 export function makeFakeSinglePostRecord(overrides) {
   let post = {
+    id,
+    created_at: createdAt,
     fk_uid: userId,
-    title: title,
+    title,
     post_content: postContent,
     img_cdn: imgCdn,
   };
@@ -12,8 +14,10 @@ export function makeFakeSinglePostRecord(overrides) {
 }
 export function makeFakeListOfPostRecords(overrides) {
   let post = {
+    id,
+    created_at: createdAt,
     fk_uid: userId,
-    title: title,
+    title,
     post_content: postContent,
     img_cdn: imgCdn,
   };

@@ -1,4 +1,6 @@
 import {
+  FAKE_POST_ID,
+  FAKE_POST_CREATED_AT,
   FAKE_IMAGE_CDN,
   FAKE_POST_CONTENT,
   FAKE_POST_TITLE,
@@ -8,6 +10,8 @@ import {
 // Make the object that will be passed into post entity factory function
 export function makeFakeRawPost(overrides) {
   const post = {
+    id: FAKE_POST_ID,
+    createdAt: FAKE_POST_CREATED_AT,
     userId: FAKE_USER_ID,
     title: FAKE_POST_TITLE,
     postContent: FAKE_POST_CONTENT,
@@ -18,6 +22,8 @@ export function makeFakeRawPost(overrides) {
 
 // Make the object that will be returned by the post entity factory function -TODO: rename for clarity
 export function makeFakePostEntity(overrides) {
+  let id =
+    overrides && overrides.hasOwnProperty("id") ? overrides.id : FAKE_POST_ID;
   let imgCdn =
     overrides && overrides.hasOwnProperty("imgCdn")
       ? overrides.imgCdn
@@ -34,7 +40,13 @@ export function makeFakePostEntity(overrides) {
     overrides && overrides.hasOwnProperty("postContent")
       ? overrides.postContent
       : FAKE_POST_CONTENT;
+  let createdAt =
+    overrides && overrides.hasOwnProperty("createdAt")
+      ? overrides.createdAt
+      : FAKE_POST_CREATED_AT;
   const post = {
+    getId: () => id,
+    getCreatedAt: () => createdAt,
     getUserId: () => userId,
     getTitle: () => title,
     getPostContent: () => postContent,
@@ -43,7 +55,7 @@ export function makeFakePostEntity(overrides) {
       imgCdn = cdn;
     },
     getDTO: () => {
-      return { userId, title, postContent, imgCdn };
+      return { id, createdAt, userId, title, postContent, imgCdn };
     },
   };
 

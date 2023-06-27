@@ -9,20 +9,26 @@ export default function makePostsDb({ dbClient }) {
   });
 
   async function getAll() {
-    let allPosts = await dbClient
+    let result = await dbClient
       .from("posts")
       .select()
       .order("created_at", { ascending: false });
-    return allPosts.map(
-      ({
-        fk_uid: userId,
-        title: title,
-        post_content: postContent,
-        img_cdn: imgCdn,
-      }) => {
-        return { userId, title, postContent, imgCdn };
-      }
-    );
+
+    if (result.data) {
+      result.data = result.data.map(
+        ({
+          id,
+          created_at: createdAt,
+          fk_uid: userId,
+          title: title,
+          post_content: postContent,
+          img_cdn: imgCdn,
+        }) => {
+          return { id, createdAt, userId, title, postContent, imgCdn };
+        }
+      );
+    }
+    return result;
   }
   async function getById(postId) {
     return await dbClient.from("posts").select().eq("id", postId);
@@ -39,11 +45,17 @@ export default function makePostsDb({ dbClient }) {
         img_cdn: imgCdn,
       })
       .select();
-    return {
-      userId: result.fk_uid,
-      title: result.title,
-      postContent: result.post_content,
-      imgCdn: result.img_cdn,
-    };
+
+    if (result.data) {
+      result.data = {
+        id: insertedPost.id,
+        createdAt: insertedPost.created_at,
+        userId: insertedPost.fk_uid,
+        title: insertedPost.title,
+        postContent: insertedPost.post_content,
+        imgCdn: insertedPost.img_cdn,
+      };
+    }
+    return result;
   }
 }
