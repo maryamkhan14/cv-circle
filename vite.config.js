@@ -5,4 +5,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   setupFiles: "dotenv/config",
+  test: {
+    coverage: {
+      provider: "istanbul", // or 'v8'
+      reporter: ["html"],
+    },
+  },
 });

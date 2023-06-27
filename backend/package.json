@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "node src/index.js",
-    "test": "vitest"
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "test-ui": "vitest --ui"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +30,8 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@vitest/coverage-istanbul": "^0.32.2",
+    "@vitest/ui": "^0.32.2",
     "@web-std/file": "^3.0.2",
     "supertest": "^6.3.3",
     "vitest": "^0.32.0"

@@ -28,3 +28,5 @@ db_setup.sql
 backend/node_modules/*
 backend/.env
 backend/src/node_modules/*
+backend/coverage
+backend/coverage/*
