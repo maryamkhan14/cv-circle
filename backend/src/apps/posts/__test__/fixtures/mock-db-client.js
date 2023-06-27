@@ -1,9 +1,9 @@
 import { vi } from "vitest";
-import realTestDbClient from "./db";
+import realTestDbClient from "./db-client";
 import {
   makeFakeSinglePostRecord,
   makeFakeListOfPostRecords,
-} from "../db-responses";
+} from "../mock-db-client-responses";
 let insertSpy = vi.fn(() => {
   return {
     select: vi.fn(() => makeFakeSinglePostRecord()),

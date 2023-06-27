@@ -1,5 +1,5 @@
 import { describe, expect, beforeEach, test } from "vitest";
-import { mockTestDbClient as dbClient } from "../__test__/fixtures/db.js";
+import { mockTestDbClient as dbClient } from "../__test__/fixtures/db-client.js";
 import makePostsDb from "./posts-db";
 import { makeFakeRawPost } from "../__test__/fixtures/post";
 

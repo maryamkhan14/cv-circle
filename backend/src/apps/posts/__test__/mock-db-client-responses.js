@@ -1,4 +1,4 @@
-import { makeFakeRawPost } from "../__test__/fixtures/post.js";
+import { makeFakeRawPost } from "./fixtures/post.js";
 
 let { userId, title, postContent, imgCdn } = makeFakeRawPost();
 export function makeFakeSinglePostRecord(overrides) {
