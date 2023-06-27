@@ -29,4 +29,10 @@ describe("post", () => {
     fakePost.setImage(null);
     expect(fakePost.getImage()).toBe(null);
   });
+
+  test("can get DTO", () => {
+    const post = makeFakeRawPost();
+    const fakePost = makePost(post);
+    expect(fakePost.getDTO()).toEqual(post);
+  });
 });

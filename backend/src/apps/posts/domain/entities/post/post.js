@@ -20,6 +20,14 @@ export default function buildMakePost() {
       setImage: (cdn) => {
         imgCdn = cdn;
       },
+      getDTO: () => {
+        return {
+          userId,
+          title,
+          postContent,
+          imgCdn,
+        };
+      },
     });
   };
 }
