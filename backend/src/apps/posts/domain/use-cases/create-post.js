@@ -7,11 +7,20 @@ export default function makeCreatePost({ postsDb }) {
       postContent,
       imgCdn,
     });
-    return postsDb.insert({
+    let { data: newPostRecord, error } = await postsDb.insert({
       userId: post.getUserId(),
       title: post.getTitle(),
       postContent: post.getPostContent(),
       imgCdn: post.getImage(),
     });
+    if (error) {
+      throw new Error(
+        `Error saving post to database: ${error.message}. Post creation failed.`
+      );
+    }
+    post.setCreatedAt(newPostRecord.createdAt);
+    post.setId(newPostRecord.id);
+    return post.getDTO();
+    //idea: only return createdAt, and postId, of database record created?
   };
 }
