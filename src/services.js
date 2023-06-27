@@ -10,8 +10,7 @@ const getPost = async (postId) => {
   }
 };
 const getAllPosts = async () => {
-  let { data: allPosts } = await axios.get(`http://localhost:5000/post/`);
-  return allPosts;
+  return await axios.get(`http://localhost:5000/api/posts`);
 };
 const uploadFile = async (formData) => {
   let { data: fileCdn } = await axios.post(

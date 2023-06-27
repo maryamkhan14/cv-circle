@@ -8,35 +8,10 @@ const AllPosts = () => {
   const [search, setSearch] = useState("");
   const [sortSelect, setSortSelect] = useState("");
 
-  const formatPosts = (posts) => {
-    console.log(posts);
-    return posts.map(
-      ({
-        id,
-        created_at: createdAt,
-        fk_uid: fkUid,
-        title,
-        post_content: postContent,
-        img_cdn: imgCdn,
-        upvote_count: upvoteCount,
-      }) => {
-        return {
-          id,
-          createdAt,
-          fkUid,
-          title,
-          postContent,
-          imgCdn,
-          upvoteCount,
-        };
-      }
-    );
-  };
-
   const loadPosts = async () => {
     const { data, error } = await getAllPosts();
     if (data) {
-      setPosts(formatPosts(data));
+      setPosts(data.posts);
     } else {
       console.log(error);
     }
@@ -80,7 +55,7 @@ const AllPosts = () => {
           onChange={(e) => setSortSelect(e.target.value)}
         >
           <option value="">Sort posts...</option>
-          <option value="created_at">Time Created</option>
+          <option value="createdAt">Time Created</option>
           <option value="upvotes">Upvotes</option>
         </select>
       </span>
