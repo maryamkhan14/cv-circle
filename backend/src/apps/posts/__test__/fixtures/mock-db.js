@@ -1,9 +1,17 @@
 import { vi } from "vitest";
 import realTestDbClient from "./db";
-
+import {
+  makeFakeSinglePostRecord,
+  makeFakeListOfPostRecords,
+} from "../db-responses";
 let insertSpy = vi.fn(() => {
   return {
-    select: vi.fn(() => {}),
+    select: vi.fn(() => makeFakeSinglePostRecord()),
+  };
+});
+let selectSpy = vi.fn(() => {
+  return {
+    order: vi.fn(() => makeFakeListOfPostRecords()),
   };
 });
 let uploadBucketSpy = vi.fn(async () => {});
@@ -19,6 +27,7 @@ const mockTestDbClient = {
   },
   from: vi.fn(() => {
     return {
+      select: selectSpy,
       insert: insertSpy,
     };
   }),
