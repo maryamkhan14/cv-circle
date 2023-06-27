@@ -9,13 +9,13 @@ export default function makePostsDb({ dbClient }) {
   });
 
   async function getAll() {
-    return await supabase
+    return await dbClient
       .from("posts")
       .select()
       .order("created_at", { ascending: false });
   }
   async function getById(postId) {
-    return await supabase.from("posts").select().eq("id", postId);
+    return await dbClient.from("posts").select().eq("id", postId);
   }
   async function update() {}
   async function remove() {}
