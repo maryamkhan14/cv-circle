@@ -29,4 +29,12 @@ describe("Posts-relevant database tests", () => {
     expect(dbClient.from).toHaveBeenCalledWith("posts");
     expect(result.data).toEqual(expected);
   });
+
+  test("Gets a single post successfully", async () => {
+    let postId = 1;
+    let expected = makeFakeRawPost();
+    let result = await postsDb.getById(postId);
+    expect(result.data).toEqual(expected);
+    expect(result.error).toEqual(null);
+  });
 });

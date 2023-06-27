@@ -7,7 +7,10 @@ import {
 let insertSpy = vi.fn(() => {
   return {
     select: vi.fn(() => {
-      return { data: makeFakeSinglePostRecord(), error: null };
+      return {
+        data: makeFakeSinglePostRecord(),
+        error: null,
+      };
     }),
   };
 });
@@ -15,6 +18,9 @@ let selectSpy = vi.fn(() => {
   return {
     order: vi.fn(() => {
       return { data: makeFakeListOfPostRecords(), error: null };
+    }),
+    eq: vi.fn(() => {
+      return { data: makeFakeSinglePostRecord(), error: null };
     }),
   };
 });

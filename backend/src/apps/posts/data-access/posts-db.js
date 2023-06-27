@@ -19,9 +19,12 @@ export default function makePostsDb({ dbClient }) {
       data: result.data.map((record) => formatDbResults(record)),
     };
   }
+
   async function getById(postId) {
-    return await dbClient.from("posts").select().eq("id", postId);
+    let result = await dbClient.from("posts").select().eq("id", postId);
+    return { ...result, data: formatDbResults(result.data) };
   }
+
   async function update() {}
   async function remove() {}
   async function insert({ userId, title, postContent, imgCdn }) {
