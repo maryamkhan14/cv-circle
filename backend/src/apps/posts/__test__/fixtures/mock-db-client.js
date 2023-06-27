@@ -6,12 +6,16 @@ import {
 } from "./mock-db-client-responses";
 let insertSpy = vi.fn(() => {
   return {
-    select: vi.fn(() => makeFakeSinglePostRecord()),
+    select: vi.fn(() => {
+      return { data: makeFakeSinglePostRecord(), error: null };
+    }),
   };
 });
 let selectSpy = vi.fn(() => {
   return {
-    order: vi.fn(() => makeFakeListOfPostRecords()),
+    order: vi.fn(() => {
+      return { data: makeFakeListOfPostRecords(), error: null };
+    }),
   };
 });
 let uploadBucketSpy = vi.fn(async () => {});

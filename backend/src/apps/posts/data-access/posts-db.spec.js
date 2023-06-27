@@ -20,13 +20,13 @@ describe("Posts-relevant database tests", () => {
     expect(postsDbInsertArgs.title).toEqual(toInsert.title);
     expect(postsDbInsertArgs.post_content).toEqual(toInsert.postContent);
     expect(postsDbInsertArgs.img_cdn).toEqual(toInsert.imgCdn);
-    expect(result).toEqual(toInsert);
+    expect(result.data).toEqual(toInsert);
   });
 
   test("Gets all posts successfully", async () => {
     let expected = [{ ...makeFakeRawPost() }];
     let result = await postsDb.getAll();
     expect(dbClient.from).toHaveBeenCalledWith("posts");
-    expect(result).toEqual(expected);
+    expect(result.data).toEqual(expected);
   });
 });

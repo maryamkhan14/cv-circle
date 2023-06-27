@@ -9,13 +9,14 @@ export default function makePostsDb({ dbClient }) {
   });
 
   async function getAll() {
+    let formattedResults;
     let result = await dbClient
       .from("posts")
       .select()
       .order("created_at", { ascending: false });
 
     if (result.data) {
-      result.data = result.data.map(
+      formattedResults = result.data.map(
         ({
           id,
           created_at: createdAt,
@@ -28,7 +29,7 @@ export default function makePostsDb({ dbClient }) {
         }
       );
     }
-    return result;
+    return { ...result, data: formattedResults };
   }
   async function getById(postId) {
     return await dbClient.from("posts").select().eq("id", postId);
@@ -36,6 +37,7 @@ export default function makePostsDb({ dbClient }) {
   async function update() {}
   async function remove() {}
   async function insert({ userId, title, postContent, imgCdn }) {
+    let formattedResult;
     let result = await dbClient
       .from("posts") // TODO: Add .env for "posts"
       .insert({
@@ -47,15 +49,20 @@ export default function makePostsDb({ dbClient }) {
       .select();
 
     if (result.data) {
-      result.data = {
-        id: insertedPost.id,
-        createdAt: insertedPost.created_at,
-        userId: insertedPost.fk_uid,
-        title: insertedPost.title,
-        postContent: insertedPost.post_content,
-        imgCdn: insertedPost.img_cdn,
-      };
+      let {
+        id,
+        created_at: createdAt,
+        fk_uid: userId,
+        title,
+        post_content: postContent,
+        img_cdn: imgCdn,
+      } = result.data;
+      formattedResult = { id, createdAt, userId, title, postContent, imgCdn };
     }
-    return result;
+
+    return {
+      ...result,
+      data: formattedResult,
+    };
   }
 }
