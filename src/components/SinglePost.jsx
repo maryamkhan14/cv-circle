@@ -44,24 +44,8 @@ const SinglePost = () => {
   useEffect(() => {
     getPost(postId).then(({ data, error }) => {
       if (data) {
-        let {
-          id,
-          created_at: createdAt,
-          fk_uid: fkUid,
-          title,
-          post_content: postContent,
-          img_cdn: imgCdn,
-          upvote_count: upvoteCount,
-        } = data[0];
-        setPost({
-          id,
-          createdAt,
-          fkUid,
-          title,
-          postContent,
-          imgCdn,
-          upvoteCount,
-        });
+        let { post } = data;
+        setPost(post);
       } else {
         // TODO: navigate to 404 page
       }

@@ -1,13 +1,6 @@
 import axios from "axios";
 const getPost = async (postId) => {
-  if (postId) {
-    let { data: singlePost } = await axios.get(
-      `http://localhost:5000/post/${postId}`
-    );
-    return singlePost;
-  } else {
-    return null;
-  }
+  return await axios.get(`http://localhost:5000/api/posts/${postId}`);
 };
 const getAllPosts = async () => {
   return await axios.get(`http://localhost:5000/api/posts`);
