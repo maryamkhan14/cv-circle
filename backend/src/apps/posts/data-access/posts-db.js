@@ -13,16 +13,12 @@ export default function makePostsDb({ dbClient }) {
       .from("posts")
       .select()
       .order("created_at", { ascending: false });
-
-    return {
-      ...result,
-      data: result.data.map((record) => formatDbResults(record)),
-    };
+    return { ...result, data: formatDbResults(result.data) };
   }
 
   async function getById(postId) {
     let result = await dbClient.from("posts").select().eq("id", postId);
-    return { ...result, data: formatDbResults(...result.data) };
+    return { ...result, data: formatDbResults(result.data) };
   }
 
   async function update() {}
@@ -46,15 +42,18 @@ export default function makePostsDb({ dbClient }) {
 
   function formatDbResults(data) {
     if (data) {
-      let {
-        id,
-        created_at: createdAt,
-        fk_uid: userId,
-        title,
-        post_content: postContent,
-        img_cdn: imgCdn,
-      } = data;
-      return { id, createdAt, userId, title, postContent, imgCdn };
+      return data.map(
+        ({
+          id,
+          created_at: createdAt,
+          fk_uid: userId,
+          title,
+          post_content: postContent,
+          img_cdn: imgCdn,
+        }) => {
+          return { id, createdAt, userId, title, postContent, imgCdn };
+        }
+      );
     }
     return null;
   }

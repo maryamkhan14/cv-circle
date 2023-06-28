@@ -7,7 +7,7 @@ export default function makeRetrieveSinglePost({ postsDb }) {
         `Error retrieving post: ${error.message}. Post retrieval failed.`
       );
     }
-    let post = makePost(postRecord);
+    let post = makePost(...postRecord);
     return post.getDTO();
   };
 }
