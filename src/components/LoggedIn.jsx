@@ -22,7 +22,8 @@ const LoggedIn = () => {
         throw new Error("Authentication has been failed!");
       })
       .then((resObject) => {
-        dispatch({ type: "USER_SIGNED_IN", payload: { ...resObject.user } });
+        console.log(resObject);
+        dispatch({ type: "USER_SIGNED_IN", payload: { user: resObject.user } });
         sessionStorage.setItem("uname", resObject.user.name);
         sessionStorage.setItem("uid", resObject.user.userId);
         sessionStorage.setItem("email", resObject.user.email);

@@ -119,8 +119,7 @@ const SinglePost = () => {
             </span>
 
             <div className="w-full flex gap-2 items-stretch">
-              {console.log(user.id, post.fkUid)}
-              {Object.keys(user).length > 0 && user.id == post.fkUid && (
+              {Object.keys(user).length > 0 && user.id == post.userId && (
                 <>
                   <Link to={`/edit-post/${post.id}`}>
                     <button className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center  h-full justify-center">
