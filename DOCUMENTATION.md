@@ -2,29 +2,71 @@
 
 ## Backend
 
-Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js.
+Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js. Swagger documentation to be added soon as well!
 
-- [POST /api/posts](#post-creation-sequence-diagram)
+- [GET /api/posts](#get-apiposts)
+- [POST /api/posts](#post-apiposts)
+
+---
+
+### GET /api/posts
+
+When a GET request is made to '/api/posts', a list of posts is returned if all goes well.
+
+#### Participant Abbreviations
+
+| Full                | Abbreviation | Additional Notes                                                                                               |
+| ------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| User                | U            | ----                                                                                                           |
+| Frontend            | F            | ----                                                                                                           |
+| makeExpressCallback | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
+| getAllPosts         | GAP          | The controller for the GET endpoint at /api/posts/                                                             |
+| retrievePosts       | RP           | The use case for retrieving all posts                                                                          |
+| postsDb             | PDB          | Interface for queries against the Supabase table that stores the posts                                         |
+
+```mermaid
+sequenceDiagram
+    U->>+F: views All Posts component
+    F->>+MKE: GET request
+    MKE->>+GAP: filtered request object
+    GAP->>+RP: calls
+    RP->>+PDB: query for all posts stored in table
+
+    rect rgba(255, 0, 0, 0.2)
+        break When database query fails
+            PDB->>RP: error object
+            RP->>RP: throw exception
+            GAP->>MKE: response w/error details
+            MKE->>F: HTTP error response
+        end
+    end
+
+    PDB->>-RP: array of complete JSON post records
+    RP->>-GAP: array of JSON DTO's of each post
+    GAP->>-MKE: JSON object with headers, body
+    MKE->>-F: HTTP success response
+    F->>-U: updated All Posts component
+```
 
 ---
 
 ### POST /api/posts
 
-When a POST request is made to 'api/posts', a new post is created if all goes well. (Swagger documentation to be added here.)
+When a POST request is made to '/api/posts', a new post is created if all goes well.
 
 #### Participant Abbreviations
 
-| Full                    | Abbreviation | Additional Notes                                                                                                                                                                                      |
-| ----------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| User                    | U            | ----                                                                                                                                                                                                  |
-| Frontend                | F            | ----                                                                                                                                                                                                  |
-| makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for dealing with req, res variables - passes on filtered req objects to controllers and constructs res objects from the controllers' responses |
-| PostPost                | PP           | The controller for the POST endpoint at /api/posts/                                                                                                                                                   |
-| handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                                                                                                              |
-| createPost              | CP           | Use case for creating post                                                                                                                                                                            |
-| imagesDb                | IDB          | Interface for queries against the Supabase bucket that stores the posts' attachments' images                                                                                                          |
-| postsDb                 | PDB          | Interface for queries against the Supabase table that stores the posts                                                                                                                                |
-| makePdfPreview          | MPP          | A custom service used by HAP to transform the first page of a PDF file into an image                                                                                                                  |
+| Full                    | Abbreviation | Additional Notes                                                                                               |
+| ----------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| User                    | U            | ----                                                                                                           |
+| Frontend                | F            | ----                                                                                                           |
+| makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
+| PostPost                | PP           | The controller for the POST endpoint at /api/posts/                                                            |
+| handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                       |
+| createPost              | CP           | Use case for creating post                                                                                     |
+| imagesDb                | IDB          | Interface for queries against the Supabase bucket that stores the posts' attachments' images                   |
+| postsDb                 | PDB          | Interface for queries against the Supabase table that stores the posts                                         |
+| makePdfPreview          | MPP          | A custom service used by HAP to transform the first page of a PDF file into an image                           |
 
 ```mermaid
 sequenceDiagram
@@ -38,7 +80,7 @@ sequenceDiagram
         PP->>+HAP: post attachment details
 
         rect rgba(255, 0, 0, 0.2)
-        break when Post does not contain valid attachment
+        break When post does not contain valid attachment
             HAP->>HAP: throw exception
             PP->>MKE: response w/error details
             MKE->>F: HTTP error response
@@ -56,7 +98,7 @@ sequenceDiagram
         HAP->>+IDB: image entity
 
         rect rgba(255, 0, 0, 0.2)
-        break when Saving attachment preview image unsuccessful
+        break When saving attachment preview image unsuccessful
             IDB->>HAP: error object
             HAP->>HAP: throw exception
             PP->>MKE: response w/error details
@@ -72,7 +114,7 @@ sequenceDiagram
         PP->>+CP: post details with image CDN
 
         rect rgba(255, 0, 0, 0.2)
-        break when Post is missing a necessary detail (e.g. userId of author)
+        break When post is missing a necessary detail (e.g. userId of author)
             CP->>CP: throw exception
             PP->>MKE: response w/error details
             MKE->>F: HTTP error response
@@ -83,7 +125,7 @@ sequenceDiagram
         CP->>+PDB: post entity
 
         rect rgba(255, 0, 0, 0.2)
-        break when Saving post unsuccessful
+        break When saving post unsuccessful
             PDB->>CP: error object
             CP->>CP: throw exception
             PP->>MKE: response w/error details
@@ -94,7 +136,7 @@ sequenceDiagram
 
         PDB->>CP: database success response
         deactivate PDB
-        CP->>PP: DTO with new post details
+        CP->>PP: JSON object containing new post's DTO
         deactivate CP
         PP->>-MKE: JSON object with headers, body
         MKE->>F: HTTP success response
