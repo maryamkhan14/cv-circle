@@ -61,7 +61,7 @@ sequenceDiagram
         end
         postsDb (Database Interface)->>createPost (Use Case): database success response
         createPost (Use Case)->>postPost (Controller): DTO with new post details
-        postPost (Controller)->>makeExpressCallback (Adapter): JSON response object with headers, status code, body
+        postPost (Controller)->>makeExpressCallback (Adapter): JSON object with headers, body
         makeExpressCallback (Adapter)->>Frontend: HTTP success response
 
     else User session not authenticated
