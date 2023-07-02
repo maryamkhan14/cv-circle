@@ -4,9 +4,13 @@
 
 Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js.
 
-### Post Creation Sequence Diagram
+- [POST /api/posts](#post-creation-sequence-diagram)
 
-This is what occurs when a POST request is made to 'api/posts'. (Swagger documentation to be added here.)
+---
+
+### POST /api/posts
+
+When a POST request is made to 'api/posts', a new post is created if all goes well. (Swagger documentation to be added here.)
 
 #### Participant Abbreviations
 
