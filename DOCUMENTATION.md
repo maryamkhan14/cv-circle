@@ -14,7 +14,6 @@ This is what occurs when a POST request is made to 'api/posts'. (Swagger documen
 | ----------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | User                    | U            | ----                                                                                                                                                                                                  |
 | Frontend                | F            | ----                                                                                                                                                                                                  |
-| Posts                   | P            | The entry point to the posts component                                                                                                                                                                |
 | makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for dealing with req, res variables - passes on filtered req objects to controllers and constructs res objects from the controllers' responses |
 | PostPost                | PP           | The controller for the POST endpoint at /api/posts/                                                                                                                                                   |
 | handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                                                                                                              |
@@ -25,60 +24,79 @@ This is what occurs when a POST request is made to 'api/posts'. (Swagger documen
 
 ```mermaid
 sequenceDiagram
-    participant U
-    participant F
-    participant P
-    participant MKE
-    participant PP
-    participant HAP
-    participant CP
-    participant IDB
-    participant PDB
-    participant MPP
+    activate U
     U->>+F: get post creation form
     alt User session authenticated
-        F->>+U: post creation form
+        F->>U: post creation form
         U->>F: post details
-        F->>+P: POST request w/post details
-        P->>+MKE: request object
+        F->>+MKE: request object
         MKE->>+PP: filtered request object
         PP->>+HAP: post attachment details
 
+        rect rgba(255, 0, 0, 0.2)
         break when Post does not contain valid attachment
             HAP->>HAP: throw exception
+            PP->>MKE: response w/error details
             MKE->>F: HTTP error response
             F->>U: error component
         end
+        end
+
+        rect rgba(191, 223, 255, 0.5)
         opt Attachment is a PDF
             HAP->>+MPP: attachment file
-            MPP->>HAP: image of first page of PDF
+            MPP->>-HAP: image of first page of PDF
         end
+        end
+
         HAP->>+IDB: image entity
+
+        rect rgba(255, 0, 0, 0.2)
         break when Saving attachment preview image unsuccessful
-            IDB->>IDB: throw exception
+            IDB->>HAP: error object
+            HAP->>HAP: throw exception
+            PP->>MKE: response w/error details
             MKE->>F: HTTP error response
             F->>U: error component
         end
+        end
+
         IDB->>HAP: image CDN
+        deactivate IDB
         HAP->>PP: image entity
+        deactivate HAP
         PP->>+CP: post details with image CDN
+
+        rect rgba(255, 0, 0, 0.2)
         break when Post is missing a necessary detail (e.g. userId of author)
             CP->>CP: throw exception
+            PP->>MKE: response w/error details
             MKE->>F: HTTP error response
             F->>U: error component
         end
-        CP->>+PDB: post entity
-        break when Saving post unsuccessful
-            PDB->>PDB: throw exception
-            MKE->>F: HTTP error response
-            F->>U: error component
         end
-        PDB->>CP: database success response
-        CP->>PP: DTO with new post details
-        PP->>MKE: JSON object with headers, body
-        MKE->>F: HTTP success response
 
+        CP->>+PDB: post entity
+
+        rect rgba(255, 0, 0, 0.2)
+        break when Saving post unsuccessful
+            PDB->>CP: error object
+            CP->>CP: throw exception
+            PP->>MKE: response w/error details
+            MKE->>F: HTTP error response
+            F->>U: error component
+        end
+        end
+
+        PDB->>CP: database success response
+        deactivate PDB
+        CP->>PP: DTO with new post details
+        deactivate CP
+        PP->>-MKE: JSON object with headers, body
+        MKE->>F: HTTP success response
+        deactivate MKE
     else User session not authenticated
-        F->>+U: 404 error component
+        F->>-U: 404 error component
+
     end
 ```
