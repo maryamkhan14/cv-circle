@@ -4,9 +4,10 @@
 
 Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js. Swagger documentation to be added soon as well!
 
-- [GET /api/posts](#get-apiposts)
-- [GET /api/posts/:id](#get-apipostsid)
-- [POST /api/posts](#post-apiposts)
+- Posts component
+  - [GET /api/posts](#get-apiposts)
+  - [GET /api/posts/:id](#get-apipostsid)
+  - [POST /api/posts](#post-apiposts)
 
 ---
 
