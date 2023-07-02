@@ -39,6 +39,7 @@ sequenceDiagram
             RSP->>RSP: throw exception
             GSP->>MKE: response w/error details
             MKE->>F: HTTP error response
+            F->>U: error component
         end
     end
 
@@ -80,6 +81,7 @@ sequenceDiagram
             RP->>RP: throw exception
             GAP->>MKE: response w/error details
             MKE->>F: HTTP error response
+            F->>U: error component
         end
     end
 
