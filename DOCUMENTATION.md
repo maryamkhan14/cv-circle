@@ -5,7 +5,49 @@
 Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js. Swagger documentation to be added soon as well!
 
 - [GET /api/posts](#get-apiposts)
+- [GET /api/posts/:id](#get-apipostsid)
 - [POST /api/posts](#post-apiposts)
+
+---
+
+### GET /api/posts/:id
+
+When a GET request is made to 'api/posts/:id', a single post is returned if all goes well.
+
+#### Participant Abbreviations
+
+| Full                | Abbreviation | Additional Notes                                                                                               |
+| ------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| User                | U            | ----                                                                                                           |
+| Frontend            | F            | ----                                                                                                           |
+| makeExpressCallback | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
+| getSinglePost       | GSP          | The controller for the GET endpoint at /api/posts/:id                                                          |
+| retrieveSinglePost  | RSP          | The use case for retrieving a single post                                                                      |
+| postsDb             | PDB          | Interface for queries against the Supabase table that stores the posts                                         |
+
+```mermaid
+sequenceDiagram
+    U->>+F: clicks on a post
+    F->>+MKE: GET request
+    MKE->>+GSP: filtered request object
+    GSP->>+RSP: calls
+    RSP->>+PDB: query for the corresponding post
+
+    rect rgba(255, 0, 0, 0.2)
+        break When database query fails
+            PDB->>RSP: error object
+            RSP->>RSP: throw exception
+            GSP->>MKE: response w/error details
+            MKE->>F: HTTP error response
+        end
+    end
+
+    PDB->>-RSP: complete JSON post record
+    RSP->>-GSP: JSON DTO of the post
+    GSP->>-MKE: JSON object with headers, body
+    MKE->>-F: HTTP success response
+    F->>-U: Single Post component
+```
 
 ---
 
