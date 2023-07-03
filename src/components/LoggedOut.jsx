@@ -7,11 +7,11 @@ import { UserContext } from "../context/UserContext";
 const LoggedOut = () => {
   const { user, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
-  const BaseURL = "http://localhost:5000/auth/logout";
+  const BaseURL = "http://localhost:5000/api/auth/logout";
 
   const logOutUser = () => {
     axios
-      .post(BaseURL)
+      .post(BaseURL, {}, { withCredentials: true })
       .then((response) => {
         dispatch({ type: "USER_SIGNED_OUT", payload: null });
         sessionStorage.clear();

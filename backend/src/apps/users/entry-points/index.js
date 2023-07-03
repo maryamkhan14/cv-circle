@@ -4,6 +4,7 @@ import makeGetGithubAuth from "./get-github-auth.js";
 import makeGetGithubAuthCallback from "./get-github-auth-callback.js";
 import makeGetGoogleAuthCallback from "./get-google-auth-callback.js";
 import makeGetAuthSuccess from "./get-auth-success.js";
+import makePostLogout from "./post-logout.js";
 
 const { authGoogle, authGoogleCallback, authGithub, authGithubCallback } =
   authenticator;
@@ -18,6 +19,7 @@ const getGithubAuthCallback = makeGetGithubAuthCallback({
 });
 
 const getAuthSuccess = makeGetAuthSuccess();
+const postLogout = makePostLogout();
 
 const userController = Object.freeze({
   getGoogleAuth,
@@ -25,6 +27,7 @@ const userController = Object.freeze({
   getGithubAuth,
   getGithubAuthCallback,
   getAuthSuccess,
+  postLogout,
 });
 
 export default { userController };
@@ -35,4 +38,5 @@ export {
   getGithubAuth,
   getGithubAuthCallback,
   getAuthSuccess,
+  postLogout,
 };

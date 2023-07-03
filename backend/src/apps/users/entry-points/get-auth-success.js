@@ -20,7 +20,7 @@ export default function makeGetAuthSuccess() {
         },
         statusCode: 400,
         body: {
-          error: e.message,
+          error: "Login unsuccessful: no user found.",
         },
       };
     }

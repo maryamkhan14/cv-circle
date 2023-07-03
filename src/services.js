@@ -1,9 +1,14 @@
 import axios from "axios";
+axios.defaults.withCredentials = true;
 const getPost = async (postId) => {
-  return await axios.get(`http://localhost:5000/api/posts/${postId}`);
+  return await axios.get(`http://localhost:5000/api/posts/${postId}`, {
+    withCredentials: true,
+  });
 };
 const getAllPosts = async () => {
-  return await axios.get(`http://localhost:5000/api/posts`);
+  return await axios.get(`http://localhost:5000/api/posts`, {
+    withCredentials: true,
+  });
 };
 const uploadFile = async (formData) => {
   let { data: fileCdn } = await axios.post(

@@ -10,6 +10,9 @@ export default function makeExpressCallback(controller) {
       method: req.method,
       path: req.path,
       user: req.user,
+      sessionStore: req.sessionStore,
+      logOut: req.logOut,
+      session: req.session,
       headers: {
         "Content-Type": req.get("Content-Type"),
         Referer: req.get("referer"),

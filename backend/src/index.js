@@ -14,8 +14,12 @@ app.use(express.json());
 app.use(
   expressSession({
     secret: "keyboard cat",
-    keys: ["lama"],
-    maxAge: 24 * 60 * 60 * 100,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 100,
+      httpOnly: true,
+    },
+    resave: true,
+    saveUninitialized: false,
   })
 );
 app.use(expressFileUpload());

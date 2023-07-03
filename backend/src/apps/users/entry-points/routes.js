@@ -5,6 +5,7 @@ import {
   getGoogleAuthCallback,
   getGithubAuthCallback,
   getAuthSuccess,
+  postLogout,
 } from "./index.js";
 import makeExpressCallback from "../../../express-callback/index.js";
 
@@ -14,5 +15,5 @@ router.get("/github", getGithubAuth);
 router.get(process.env.GOOGLE_CALLBACK_URL, getGoogleAuthCallback);
 router.get(process.env.GITHUB_CALLBACK_URL, getGithubAuthCallback);
 router.get("/success", makeExpressCallback(getAuthSuccess));
-
+router.post("/logout", makeExpressCallback(postLogout));
 export default router;
