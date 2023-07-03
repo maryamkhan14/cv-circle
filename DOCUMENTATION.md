@@ -8,6 +8,8 @@ Here are some notes on the architecture of CV circle's backend. It's a work in p
   - [GET /api/posts](#get-apiposts)
   - [GET /api/posts/:id](#get-apipostsid)
   - [POST /api/posts](#post-apiposts)
+- Users component
+- [GET /api/auth/github]()
 
 ---
 
@@ -190,4 +192,24 @@ sequenceDiagram
         F->>-U: 404 error component
 
     end
+```
+
+---
+
+### GET /api/auth/github
+
+When a GET request is made to '/api/auth/github', the login / signup process with Github begins.
+
+#### Participant Abbreviations
+
+| Full     | Abbreviation | Additional Notes |
+| -------- | ------------ | ---------------- |
+| User     | U            | ----             |
+| Frontend | F            | ----             |
+
+```
+mermaid
+sequenceDiagram
+    activate U
+    U->>+F: Clicks Login/Signup button
 ```
