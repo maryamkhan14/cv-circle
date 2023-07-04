@@ -207,7 +207,7 @@ When a GET request is made to '/api/auth/[provider]', the login / signup process
 | User                        | U            | ----                                                                           |
 | Browser                     | B            | ----                                                                           |
 | Auth Controller             | AC           | Controller for the first GET endpoint reached in login/signup requests         |
-| Auth Callback Controller    | ACB          | Controller for the GET endpoimdnt at the redirect URI in OAuth apps            |
+| Auth Callback Controller    | ACB          | Controller for the GET endpoint at the redirect URI in OAuth apps              |
 | Authenticator               | AUTH         | The authenticator middleware used - currently, Passport.js                     |
 | OAuth Authorization Server  | O_AS         | The OAuth authorization server for the OAuth provider being used (e.g. Google) |
 | OAuth API Provider endpoint | O_APE        | The OAuth provider's API endpoint, which serves profile data                   |
@@ -227,7 +227,7 @@ URI's are referenced in diagram as follows:
 sequenceDiagram
     U->>+B: clicks login / signup
     B->>+AC: HTTP GET request to AC
-    AC->>+AUTH: call to authenticate user
+    AC->>+AUTH: authorization request
     deactivate AC
     AUTH->>+O_AS: authorization request
     O_AS->>B: permission form
