@@ -9,7 +9,6 @@ Here are some notes on the architecture of CV circle's backend. It's a work in p
   - [GET /api/posts/:id](#get-apipostsid)
   - [POST /api/posts](#post-apiposts)
 - Users component
-- [GET /api/auth/github]()
 
 ---
 
@@ -202,14 +201,68 @@ When a GET request is made to '/api/auth/github', the login / signup process wit
 
 #### Participant Abbreviations
 
-| Full     | Abbreviation | Additional Notes |
-| -------- | ------------ | ---------------- |
-| User     | U            | ----             |
-| Frontend | F            | ----             |
+| Full                        | Abbreviation | Additional Notes                                                               |
+| --------------------------- | ------------ | ------------------------------------------------------------------------------ |
+| User                        | U            | ----                                                                           |
+| Browser                     | B            | ----                                                                           |
+| Auth Controller             | AC           | Controller for the first GET endpoint reached in login/signup requests         |
+| Auth Callback Controller    | ACB          | Controller for the GET endpoimdnt at the redirect URI in OAuth apps            |
+| Authenticator               | AUTH         | The authenticator middleware used - currently, Passport.js                     |
+| OAuth Authorization Server  | O_AS         | The OAuth authorization server for the OAuth provider being used (e.g. Google) |
+| OAuth API Provider endpoint | O_APE        | The OAuth provider's API endpoint, which serves profile data                   |
+| Database                    | DB           | The application database, where users are stored                               |
 
-```
-mermaid
+##### Other notes
+
+URI's are referenced in diagram as follows:
+| URI | Abbreviation | Notes |
+| :--- | :----------: | -------------: |
+| /api/auth/[provider] | AC | Leads to the Auth Controller |
+| /api/auth/[provider]/redirect | AR | The authorization redirect URL used in authentication strategies |
+| /logged-in | SR | The success redirect URL |
+| /login-failed | FR | The failure redirect URL |
+
+```mermaid
 sequenceDiagram
-    activate U
-    U->>+F: Clicks Login/Signup button
+    U->>+B: clicks login / signup
+    B->>+AC: HTTP GET request to AC
+    AC->>+AUTH: call to authenticate user
+    deactivate AC
+    AUTH->>+O_AS: authorization request
+    O_AS->>B: permission form
+
+    alt Permission granted
+    U->>B: permission & identifying credentials
+    B->>O_AS: permission & identifying credentials
+    O_AS->>B: HTTP redirect to AR
+    B->>+ACB: authorization response
+    ACB->>AUTH: authorization response
+    AUTH->>O_AS: HTTP POST request w/authorization code
+    O_AS->>AUTH: access token
+    AUTH->>+O_APE: HTTP GET request w/access token
+    O_APE->>-AUTH: user profile
+    AUTH->>+DB: normalized user profile
+    DB->>DB: upsert user profile
+
+    alt Upserting user profile succeeds
+        DB->>AUTH: success response
+        AUTH->>AUTH: serialize user
+        AUTH->>B: HTTP redirect to SR
+        B->>U: success component
+    else Upserting user profile fails
+        DB->>-AUTH: error response
+        AUTH->>AUTH: throw error
+        AUTH->>B: HTTP redirect to FR
+        B->>U: failure component
+    end
+
+    else Permission not granted
+    U->>B: permission denial
+    B->>O_AS: permission denial
+    O_AS->>-B: HTTP redirect to AR
+    B->>ACB: authorization response
+    ACB->>-AUTH: authorization response
+    AUTH->>-B: HTTP redirect to FR
+    B->>-U: failure component
+    end
 ```
