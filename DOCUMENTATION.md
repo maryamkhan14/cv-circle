@@ -9,6 +9,7 @@ Here are some notes on the architecture of CV circle's backend. It's a work in p
   - [GET /api/posts/:id](#get-apipostsid)
   - [POST /api/posts](#post-apiposts)
 - Users component
+  - [GET /api/auth/[provider]](#get-apiauthprovider)
 
 ---
 
@@ -195,9 +196,9 @@ sequenceDiagram
 
 ---
 
-### GET /api/auth/github
+### GET /api/auth/[provider]
 
-When a GET request is made to '/api/auth/github', the login / signup process with Github begins.
+When a GET request is made to '/api/auth/[provider]', the login / signup process with that provider begins. Current providers are Github and Google.
 
 #### Participant Abbreviations
 
