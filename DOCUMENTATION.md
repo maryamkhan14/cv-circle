@@ -53,7 +53,13 @@ sequenceDiagram
         F->>+MKE: request object
         MKE->>+PP: filtered request object
         Note over PP, HAP: Handle Attachment Preview
-
+        rect rgba(255,0,0,0.1)
+        break Handle Attachment Preview threw exception
+            PP->>+MKE: response w/error details
+            MKE->>+F: HTTP error response
+            F->>U: error component
+        end
+        end
         PP->>+CP: post details with image CDN
 
         rect rgba(255, 0, 0, 0.1)
@@ -203,6 +209,13 @@ sequenceDiagram
         rect rgba(0,0,255,0.1)
         opt Post update details contain new attachment
             Note over PP, HAP: Handle Attachment Preview
+            rect rgba(255,0,0,0.1)
+            break Handle Attachment Preview threw exception
+                PP->>+MKE: response w/error details
+                MKE->>+F: HTTP error response
+                F->>U: error component
+            end
+            end
         end
         end
 
@@ -325,9 +338,6 @@ These are diagrams that are referenced in two or more diagrams.
 
 | Full                    | Abbreviation | Additional Notes                                                                                               |
 | ----------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| User                    | U            | ----                                                                                                           |
-| Frontend                | F            | ----                                                                                                           |
-| makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
 | Controller              | CTRL         | The controller at the endpoint                                                                                 |
 | handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                       |
 | imagesDb                | IDB          | Interface for queries against the Supabase bucket that stores the posts' attachments' images                   |
@@ -351,9 +361,6 @@ sequenceDiagram
         break When saving attachment preview image unsuccessful
             IDB->>HAP: error object
             HAP->>HAP: throw exception
-            CTRL->>+MKE: response w/error details
-            MKE->>+F: HTTP error response
-            F->>U: error component
         end
         end
 
@@ -361,10 +368,5 @@ sequenceDiagram
     HAP->>CTRL: image entity
     else Post does not contain valid attachment
         HAP->>-HAP: throw exception
-        CTRL->>-MKE: response w/error details
-        MKE->>-F: HTTP error response
-
-        F->>+U: error component
-        deactivate U
     end
 ```
