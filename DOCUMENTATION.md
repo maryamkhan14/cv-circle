@@ -88,11 +88,10 @@ sequenceDiagram
         CP->>PP: JSON object containing new post's DTO
         deactivate CP
         PP->>-MKE: JSON object with headers, body
-        MKE->>F: HTTP success response
-        deactivate MKE
+        MKE->>-F: HTTP success response
     else User session not authenticated
         F->>-U: 404 error component
-
+        deactivate U
     end
 ```
 
@@ -115,6 +114,7 @@ When a GET request is made to 'api/posts/:id', a single post is returned if all 
 
 ```mermaid
 sequenceDiagram
+    activate U
     U->>+F: clicks on a post
     F->>+MKE: GET request
     MKE->>+GSP: filtered request object
@@ -136,6 +136,7 @@ sequenceDiagram
     GSP->>-MKE: JSON object with headers, body
     MKE->>-F: HTTP success response
     F->>-U: Single Post component
+    deactivate U
 ```
 
 ---
@@ -157,6 +158,7 @@ When a GET request is made to '/api/posts', a list of posts is returned if all g
 
 ```mermaid
 sequenceDiagram
+    activate U
     U->>+F: views All Posts component
     F->>+MKE: GET request
     MKE->>+GAP: filtered request object
@@ -178,6 +180,7 @@ sequenceDiagram
     GAP->>-MKE: JSON object with headers, body
     MKE->>-F: HTTP success response
     F->>-U: updated All Posts component
+    deactivate U
 ```
 
 ---
@@ -199,6 +202,7 @@ When a PATCH request is made to '/api/posts/:id', the post with that ID is updat
 
 ```mermaid
 sequenceDiagram
+    activate U
     U->>+F: Clicks Update Post button
     alt User session is active:
         F->>U: post update form
@@ -245,10 +249,11 @@ sequenceDiagram
         PDB->>-UP: database success response
         UP->>-PP: JSON object containing new post's DTO
         PP->>-MKE: JSON object with headers, body
-        MKE->>F: HTTP success response
+        MKE->>-F: HTTP success response
         F->>U: success component
     else User session is expired/invalid:
         F->>-U: error component
+        deactivate U
     end
 ```
 
@@ -283,6 +288,7 @@ URI's are referenced in diagram as follows:
 
 ```mermaid
 sequenceDiagram
+    activate U
     U->>+B: clicks login / signup
     B->>+AC: HTTP GET request to AC
     AC->>+AUTH: authorization request
@@ -323,6 +329,7 @@ sequenceDiagram
     ACB->>-AUTH: authorization response
     AUTH->>-B: HTTP redirect to FR
     B->>-U: failure component
+    deactivate U
     end
 ```
 
