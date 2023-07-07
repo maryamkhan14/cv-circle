@@ -13,17 +13,14 @@ Here are some notes on the architecture of CV circle's backend. It's a work in p
 ## Posts Component
   
 Here you'll find all the documentation concerning the endpoints for the Posts component. Navigate between them here:
+- [POST /api/posts](#post-apiposts)
 - [GET /api/posts](#get-apiposts)
 - [GET /api/posts/:id](#get-apipostsid)
-- [POST /api/posts](#post-apiposts)
 - [Supporting diagrams](#supporting-diagrams-for-posts-component)
 
 ## Users Component
 
 Here you'll find all the documentation concerning the endpoints for the Users component. Navigate between them here:
-- [GET /api/posts](#get-apiposts)
-- [GET /api/posts/:id](#get-apipostsid)
-- [POST /api/posts](#post-apiposts)
 - [GET /api/auth/[provider]](#get-apiauthprovider)
 ---
 
