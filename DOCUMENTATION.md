@@ -4,12 +4,93 @@
 
 Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js. Swagger documentation to be added soon as well!
 
-- Posts component
-  - [GET /api/posts](#get-apiposts)
-  - [GET /api/posts/:id](#get-apipostsid)
-  - [POST /api/posts](#post-apiposts)
-- Users component
-  - [GET /api/auth/[provider]](#get-apiauthprovider)
+- [Posts component](#posts-component)
+- [Users component](#users-component)
+- [Supporting diagrams](#supporting-diagrams)
+
+---
+
+## Posts Component
+  
+Here you'll find all the documentation concerning the endpoints for the Posts component. Navigate between them here:
+- [GET /api/posts](#get-apiposts)
+- [GET /api/posts/:id](#get-apipostsid)
+- [POST /api/posts](#post-apiposts)
+- [Supporting diagrams](#supporting-diagrams-for-posts-component)
+
+## Users Component
+
+Here you'll find all the documentation concerning the endpoints for the Users component. Navigate between them here:
+- [GET /api/posts](#get-apiposts)
+- [GET /api/posts/:id](#get-apipostsid)
+- [POST /api/posts](#post-apiposts)
+- [GET /api/auth/[provider]](#get-apiauthprovider)
+---
+
+### POST /api/posts
+
+When a POST request is made to '/api/posts', a new post is created if all goes well.
+
+#### Participant Abbreviations
+
+| Full                    | Abbreviation | Additional Notes                                                                                               |
+| ----------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| User                    | U            | ----                                                                                                           |
+| Frontend                | F            | ----                                                                                                           |
+| makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
+| PostPost                | PP           | The controller for the POST endpoint at /api/posts/                                                            |
+| handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                       |
+| createPost              | CP           | Use case for creating post                                                                                     |
+| imagesDb                | IDB          | Interface for queries against the Supabase bucket that stores the posts' attachments' images                   |
+| postsDb                 | PDB          | Interface for queries against the Supabase table that stores the posts                                         |
+| makePdfPreview          | MPP          | A custom service used by HAP to transform the first page of a PDF file into an image                           |
+
+```mermaid
+sequenceDiagram
+    activate U
+    U->>+F: get post creation form
+    alt User session authenticated
+        F->>U: post creation form
+        U->>F: post details
+        F->>+MKE: request object
+        MKE->>+PP: filtered request object
+        Note over PP, HAP: Handle Attachment Preview
+
+        PP->>+CP: post details with image CDN
+
+        rect rgba(255, 0, 0, 0.1)
+        break When post is missing a necessary detail (e.g. userId of author)
+            CP->>CP: throw exception
+            PP->>MKE: response w/error details
+            MKE->>F: HTTP error response
+            F->>U: error component
+        end
+        end
+
+        CP->>+PDB: post entity
+
+        rect rgba(255, 0, 0, 0.1)
+        break When saving post unsuccessful
+            PDB->>CP: error object
+            CP->>CP: throw exception
+            PP->>MKE: response w/error details
+            MKE->>F: HTTP error response
+            F->>U: error component
+        end
+        end
+
+        PDB->>CP: database success response
+        deactivate PDB
+        CP->>PP: JSON object containing new post's DTO
+        deactivate CP
+        PP->>-MKE: JSON object with headers, body
+        MKE->>F: HTTP success response
+        deactivate MKE
+    else User session not authenticated
+        F->>-U: 404 error component
+
+    end
+```
 
 ---
 
@@ -265,5 +346,61 @@ sequenceDiagram
     ACB->>-AUTH: authorization response
     AUTH->>-B: HTTP redirect to FR
     B->>-U: failure component
+    end
+```
+
+---
+
+## Supporting Diagrams for Posts Component
+
+These are diagrams that are referenced in two or more diagrams.
+
+---
+### Handle Attachment Preview
+#### Participant Abbreviations
+
+| Full                    | Abbreviation | Additional Notes                                                                                               |
+| ----------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| User                    | U            | ----                                                                                                           |
+| Frontend                | F            | ----                                                                                                           |
+| makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
+| Controller              | CTRL         | The controller at the endpoint                                                                                 |
+| handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                       |
+| imagesDb                | IDB          | Interface for queries against the Supabase bucket that stores the posts' attachments' images                   |
+| makePdfPreview          | MPP          | A custom service used by HAP to transform the first page of a PDF file into an image                           |
+
+```mermaid
+sequenceDiagram
+    activate CTRL
+    CTRL->>+HAP: post attachment details
+    alt Post contains valid attachment
+        rect rgba(0, 0, 255, 0.1)
+        opt Attachment is a PDF
+            HAP->>+MPP: attachment file
+            MPP->>-HAP: image of first page of PDF
+        end
+        end
+
+        HAP->>+IDB: image entity
+
+        rect rgba(255, 0, 0, 0.1)
+        break When saving attachment preview image unsuccessful
+            IDB->>HAP: error object
+            HAP->>HAP: throw exception
+            CTRL->>+MKE: response w/error details
+            MKE->>+F: HTTP error response
+            F->>U: error component
+        end
+        end
+
+    IDB->>-HAP: image CDN
+    HAP->>CTRL: image entity
+    else Post does not contain valid attachment
+        HAP->>-HAP: throw exception
+        CTRL->>-MKE: response w/error details
+        MKE->>-F: HTTP error response
+
+        F->>+U: error component
+        deactivate U
     end
 ```
