@@ -45,7 +45,6 @@ const uploadPost = async (post) => {
         },
       }
     );
-    console.log(newPost);
     return newPost;
   }
 };
