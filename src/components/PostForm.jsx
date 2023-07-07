@@ -18,7 +18,7 @@ const PostForm = () => {
 
   const updatePost = async (e) => {
     e.preventDefault();
-
+    console.log("USER", user.id)
     if (!attachment) {
       let { data, error } = await uploadPost({
         title,
@@ -38,6 +38,7 @@ const PostForm = () => {
         postContent,
         cdnUrl,
         postId,
+        userId: user.id
       });
       if (data) {
         handleSaveResult(true);
@@ -50,14 +51,7 @@ const PostForm = () => {
 
   const createPost = async (e) => {
     e.preventDefault();
-    let result = await testUploadPost({
-      title,
-      postContent,
-      postId,
-      file: attachment,
-      userId: user.id,
-    });
-    console.log(result);
+    
     if (!attachment) {
       setAttachmentError("Error: Please attach a resume.");
     } else if (
@@ -66,18 +60,15 @@ const PostForm = () => {
       attachment.type == "image/jpeg" ||
       attachment.type == "application/pdf"
     ) {
-      let cdnUrl = await getCdnUrl();
-      let { data, error } = await uploadPost({
-        userId: user.id,
+      console.log(user)
+      let result = await uploadPost({
+        userId: user.userId,
         title,
         postContent,
-        cdnUrl,
+        postId,
+        file: attachment,
       });
-      if (data) {
-        handleSaveResult(true);
-      } else {
-        handleSaveResult(false, error);
-      }
+      console.log(result)
     } else {
       setAttachmentError(
         "Error: Please only attach .pdf, .png, .jpg, or .jpeg files."

@@ -23,15 +23,6 @@ const uploadFile = async (formData) => {
   return fileCdn;
 };
 
-const testUploadPost = async (post) => {
-  let result = await axios.post("http://localhost:5000/api/posts", post, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  console.log(result);
-  return result;
-};
 const uploadPost = async (post) => {
   if (post.postId) {
     let { data: updatedPost } = await axios.post(
@@ -46,14 +37,15 @@ const uploadPost = async (post) => {
     return updatedPost;
   } else {
     let { data: newPost } = await axios.post(
-      "http://localhost:5000/post/create",
+      "http://localhost:5000/api/posts",
       post,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
+    console.log(newPost);
     return newPost;
   }
 };
