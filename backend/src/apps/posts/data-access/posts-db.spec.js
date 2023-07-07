@@ -1,8 +1,8 @@
 import { describe, expect, beforeEach, test } from "vitest";
 import { mockTestDbClient as dbClient } from "../__test__/fixtures/db-client.js";
 import {
-  makeFakeListOfPostRecords,
-  makeFakeSinglePostRecord,
+  makeFakeListOfRawPostRecords,
+  makeFakeSingleRawPostRecord,
 } from "../__test__/fixtures/mock-db-client-responses.js";
 import makePostsDb from "./posts-db";
 import { makeFakePostEntity, makeFakeRawPost } from "../__test__/fixtures/post";
@@ -29,7 +29,7 @@ describe("Posts-relevant database tests", () => {
   });
 
   test("Gets all posts successfully", async () => {
-    let expected = makeFakeListOfPostRecords().map((postRecord) =>
+    let expected = makeFakeListOfRawPostRecords().map((postRecord) =>
       makeFakeRawPost({ id: postRecord.id })
     );
     let result = await postsDb.getAll();
@@ -38,7 +38,7 @@ describe("Posts-relevant database tests", () => {
   });
 
   test("Gets a single post successfully", async () => {
-    let postId = makeFakeSinglePostRecord()[0].id;
+    let postId = makeFakeSingleRawPostRecord()[0].id;
     let expected = [makeFakeRawPost({ id: postId })];
     let result = await postsDb.getById(postId);
     expect(result.data).toEqual(expected);

@@ -1,23 +1,37 @@
 import { test, describe, expect, vi, beforeEach } from "vitest";
-import {
-  makeFakeRawPost,
-  makeFakePostEntity,
-} from "../../__test__/fixtures/post";
+import { makeFakePostEntity } from "../../__test__/fixtures/post";
+import { makeFakeSingleRawPostRecord } from "../../__test__/fixtures/mock-db-client-responses";
 import makeRetrieveSinglePost from "./retrieve-single-post";
+
 describe("Retrieve single post use case", () => {
   let postsDb;
   let retrieveSinglePost;
-  let postRecord = makeFakeRawPost();
+  let postRecord = makeFakeSingleRawPostRecord();
   beforeEach(() => {
     let getById = vi.fn(async () => {
-      return { data: postRecord, error: null };
+      return {
+        data: postRecord.map(
+          ({
+            id,
+            created_at: createdAt,
+            fk_uid: userId,
+            title,
+            post_content: postContent,
+            img_cdn: imgCdn,
+          }) => {
+            return { id, createdAt, userId, title, postContent, imgCdn };
+          }
+        ),
+        error: null,
+      };
     });
     postsDb = { getById };
     retrieveSinglePost = makeRetrieveSinglePost({ postsDb });
   });
   test("Retrieves a single post successfully", async () => {
     let postId = 1;
-    let expected = makeFakePostEntity(postRecord).getDTO();
+    let expected = makeFakePostEntity(...postRecord).getDTO();
+    console.log(expected);
     let actual = await retrieveSinglePost(postId);
     expect(actual).toEqual(expected);
   });

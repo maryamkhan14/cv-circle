@@ -1,6 +1,6 @@
 import { makeFakeRawPost } from "./post.js";
 
-export function makeFakeSinglePostRecord(overrides) {
+export function makeFakeSingleRawPostRecord(overrides) {
   let { id, createdAt, userId, title, postContent, imgCdn } = makeFakeRawPost();
   let post = {
     id,
@@ -12,7 +12,7 @@ export function makeFakeSinglePostRecord(overrides) {
   };
   return [{ ...post, ...overrides }];
 }
-export function makeFakeListOfPostRecords(overrides) {
+export function makeFakeListOfRawPostRecords(overrides) {
   let posts = [makeFakeRawPost({ id: 1 }), makeFakeRawPost({ id: 2 })];
   return posts.map((post) => {
     let newPost = {

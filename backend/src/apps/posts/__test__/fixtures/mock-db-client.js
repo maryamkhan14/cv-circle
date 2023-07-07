@@ -1,14 +1,14 @@
 import { vi } from "vitest";
 import realTestDbClient from "./db-client";
 import {
-  makeFakeSinglePostRecord,
-  makeFakeListOfPostRecords,
+  makeFakeSingleRawPostRecord,
+  makeFakeListOfRawPostRecords,
 } from "./mock-db-client-responses";
 let insertSpy = vi.fn(() => {
   return {
     select: vi.fn(() => {
       return {
-        data: makeFakeSinglePostRecord(),
+        data: makeFakeSingleRawPostRecord(),
         error: null,
       };
     }),
@@ -17,10 +17,10 @@ let insertSpy = vi.fn(() => {
 let selectSpy = vi.fn(() => {
   return {
     order: vi.fn(() => {
-      return { data: makeFakeListOfPostRecords(), error: null };
+      return { data: makeFakeListOfRawPostRecords(), error: null };
     }),
     eq: vi.fn(() => {
-      return { data: makeFakeSinglePostRecord(), error: null };
+      return { data: makeFakeSingleRawPostRecord(), error: null };
     }),
   };
 });
