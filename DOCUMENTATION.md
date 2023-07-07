@@ -16,6 +16,7 @@ Here you'll find all the documentation concerning the endpoints for the Posts co
 - [POST /api/posts](#post-apiposts)
 - [GET /api/posts](#get-apiposts)
 - [GET /api/posts/:id](#get-apipostsid)
+- [PATCH /api/posts/:id](#patch-apipostsid)
 - [Supporting diagrams](#supporting-diagrams-for-posts-component)
 
 ## Users Component
@@ -175,100 +176,66 @@ sequenceDiagram
 
 ---
 
-### POST /api/posts
+### PATCH /api/posts/:id
 
-When a POST request is made to '/api/posts', a new post is created if all goes well.
+When a PATCH request is made to '/api/posts/:id', the post with that ID is updated if all goes well.
 
 #### Participant Abbreviations
 
-| Full                    | Abbreviation | Additional Notes                                                                                               |
-| ----------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| User                    | U            | ----                                                                                                           |
-| Frontend                | F            | ----                                                                                                           |
-| makeExpressCallback     | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
-| PostPost                | PP           | The controller for the POST endpoint at /api/posts/                                                            |
-| handleAttachmentPreview | HAP          | Use case for handling process of generating preview from post attachment                                       |
-| createPost              | CP           | Use case for creating post                                                                                     |
-| imagesDb                | IDB          | Interface for queries against the Supabase bucket that stores the posts' attachments' images                   |
-| postsDb                 | PDB          | Interface for queries against the Supabase table that stores the posts                                         |
-| makePdfPreview          | MPP          | A custom service used by HAP to transform the first page of a PDF file into an image                           |
+| Full                | Abbreviation | Additional Notes                                                                                               |
+| ------------------- | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| User                | U            | ----                                                                                                           |
+| Frontend            | F            | ----                                                                                                           |
+| makeExpressCallback | MKE          | An adapter that provides an extra layer of indirection for req, res variables between frontend and controllers |
+| patchPost           | PP           | The controller for the PATCH endpoint at /api/posts/                                                           |
+| updatePost          | UP           | The use case for updating a posts                                                                              |
+| postsDb             | PDB          | Interface for queries against the Supabase table that stores the posts                                         |
 
 ```mermaid
 sequenceDiagram
-    activate U
-    U->>+F: get post creation form
-    alt User session authenticated
-        F->>U: post creation form
-        U->>F: post details
-        F->>+MKE: request object
+    U->>+F: Clicks Update Post button
+    alt User session is active:
+        F->>U: post update form
+        U->>F: post update details
+        F->>+MKE: PATCH request
         MKE->>+PP: filtered request object
-        PP->>+HAP: post attachment details
 
-        rect rgba(255, 0, 0, 0.2)
-        break When post does not contain valid attachment
-            HAP->>HAP: throw exception
-            PP->>MKE: response w/error details
+        rect rgba(0,0,255,0.1)
+        opt Post update details contain new attachment
+            Note over PP, HAP: Handle Attachment Preview
+        end
+        end
+
+        PP->+UP: post details
+
+        rect rgba(255,0,0,0.1)
+        break Post update details missing critical detail
+            UP->>UP: throw exception
+            UP->>MKE: response w/error details
             MKE->>F: HTTP error response
             F->>U: error component
         end
         end
 
-        rect rgba(191, 223, 255, 0.5)
-        opt Attachment is a PDF
-            HAP->>+MPP: attachment file
-            MPP->>-HAP: image of first page of PDF
-        end
-        end
+        UP->>+PDB: post entity
 
-        HAP->>+IDB: image entity
-
-        rect rgba(255, 0, 0, 0.2)
-        break When saving attachment preview image unsuccessful
-            IDB->>HAP: error object
-            HAP->>HAP: throw exception
-            PP->>MKE: response w/error details
-            MKE->>F: HTTP error response
-            F->>U: error component
-        end
-        end
-
-        IDB->>HAP: image CDN
-        deactivate IDB
-        HAP->>PP: image entity
-        deactivate HAP
-        PP->>+CP: post details with image CDN
-
-        rect rgba(255, 0, 0, 0.2)
-        break When post is missing a necessary detail (e.g. userId of author)
-            CP->>CP: throw exception
-            PP->>MKE: response w/error details
-            MKE->>F: HTTP error response
-            F->>U: error component
-        end
-        end
-
-        CP->>+PDB: post entity
-
-        rect rgba(255, 0, 0, 0.2)
+        rect rgba(255, 0, 0, 0.1)
         break When saving post unsuccessful
-            PDB->>CP: error object
-            CP->>CP: throw exception
+            PDB->>UP: error object
+            UP->>UP: throw exception
             PP->>MKE: response w/error details
             MKE->>F: HTTP error response
             F->>U: error component
         end
         end
 
-        PDB->>CP: database success response
-        deactivate PDB
-        CP->>PP: JSON object containing new post's DTO
-        deactivate CP
+        PDB->>-UP: database success response
+        UP->>-PP: JSON object containing new post's DTO
         PP->>-MKE: JSON object with headers, body
         MKE->>F: HTTP success response
-        deactivate MKE
-    else User session not authenticated
-        F->>-U: 404 error component
-
+        F->>U: success component
+    else User session is expired/invalid:
+        F->>-U: error component
     end
 ```
 
