@@ -10,7 +10,7 @@ export default function makeHandleAttachmentPreview({
       let imageData = file.data;
       image = makeImage({ imageData, userId });
     } else {
-      let imageData = await makePdfPreview(file).get();
+      let imageData = (await makePdfPreview(file)).get();
       image = makeImage({ imageData, userId });
     }
 
