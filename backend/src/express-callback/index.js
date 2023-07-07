@@ -1,6 +1,6 @@
 // credit: https://github.com/dev-mastery/comments-api.git
 // purpose: this is an adapter that provides extra layer of indirection (separation) to deal with req and res variables, instead of having the controllers doing so.
-export default function makeExpressCallback(controller) {
+export default function makeExpressCallback(controller, requiresAuth = false) {
   return async (req, res) => {
     const httpRequest = {
       body: { ...req.body, ...req.files },
@@ -20,6 +20,9 @@ export default function makeExpressCallback(controller) {
       },
     };
     try {
+      if (requiresAuth && !req.isAuthenticated()) {
+        throw new Error("Not authenticated");
+      }
       let httpResponse = await controller(httpRequest);
       if (httpResponse.headers) {
         res.set(httpResponse.headers);
@@ -27,6 +30,7 @@ export default function makeExpressCallback(controller) {
       res.type("json");
       res.status(httpResponse.statusCode).send(httpResponse.body);
     } catch (e) {
+      console.log(e);
       res.status(500).send({ error: "An unknown error occurred." });
     }
   };
