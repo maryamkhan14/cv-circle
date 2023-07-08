@@ -25,10 +25,10 @@ const PostForm = () => {
     clear();
     let { file } = post;
     if (!file) {
-      let result = await updatePost({ ...post }); //TODO: set status
+      let result = await updatePost({ ...post, id: toEditId }, toEditId); //TODO: set status
       console.log(result);
     } else if (checkFileConstraints(file)) {
-      let result = await updatePost({ ...post }); //TODO: set status
+      let result = await updatePost({ ...post, id: toEditId }, toEditId); //TODO: set status
       console.log(result);
     } else {
       setStatus({

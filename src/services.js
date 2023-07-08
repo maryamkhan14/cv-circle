@@ -23,18 +23,19 @@ const getAllPosts = async () => {
   }
 };
 
-const updatePost = async (post) => {
+const updatePost = async (post, id) => {
   try {
     let { data: updatedPost } = await axios.patch(
-      "http://localhost:5000/api/posts",
+      `http://localhost:5000/api/posts/${id}`,
       post,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
     return updatedPost;
   } catch (e) {
-    let { data, status } = e.response;
+    console.log(e);
+    let { data, status, statusText } = e.response;
     let errorMsg = data.error;
-    return { error: errorMsg, status };
+    return { error: errorMsg || statusText, status };
   }
 };
 
