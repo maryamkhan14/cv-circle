@@ -12,7 +12,7 @@ const Navbar = () => {
         payload: {
           user: {
             name: sessionStorage.uname,
-            id: sessionStorage.uid,
+            userId: sessionStorage.uid,
             profilePic: sessionStorage.profilePic,
             email: sessionStorage.email,
           },
