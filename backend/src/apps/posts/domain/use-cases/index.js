@@ -4,6 +4,7 @@ import makeRetrieveSinglePost from "./retrieve-single-post.js";
 import makePdfPreview from "../services/pdf-preview/index.js";
 import makeImage from "../entities/image/index.js";
 import makeHandleAttachmentPreview from "./handle-attachment-preview.js";
+import makeUpdatePost from "./update-post.js";
 import { postsDb, imagesDb } from "../../data-access/index.js";
 
 const createPost = makeCreatePost({
@@ -16,11 +17,13 @@ const handleAttachmentPreview = makeHandleAttachmentPreview({
   makePdfPreview,
   makeImage,
 });
+const updatePost = makeUpdatePost({ postsDb });
 const postService = Object.freeze({
   createPost,
   handleAttachmentPreview,
   retrievePosts,
   retrieveSinglePost,
+  updatePost,
 });
 export default postService;
 export {
@@ -28,4 +31,5 @@ export {
   handleAttachmentPreview,
   retrievePosts,
   retrieveSinglePost,
+  updatePost,
 };

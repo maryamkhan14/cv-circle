@@ -22,7 +22,7 @@ export default function buildMakePost() {
     }
     return Object.freeze({
       getId: () => id,
-      getCreatedAt: () => createdAt,
+      getCreatedAt: () => createdAt, // TODO: Add lastModified
       getUserId: () => userId,
       getTitle: () => title,
       getPostContent: () => postContent,

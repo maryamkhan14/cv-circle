@@ -1,14 +1,12 @@
 export default function makePatchPost({ updatePost, handleAttachmentPreview }) {
   return async function patchPost(httpRequest) {
     try {
-      const { post, attachmentChanged } = httpRequest.body;
+      const post = httpRequest.body;
       let image;
-      if (attachmentChanged) {
+      if (post.file) {
         image = await handleAttachmentPreview(post);
       }
-      const toUpdate = attachmentChanged
-        ? { ...post, imgCdn: image.getCdn() }
-        : post;
+      const toUpdate = post.file ? { ...post, ...image.getCdn() } : post;
       const updated = await updatePost(toUpdate);
       return {
         headers: {
