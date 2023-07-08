@@ -1,41 +1,45 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 const getPost = async (postId) => {
-  return await axios.get(`http://localhost:5000/api/posts/${postId}`, {
-    withCredentials: true,
-  });
+  try {
+    return await axios.get(`http://localhost:5000/api/posts/${postId}`, {
+      withCredentials: true,
+    });
+  } catch (e) {
+    let { data, status } = e.response;
+    let errorMsg = data.error;
+    return { error: errorMsg, status };
+  }
 };
 const getAllPosts = async () => {
-  return await axios.get(`http://localhost:5000/api/posts`, {
-    withCredentials: true,
-  });
-};
-const uploadFile = async (formData) => {
-  let { data: fileCdn } = await axios.post(
-    "http://localhost:5000/file/upload",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
-  return fileCdn;
+  try {
+    return await axios.get(`http://localhost:5000/api/posts`, {
+      withCredentials: true,
+    });
+  } catch (e) {
+    let { data, status } = e.response;
+    let errorMsg = data.error;
+    return { error: errorMsg, status };
+  }
 };
 
-const uploadPost = async (post) => {
-  if (post.postId) {
-    let { data: updatedPost } = await axios.post(
-      "http://localhost:5000/post/update",
+const updatePost = async (post) => {
+  try {
+    let { data: updatedPost } = await axios.patch(
+      "http://localhost:5000/api/posts",
       post,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      { headers: { "Content-Type": "multipart/form-data" } }
     );
     return updatedPost;
-  } else {
+  } catch (e) {
+    let { data, status } = e.response;
+    let errorMsg = data.error;
+    return { error: errorMsg, status };
+  }
+};
+
+const createPost = async (post) => {
+  try {
     let { data: newPost } = await axios.post(
       "http://localhost:5000/api/posts",
       post,
@@ -46,6 +50,10 @@ const uploadPost = async (post) => {
       }
     );
     return newPost;
+  } catch (e) {
+    let { data, status } = e.response;
+    let errorMsg = data.error;
+    return { error: errorMsg, status };
   }
 };
 const upvotePost = async (postId, userId) => {
@@ -88,12 +96,11 @@ const deletePost = async (postId) => {
   }
 };
 export {
-  uploadFile,
-  uploadPost,
+  createPost,
+  updatePost,
   getPost,
   getAllPosts,
   upvotePost,
   checkHasUpvoted,
   deletePost,
-  testUploadPost,
 };
