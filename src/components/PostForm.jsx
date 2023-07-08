@@ -8,7 +8,7 @@ const PostForm = () => {
   const { user } = useContext(UserContext);
   const { id: toEditId } = useParams(); //postId->toEditId
   const navigate = useNavigate();
-
+  console.log("test");
   const [status, setStatus] = useState({});
   const [post, setPost] = useState({
     createdAt: "",
@@ -29,7 +29,6 @@ const PostForm = () => {
       console.log(result);
     } else if (checkFileConstraints(file)) {
       let result = await updatePost({ ...post, id: toEditId }, toEditId); //TODO: set status
-      console.log(result);
     } else {
       setStatus({
         error: true,
@@ -37,6 +36,8 @@ const PostForm = () => {
         success: null,
       });
     }
+
+    navigate(`/post/${toEditId}`);
   };
 
   const uploadNewPost = async (e) => {
