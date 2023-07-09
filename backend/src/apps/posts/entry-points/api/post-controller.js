@@ -3,12 +3,12 @@ import {
   retrievePosts,
   retrieveSinglePost,
   updatePost,
-} from "../domain/use-cases/index.js";
-import { handleAttachmentPreview } from "../domain/use-cases/index.js";
-import makePostPost from "./post-post.js";
-import makeGetAllPosts from "./get-all-posts.js";
-import makeGetSinglePost from "./get-single-post.js";
-import makePatchPost from "./patch-post.js";
+} from "../../domain/use-cases/index.js";
+import { handleAttachmentPreview } from "../../domain/use-cases/index.js";
+import makePostPost from "./post/post-post.js";
+import makeGetAllPosts from "./get/get-all-posts.js";
+import makeGetSinglePost from "./get/get-single-post.js";
+import makePatchPost from "./patch/patch-post.js";
 
 const postPost = makePostPost({ createPost, handleAttachmentPreview });
 const getAllPosts = makeGetAllPosts({ retrievePosts });

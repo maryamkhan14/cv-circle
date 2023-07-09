@@ -1,4 +1,4 @@
-import dbClient from "../../../common-utilities/db/index.js";
+import dbClient from "./db-client.js";
 import makePostsDb from "./posts-db.js";
 import makeImagesDb from "./images-db.js";
 
