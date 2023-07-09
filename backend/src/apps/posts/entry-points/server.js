@@ -19,8 +19,7 @@ app.use(postRoutes)
 
 app.listen(5000, () => {
     console.log("Server is listening on port 5000");
-    console.log(process.env.VITE_SUPABASE_URL);
-    console.log(process.env.GOOGLE_CALLBACK_URL);
+    console.log(process.env)
   });
   
 export default app;
