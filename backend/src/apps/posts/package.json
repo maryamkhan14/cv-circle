@@ -2,9 +2,10 @@
   "name": "posts",
   "version": "1.0.0",
   "description": "Posts feature of backend",
-  "main": "entry-points/api/index.js",
+  "main": "entry-points/api/server.js",
+  "type": "module",
   "scripts": {
-    "test": "npm run dev"
+    "dev": "node --watch entry-points/api/server.js"
   },
   "author": "",
   "license": "ISC",
