@@ -15,12 +15,10 @@ app.use(
   })
 );
 
-app.use(postRoutes)
+app.use(postRoutes);
 
 app.listen(5000, () => {
-    console.log("Server is listening on port 5000");
-    console.log(process.env)
-  });
-  
+  console.log("Server is listening on port ", process.env.PORT);
+});
+
 export default app;
-  
