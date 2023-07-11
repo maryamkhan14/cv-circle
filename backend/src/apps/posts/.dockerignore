@@ -4,3 +4,4 @@ Dockerfile
 __test__
 .git
 .gitignore
+.env
