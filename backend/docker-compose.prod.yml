@@ -1,6 +1,10 @@
 version: "2.19.1"
 services:
   posts:
+    build: 
+      context: ./src/apps/posts
+      args: 
+        NODE_ENV: production
     environment: 
       - NODE_ENV=production
     command: node entry-points/server.js

@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseKey = process.env.VITE_SUPABASE_KEY;
+const supabaseUrl = process.env.DB_URL;
+const supabaseKey = process.env.DB_KEY;
 
 const dbClient = createClient(supabaseUrl, supabaseKey);
 export default dbClient;

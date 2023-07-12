@@ -16,7 +16,7 @@ function makeFakeRawImage(overrides) {
 // Make the object that will be returned by the image entity factory function
 function makeFakeImageEntity(overrides) {
   let extension = FAKE_IMAGE_EXTENSION;
-  let cdn = process.env.VITE_SUPABASE_TEST_BASE_CDN_URL + FAKE_IMAGE_EXTENSION;
+  let cdn = process.env.DB_TEST_BASE_CDN_URL + FAKE_IMAGE_EXTENSION;
   const image = {
     getUserId: () =>
       overrides && overrides.hasOwnProperty("userId")

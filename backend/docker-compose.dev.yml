@@ -1,6 +1,10 @@
 version: "2.19.1"
 services:
   posts:
+    build: 
+      context: ./src/apps/posts
+      args: 
+        NODE_ENV: development
     volumes:
       - ./src/apps/posts/:/app:ro
       - /app/node_modules
