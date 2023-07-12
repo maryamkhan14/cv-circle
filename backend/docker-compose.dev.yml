@@ -1,0 +1,9 @@
+version: "2.19.1"
+services:
+  posts:
+    volumes:
+      - ./src/apps/posts/:/app:ro
+      - /app/node_modules
+    environment: 
+      - NODE_ENV=development
+    command: npm run dev

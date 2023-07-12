@@ -1,0 +1,6 @@
+version: "2.19.1"
+services:
+  posts:
+    environment: 
+      - NODE_ENV=production
+    command: node entry-points/server.js
