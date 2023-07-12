@@ -6,8 +6,8 @@ import {
   getGithubAuthCallback,
   getAuthSuccess,
   postLogout,
-} from "./index.js";
-import makeExpressCallback from "../../../express-callback/index.js";
+} from "./users-controller.js";
+import makeExpressCallback from "../../express-callback/index.js";
 
 const router = express.Router();
 router.get("/google", getGoogleAuth);

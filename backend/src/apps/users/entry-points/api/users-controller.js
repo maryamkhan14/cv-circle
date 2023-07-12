@@ -1,10 +1,10 @@
-import authenticator from "../domain/services/authenticator/index.js";
-import makeGetGoogleAuth from "./get-google-auth.js";
-import makeGetGithubAuth from "./get-github-auth.js";
-import makeGetGithubAuthCallback from "./get-github-auth-callback.js";
-import makeGetGoogleAuthCallback from "./get-google-auth-callback.js";
-import makeGetAuthSuccess from "./get-auth-success.js";
-import makePostLogout from "./post-logout.js";
+import authenticator from "../../domain/services/authenticator/index.js";
+import makeGetGoogleAuth from "./get/get-google-auth.js";
+import makeGetGithubAuth from "./get/get-github-auth.js";
+import makeGetGithubAuthCallback from "./get/get-github-auth-callback.js";
+import makeGetGoogleAuthCallback from "./get/get-google-auth-callback.js";
+import makeGetAuthSuccess from "./get/get-auth-success.js";
+import makePostLogout from "./post/post-logout.js";
 
 const { authGoogle, authGoogleCallback, authGithub, authGithubCallback } =
   authenticator;
