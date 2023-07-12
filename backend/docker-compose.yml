@@ -1,0 +1,11 @@
+version: "2.19.1"
+services:
+  posts:
+    build: ./src/apps/posts
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src/apps/posts/:/app
+      - /app/node_modules
+    env_file: 
+      - ./src/apps/posts/.env
