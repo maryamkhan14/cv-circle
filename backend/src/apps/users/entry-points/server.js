@@ -1,20 +1,26 @@
 import "dotenv/config";
 import userRoutes from "./api/index.js";
 import express from "express";
-import expressSession from "express-session";
+import { createClient } from "redis";
+import RedisStore from "connect-redis";
+import session from "express-session";
 import cors from "cors";
 import configuredPassportInstance from "../authentication/passport-setup/index.js";
+let redisClient = createClient({
+  url: process.env.REDIS_URL,
+  port: process.env.REDIS_PORT,
+});
+redisClient.connect().catch(console.error);
+let redisStore = new RedisStore({ client: redisClient });
+
 const app = express();
 
 app.use(express.json());
 app.use(
-  expressSession({
-    secret: "keyboard cat",
-    cookie: {
-      maxAge: 24 * 60 * 60 * 100,
-      httpOnly: true,
-    },
-    resave: true,
+  session({
+    store: redisStore,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
     saveUninitialized: false,
   })
 );
