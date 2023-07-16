@@ -15,9 +15,9 @@ app.use(
   })
 );
 
-app.use(postRoutes);
+app.use("/api/posts", postRoutes);
 
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
 });
 

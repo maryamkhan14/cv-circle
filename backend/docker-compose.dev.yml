@@ -11,3 +11,14 @@ services:
     environment: 
       - NODE_ENV=development
     command: npm run dev
+  users:
+    build: 
+      context: ./src/apps/users
+      args: 
+        NODE_ENV: development
+    volumes:
+      - ./src/apps/users/:/app:ro
+      - /app/node_modules
+    environment: 
+      - NODE_ENV=development
+    command: npm run dev

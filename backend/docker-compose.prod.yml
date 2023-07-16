@@ -8,3 +8,11 @@ services:
     environment: 
       - NODE_ENV=production
     command: node entry-points/server.js
+  users:
+    build: 
+      context: ./src/apps/users
+      args: 
+        NODE_ENV: production
+    environment: 
+      - NODE_ENV=production
+    command: node entry-points/server.js

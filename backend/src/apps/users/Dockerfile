@@ -7,6 +7,6 @@ RUN if [ "$NODE_ENV" = "development" ]; \
     else npm install --omit=dev; \
     fi
 COPY . ./
-ENV PORT 5000
+ENV PORT=3001
 EXPOSE $PORT
 CMD ["node", "entry-points/server.js"]
