@@ -6,3 +6,6 @@ services:
       - "3000:3000"
     env_file: 
       - ./src/apps/posts/.env
+    restart: always
+  redis:
+    image: redis
