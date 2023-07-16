@@ -5,7 +5,9 @@
   "main": "entry-points/api/server.js",
   "type": "module",
   "scripts": {
-    "dev": "node entry-points/server.js"
+    "dev": "node --watch entry-points/server.js",
+    "start": "node entry-points/server.js",
+    "test": "vitest --coverage"
   },
   "author": "",
   "license": "ISC",
