@@ -2,7 +2,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 const getPost = async (postId) => {
   try {
-    return await axios.get(`http://localhost:5000/api/posts/${postId}`, {
+    return await axios.get(`http://localhost:3000/api/posts/${postId}`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -13,7 +13,7 @@ const getPost = async (postId) => {
 };
 const getAllPosts = async () => {
   try {
-    return await axios.get(`http://localhost:5000/api/posts`, {
+    return await axios.get(`http://localhost:3000/api/posts`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -26,7 +26,7 @@ const getAllPosts = async () => {
 const updatePost = async (post, id) => {
   try {
     let { data: updatedPost } = await axios.patch(
-      `http://localhost:5000/api/posts/${id}`,
+      `http://localhost:3000/api/posts/${id}`,
       post,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
@@ -42,7 +42,7 @@ const updatePost = async (post, id) => {
 const createPost = async (post) => {
   try {
     let { data: newPost } = await axios.post(
-      "http://localhost:5000/api/posts",
+      "http://localhost:3000/api/posts",
       post,
       {
         headers: {
@@ -61,7 +61,7 @@ const upvotePost = async (postId, userId) => {
   console.log(postId, userId);
   if (postId) {
     let { data: upvoteCount } = await axios.post(
-      `http://localhost:5000/post/upvote/${postId}`,
+      `http://localhost:3000/post/upvote/${postId}`,
       userId,
       {
         headers: {
@@ -76,7 +76,7 @@ const upvotePost = async (postId, userId) => {
 };
 const checkHasUpvoted = async (postId, userId) => {
   let { data: hasUpvoted } = await axios.post(
-    `http://localhost:5000/post/hasUpvoted/${postId}`,
+    `http://localhost:3000/post/hasUpvoted/${postId}`,
     userId,
     {
       headers: {
@@ -89,7 +89,7 @@ const checkHasUpvoted = async (postId, userId) => {
 const deletePost = async (postId) => {
   if (postId) {
     let { data: deletedPost } = await axios.delete(
-      `http://localhost:5000/post/${postId}`
+      `http://localhost:3000/post/${postId}`
     );
     return deletedPost;
   } else {
