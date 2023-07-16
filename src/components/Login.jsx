@@ -2,10 +2,10 @@ import React from "react";
 
 const Login = () => {
   const loginWithGithub = () => {
-    window.location = "http://localhost:5000/api/auth/github";
+    window.location = "http://localhost:3001/api/auth/github";
   };
   const loginWithGoogle = () => {
-    window.location = "http://localhost:5000/api/auth/google";
+    window.location = "http://localhost:3001/api/auth/google";
   };
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 backdrop-blur-xl flex-col justify-center px-3 py-5 font-[700] text-center">

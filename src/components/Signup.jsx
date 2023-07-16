@@ -1,10 +1,10 @@
 import React from "react";
 const Signup = () => {
   const signUpWithGithub = () => {
-    window.location = "http://localhost:5000/auth/github/auth";
+    window.location = "http://localhost:3001/auth/github/auth";
   };
   const signUpWithGoogle = () => {
-    window.location = "http://localhost:5000/auth/google/auth";
+    window.location = "http://localhost:3001/auth/google/auth";
   };
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 backdrop-blur-xl flex-col justify-center px-3 py-5 font-[700] text-center">

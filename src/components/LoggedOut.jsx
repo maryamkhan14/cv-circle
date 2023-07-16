@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 const LoggedOut = () => {
   const { user, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
-  const BaseURL = "http://localhost:5000/api/auth/logout";
+  const BaseURL = "http://localhost:3001/api/auth/logout";
 
   const logOutUser = () => {
     axios
