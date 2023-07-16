@@ -21,6 +21,7 @@ app.use(
     store: redisStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
+    cookie: { maxAge: 86400 },
     saveUninitialized: false,
   })
 );
