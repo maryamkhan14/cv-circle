@@ -21,7 +21,7 @@ app.use(
     store: redisStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
-    cookie: { maxAge: 86400 },
+    cookie: { maxAge: 86400000 },
     saveUninitialized: false,
   })
 );
@@ -39,6 +39,17 @@ app.use("/api/auth", userRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
+  testScan();
 });
-
+async function testScan() {
+  for await (const key of redisClient.scanIterator({
+    MATCH: "sess:*",
+    COUNT: 100,
+  })) {
+    const log = await redisClient.get(key);
+    if (log) {
+      console.log(JSON.parse(log));
+    }
+  }
+}
 export default app;

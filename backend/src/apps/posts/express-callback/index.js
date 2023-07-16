@@ -18,6 +18,7 @@ export default function makeExpressCallback(controller, requiresAuth = false) {
     };
     try {
       // send message to kafka?
+      console.log(req.headers, req.cookies, req.session);
       let httpResponse = await controller(httpRequest);
       if (httpResponse.headers) {
         res.set(httpResponse.headers);
