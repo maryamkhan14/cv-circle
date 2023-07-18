@@ -39,7 +39,7 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:29092
   kafka-connect:
-    build: ./src/apps/messaging
+    build: ./src/apps/messaging/kafka-connect
     container_name: kafka-connect
     depends_on:
       - broker
@@ -47,9 +47,9 @@ services:
     ports:
       - 8083:8083
     env_file:
-      - ./src/apps/messaging/.env
+      - ./src/apps/messaging/kafka-connect/.env
     volumes:
-      - ./src/apps/messaging/data:/data
+      - ./src/apps/messaging/kafka-connect/data:/data
     command:
       - bash 
       - -c 
