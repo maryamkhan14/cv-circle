@@ -20,5 +20,6 @@ curl -X POST -H "Content-Type: application/json" --data '
      "redis.stream.name":"mystream",
      "redis.stream.offset":"0-0",
      "redis.stream.delivery": "at-least-once",
-     "topic": "mystream"
+     "topic": "mystream",
+     "key.ignore": "true"
 }}' http://localhost:8083/connectors

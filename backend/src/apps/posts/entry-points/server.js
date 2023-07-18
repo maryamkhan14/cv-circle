@@ -3,8 +3,15 @@ import postRoutes from "./api/index.js";
 import express from "express";
 import expressFileUpload from "express-fileupload";
 import cors from "cors";
+import { Kafka } from "kafkajs";
+import { SchemaRegistry } from "@kafkajs/confluent-schema-registry";
 const app = express();
-
+const kafka = new Kafka({
+  clientId: "my-app",
+  brokers: ["broker:29092"],
+});
+const registry = new SchemaRegistry({ host: "http://schema-registry:8081/" });
+const consumer = kafka.consumer({ groupId: "posts-connect" });
 app.use(express.json());
 app.use(expressFileUpload());
 app.use(
@@ -19,6 +26,17 @@ app.use("/api/posts", postRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
+  getMessages();
 });
-
+async function getMessages() {
+  await consumer.connect();
+  await consumer.subscribe({ topic: "mystream", fromBeginning: true });
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      const decodedKey = await registry.decode(message.key);
+      const decodedValue = await registry.decode(message.value);
+      console.log({ decodedKey, dv: JSON.parse(decodedValue) });
+    },
+  });
+}
 export default app;

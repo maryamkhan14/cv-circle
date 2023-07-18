@@ -60,6 +60,10 @@ services:
         sleep infinity
   posts:
     build: ./src/apps/posts
+    depends_on:
+      - kafka-connect
+    links:
+      - "broker:broker"
     ports:
       - "3000:3000"
     env_file: 
