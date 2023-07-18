@@ -1,6 +1,7 @@
 export default function makeGetAuthSuccess() {
   return function (httpRequest) {
     if (httpRequest.user) {
+      console.log(httpRequest.session, httpRequest.sessionID);
       return {
         headers: {
           "Content-Type": "application/json",

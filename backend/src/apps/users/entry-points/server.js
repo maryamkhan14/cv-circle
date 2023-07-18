@@ -11,7 +11,7 @@ let redisClient = createClient({
   port: process.env.REDIS_PORT,
 });
 redisClient.connect().catch(console.error);
-let redisStore = new RedisStore({ client: redisClient });
+let redisStore = new RedisStore({ client: redisClient, prefix: "sess:" });
 
 const app = express();
 
@@ -48,7 +48,7 @@ async function testScan() {
   })) {
     const log = await redisClient.get(key);
     if (log) {
-      console.log(JSON.parse(log));
+      console.log("REDIS LOG KEY: ", key, ":", JSON.parse(log));
     }
   }
 }

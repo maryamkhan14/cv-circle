@@ -30,12 +30,10 @@ app.listen(process.env.PORT, () => {
 });
 async function getMessages() {
   await consumer.connect();
-  await consumer.subscribe({ topic: "mystream", fromBeginning: true });
+  await consumer.subscribe({ topic: "user-logged-in", fromBeginning: true });
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      const decodedKey = await registry.decode(message.key);
-      const decodedValue = await registry.decode(message.value);
-      console.log({ decodedKey, dv: JSON.parse(decodedValue) });
+      console.log(message.value.toString());
     },
   });
 }

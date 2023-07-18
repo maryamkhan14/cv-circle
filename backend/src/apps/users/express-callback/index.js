@@ -11,6 +11,7 @@ export default function makeExpressCallback(controller, requiresAuth = false) {
       path: req.path,
       user: req.user,
       sessionStore: req.sessionStore,
+      sessionID: req.sessionID,
       logOut: req.logOut,
       session: req.session,
       headers: {
