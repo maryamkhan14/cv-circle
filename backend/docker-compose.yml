@@ -7,9 +7,14 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  redis:
+  users-redis:
     image: redis
-    container_name: redis
+    container_name: users-redis
+    restart: always
+
+  posts-redis:
+    image: redis
+    container_name: posts-redis
     restart: always
 
   broker:
@@ -51,10 +56,19 @@ services:
       - -c 
       - | 
         confluent-hub install --no-prompt redis/redis-enterprise-kafka:6.7.4 
+        confluent-hub install --no-prompt jcustenborder/kafka-connect-redis:latest
         /etc/confluent/docker/run &
         /app/connector 8083
         sleep infinity
-
+  kafkacat:
+    image: confluentinc/cp-kafkacat:latest
+    container_name: kafkacat
+    entrypoint: 
+      - /bin/sh 
+      - -c 
+      - |
+        apk add jq; 
+        while [ 1 -eq 1 ];do sleep 60;done
   posts:
     build: ./src/apps/posts
     depends_on:
@@ -69,6 +83,8 @@ services:
     
   users:
     build: ./src/apps/users
+    links:
+      - "users-redis:redis"
     ports:
       - "3001:3001"
     env_file: 

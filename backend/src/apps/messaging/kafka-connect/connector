@@ -16,10 +16,33 @@ curl -X POST -H "Content-Type: application/json" --data '
    "config": {
      "tasks.max":"1",
      "connector.class":"com.redis.kafka.connect.RedisSourceConnector",
-     "redis.uri":"redis://redis:6379",
+     "redis.uri":"redis://users-redis:6379",
      "redis.stream.name":"mystream",
      "redis.stream.offset":"0-0",
-     "redis.stream.delivery": "at-least-once",
-     "topic": "mystream",
-     "key.ignore": "true"
+     "redis.stream.delivery":"at-least-once",
+     "topic":"mystream",
+     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "value.converter.schemas.enable": "false",
+    "transforms": "extractBody",
+    "transforms.extractBody.type": "org.apache.kafka.connect.transforms.ExtractField$Value",
+    "transforms.extractBody.field": "body"
 }}' http://localhost:8083/connectors
+
+sleep 2
+echo -e "\nAdding Redis Kafka Sink Connector for the 'mystream' topic into RedisJSON:"
+curl -X POST -H "Content-Type: application/json" --data '
+  {"name": "redis-sink-json",
+   "config": {
+    "name" : "redis-sink-json",
+    "connector.class" : "com.github.jcustenborder.kafka.connect.redis.RedisSinkConnector",
+     "tasks.max":"1",
+     "topics":"mystream",
+     "redis.hosts": "posts-redis:6379",
+     "redis.database":0,
+     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+     "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "transforms": "extractBody",
+    "transforms.extractBody.type": "org.apache.kafka.connect.transforms.ExtractField$Value",
+    "transforms.extractBody.field": "body"
+}}' http://localhost:8083/connectors -w "\n"
