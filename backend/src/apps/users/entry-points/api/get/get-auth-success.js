@@ -1,7 +1,14 @@
-export default function makeGetAuthSuccess() {
+export default function makeGetAuthSuccess({ updateCache }) {
   return function (httpRequest) {
     if (httpRequest.user) {
-      console.log(httpRequest.session, httpRequest.sessionID);
+      console.log(httpRequest.session.cookie);
+      updateCache({
+        sessionId: httpRequest.sessionId,
+        sessionDetails: {
+          cookie: httpRequest.session.cookie,
+          user: httpRequest.user,
+        },
+      });
       return {
         headers: {
           "Content-Type": "application/json",

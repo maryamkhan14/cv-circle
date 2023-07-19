@@ -1,3 +1,4 @@
+import { updateCache } from "../../domain/use-cases/index.js";
 import authenticator from "../../domain/services/authenticator/index.js";
 import makeGetGoogleAuth from "./get/get-google-auth.js";
 import makeGetGithubAuth from "./get/get-github-auth.js";
@@ -18,7 +19,7 @@ const getGithubAuthCallback = makeGetGithubAuthCallback({
   authGithubCallback,
 });
 
-const getAuthSuccess = makeGetAuthSuccess();
+const getAuthSuccess = makeGetAuthSuccess({ updateCache });
 const postLogout = makePostLogout();
 
 const userController = Object.freeze({

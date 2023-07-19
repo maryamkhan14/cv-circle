@@ -1,14 +1,13 @@
 import makeUser from "../entities/user/index.js";
 import makeSaveUser from "./save-user.js";
-import { usersDb } from "../../data-access/index.js";
-import { producer } from "../../message-producer/index.js";
-import makeUpdateUsersTopic from "./update-users-topic.js";
+import { usersDb, sessionsCache } from "../../data-access/index.js";
+import makeUpdateCache from "./update-cache.js";
 const saveUser = makeSaveUser({
   usersDb,
   makeUser,
 });
-const updateUsersTopic = makeUpdateUsersTopic({ producer });
-const authenticationService = Object.freeze({ saveUser, updateUsersTopic });
+const updateCache = makeUpdateCache({ sessionsCache });
+const authenticationService = Object.freeze({ saveUser, updateCache });
 
 export default authenticationService;
-export { saveUser, updateUsersTopic };
+export { saveUser, updateCache };

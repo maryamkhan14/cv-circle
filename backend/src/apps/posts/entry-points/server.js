@@ -30,10 +30,12 @@ app.listen(process.env.PORT, () => {
 });
 async function getMessages() {
   await consumer.connect();
-  await consumer.subscribe({ topic: "user-logged-in", fromBeginning: true });
+  await consumer.subscribe({ topic: "mystream", fromBeginning: true });
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log(message.value.toString());
+      console.log(message);
+      console.log(message.value);
+      console.log(message.key);
     },
   });
 }

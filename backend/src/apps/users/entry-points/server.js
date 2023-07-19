@@ -1,16 +1,11 @@
 import "dotenv/config";
 import userRoutes from "./api/index.js";
 import express from "express";
-import { createClient } from "redis";
+import { cacheClient as redisClient } from "../data-access/index.js";
 import RedisStore from "connect-redis";
 import session from "express-session";
 import cors from "cors";
 import configuredPassportInstance from "../authentication/passport-setup/index.js";
-let redisClient = createClient({
-  url: process.env.REDIS_URL,
-  port: process.env.REDIS_PORT,
-});
-redisClient.connect().catch(console.error);
 let redisStore = new RedisStore({ client: redisClient, prefix: "sess:" });
 
 const app = express();

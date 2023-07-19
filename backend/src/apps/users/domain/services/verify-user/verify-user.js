@@ -1,13 +1,6 @@
-export default function makeVerifyUser({
-  saveUser,
-  isolateProfileDetails,
-  updateUsersTopic,
-}) {
+export default function makeVerifyUser({ saveUser, isolateProfileDetails }) {
   return function (accessToken, refreshToken, profile, done) {
     let strippedProfile = isolateProfileDetails(profile);
-    saveUser(strippedProfile).then((user) => {
-      updateUsersTopic(user);
-      done(null, user);
-    });
+    saveUser(strippedProfile).then((user) => done(null, user));
   };
 }
