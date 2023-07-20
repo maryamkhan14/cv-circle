@@ -4,8 +4,10 @@ export default function makeGetAuthSuccess({ updateCache }) {
       console.log(httpRequest.session.cookie);
       updateCache({
         sessionId: httpRequest.sessionId,
-        cookie: httpRequest.session.cookie,
-        user: httpRequest.user,
+        sessionDetails: {
+          cookie: httpRequest.session.cookie,
+          user: httpRequest.user,
+        },
       });
       return {
         headers: {

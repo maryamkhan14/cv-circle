@@ -58,7 +58,7 @@ services:
         confluent-hub install --no-prompt redis/redis-enterprise-kafka:6.7.4 
         confluent-hub install --no-prompt jcustenborder/kafka-connect-redis:latest
         /etc/confluent/docker/run &
-        /app/connector 8083
+        /app/connectors-config 8083
         sleep infinity
 
   ksqldb:
