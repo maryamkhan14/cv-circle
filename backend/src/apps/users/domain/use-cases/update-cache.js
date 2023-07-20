@@ -1,6 +1,5 @@
 export default function makeUpdateCache({ sessionsCache }) {
-  return function updateCache(user) {
-    let added = sessionsCache.add("mystream", user);
-    console.log("ADDED:", added);
+  return async function updateCache(session) {
+    return await sessionsCache.add("cache-auth", session);
   };
 }
