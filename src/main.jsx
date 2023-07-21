@@ -12,6 +12,7 @@ import LoggedOut from "./components/LoggedOut";
 import PostForm from "./components/PostForm";
 import AllPosts from "./components/AllPosts";
 import SinglePost from "./components/SinglePost";
+import NotPermitted from "./components/NotPermitted";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/create-post" element={<PostForm />} />
           <Route path="/post/:id" element={<SinglePost />} />
           <Route path="/edit-post/:id" element={<PostForm />} />
+          <Route path="/not-permitted" element={<NotPermitted />} />
         </Route>
       </Routes>
     </BrowserRouter>
