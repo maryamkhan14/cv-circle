@@ -87,6 +87,8 @@ services:
     build: ./src/apps/posts
     depends_on:
       - kafka-connect
+      - broker
+      - schema-registry
     links:
       - "broker:broker"
     ports:

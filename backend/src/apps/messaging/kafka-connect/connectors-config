@@ -28,11 +28,13 @@ curl -X POST -H "Content-Type: application/json" --data '
 sleep 2
 echo -e "\nCreating necessary topics:"
 retries=0
-while [ $(curl -s -o /dev/null -w %{http_code} -X POST http://ksqldb:8088/ksql -d '{"ksql": "CREATE STREAM IF NOT EXISTS source_records WITH (KAFKA_TOPIC='\''kafka_auth'\'', KEY_FORMAT='\''KAFKA'\'', VALUE_FORMAT='\''AVRO'\'');CREATE STREAM IF NOT EXISTS unkeyed_session_details AS SELECT CAST(EXTRACTJSONFIELD(BODY['\''session'\''], '\''$.sessionId'\'') AS STRING) AS ID, CAST(EXTRACTJSONFIELD(BODY['\''session'\''], '\''$.sessionDetails'\'') AS STRING) AS sessionDetails from source_records;SET '\''auto.offset.reset'\'' = '\''earliest'\'';CREATE STREAM IF NOT EXISTS keyed_session_details WITH (KAFKA_TOPIC='\''keyed_session_details'\'') AS SELECT * FROM unkeyed_session_details PARTITION BY ID;"}') -ne 200 ] ; do
+while [ $(curl -s -o /dev/null -w %{http_code} -X POST http://ksqldb:8088/ksql -d '{"ksql": "CREATE STREAM IF NOT EXISTS source_records WITH (KAFKA_TOPIC='\''kafka_auth'\'', KEY_FORMAT='\''KAFKA'\'', VALUE_FORMAT='\''AVRO'\'');CREATE STREAM IF NOT EXISTS unkeyed_session_details AS SELECT CAST(EXTRACTJSONFIELD(BODY['\''session'\''], '\''$.sessionId'\'') AS STRING) AS ID, CAST(EXTRACTJSONFIELD(BODY['\''session'\''], '\''$.cookie'\'') AS STRING) AS cookie, CAST(EXTRACTJSONFIELD(BODY['\''session'\''], '\''$.user'\'') AS STRING) AS user from source_records;SET '\''auto.offset.reset'\'' = '\''earliest'\'';CREATE STREAM IF NOT EXISTS keyed_session_details WITH (KAFKA_TOPIC='\''keyed_session_details'\'') AS SELECT * FROM unkeyed_session_details PARTITION BY ID;"}') -ne 200 ] ; do
   echo -e "\t" $(date) " Stream creation state not good (waiting for 200)"
   sleep 30
 done
 echo "Topics created successfully!"
+
+<<comment
 sleep 2
 echo -e "\nAdding Redis Kafka Sink Connector for the 'kafka_auth' topic into RedisJSON:"
 curl -X POST -H "Content-Type: application/json" --data '
@@ -47,3 +49,4 @@ curl -X POST -H "Content-Type: application/json" --data '
         "key.converter": "org.apache.kafka.connect.storage.StringConverter",
         "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter"
     }}' http://localhost:8083/connectors -w "\n"
+comment
