@@ -4,7 +4,6 @@ export default function makeSessionDetailsConsumer({
   registry,
 }) {
   return async function sessionDetailsConsumer() {
-    console.log(registry.decode);
     await consumeMessages(handleMessages);
   };
   async function consumeMessages(handleMessages) {
@@ -25,11 +24,14 @@ export default function makeSessionDetailsConsumer({
   }
   async function handleMessages(key, value) {
     try {
-      let parsedValue = JSON.parse(value);
-      let { COOKIE: cookie, USER: user } = parsedValue;
-      cookie = JSON.parse(cookie.string);
-      user = JSON.parse(user.string);
-      await sessionsCache.set(key, { cookie, user });
+      let { COOKIE: cookie, USER: user } = value;
+      if (cookie && user) {
+        cookie = JSON.parse(cookie);
+        user = JSON.parse(user);
+        await sessionsCache.set(key, { cookie, user });
+      } else {
+        await sessionsCache.set(key);
+      }
     } catch (e) {
       console.log("ERROR", e);
     }

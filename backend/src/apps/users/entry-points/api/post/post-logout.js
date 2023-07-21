@@ -1,6 +1,7 @@
-export default function makePostLogout() {
+export default function makePostLogout({ updateCache }) {
   return function (httpRequest) {
     if (httpRequest.sessionStore) {
+      updateCache({ sessionId: httpRequest.sessionId });
       httpRequest.logOut((err) => {
         if (err) {
           return {

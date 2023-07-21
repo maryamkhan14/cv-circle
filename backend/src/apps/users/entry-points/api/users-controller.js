@@ -20,7 +20,7 @@ const getGithubAuthCallback = makeGetGithubAuthCallback({
 });
 
 const getAuthSuccess = makeGetAuthSuccess({ updateCache });
-const postLogout = makePostLogout();
+const postLogout = makePostLogout({ updateCache });
 
 const userController = Object.freeze({
   getGoogleAuth,
