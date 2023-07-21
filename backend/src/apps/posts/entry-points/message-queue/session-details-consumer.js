@@ -24,10 +24,14 @@ export default function makeSessionDetailsConsumer({
     });
   }
   async function handleMessages(key, value) {
-    let parsedValue = JSON.parse(value);
-    let { COOKIE: cookie, USER: user } = parsedValue;
-    cookie = JSON.parse(cookie.string);
-    user = JSON.parse(user.string);
-    await sessionsCache.set(key, JSON.stringify({ ...cookie, ...user }));
+    try {
+      let parsedValue = JSON.parse(value);
+      let { COOKIE: cookie, USER: user } = parsedValue;
+      cookie = JSON.parse(cookie.string);
+      user = JSON.parse(user.string);
+      await sessionsCache.set(key, { cookie, user });
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   }
 }
