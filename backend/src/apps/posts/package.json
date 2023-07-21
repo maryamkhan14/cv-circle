@@ -21,7 +21,9 @@
     "express-session": "^1.17.3",
     "pdf-img-convert": "^1.2.1",
     "kafkajs": "2.2.4",
-    "@kafkajs/confluent-schema-registry": "3.3.0"
+    "@kafkajs/confluent-schema-registry": "3.3.0",
+    "redis": "4.6.7",
+    "connect-redis": "7.1.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
