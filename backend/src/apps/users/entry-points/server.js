@@ -34,17 +34,5 @@ app.use("/api/auth", userRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
-  testScan();
 });
-async function testScan() {
-  for await (const key of redisClient.scanIterator({
-    MATCH: "sess:*",
-    COUNT: 100,
-  })) {
-    const log = await redisClient.get(key);
-    if (log) {
-      console.log("REDIS LOG KEY: ", key, ":", JSON.parse(log));
-    }
-  }
-}
 export default app;
