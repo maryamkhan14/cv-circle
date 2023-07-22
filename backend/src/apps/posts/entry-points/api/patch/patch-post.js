@@ -3,12 +3,12 @@ export default function makePatchPost({ updatePost, handleAttachmentPreview }) {
     try {
       const user = httpRequest.user;
       const post = httpRequest.body;
-      if (user.userId === post.userId) {
+      if (user && user.userId === post.userId) {
         let image;
         if (post.file) {
           image = await handleAttachmentPreview(post);
         }
-        const toUpdate = post.file ? { ...post, ...image.getCdn() } : post;
+        const toUpdate = post.file ? { ...post, imgCdn: image.getCdn() } : post;
         const updated = await updatePost(toUpdate);
         return {
           headers: {

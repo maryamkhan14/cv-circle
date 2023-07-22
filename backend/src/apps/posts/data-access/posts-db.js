@@ -25,10 +25,7 @@ export default function makePostsDb({ dbClient }) {
   }
 
   function formatDbResults(records, keysMap) {
-    if (records.length) {
-      return records.map((record) => renameKeys(record, keysMap));
-    }
-    return null;
+    return records;
   }
 
   return Object.freeze({
@@ -40,10 +37,7 @@ export default function makePostsDb({ dbClient }) {
   });
 
   async function getAll() {
-    let result = await dbClient
-      .from("posts")
-      .select()
-      .order("created_at", { ascending: false });
+    let result = await dbClient.from("posts").select();
     return {
       ...result,
       data: formatDbResults(result.data, dbColumnsToNormalizedProfile),

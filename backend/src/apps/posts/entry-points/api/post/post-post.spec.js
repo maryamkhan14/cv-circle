@@ -1,6 +1,6 @@
 import { describe, expect, beforeEach, vi, test } from "vitest";
-import { makeFakeRawPost } from "../__test__/fixtures/post";
-import { makeFakeImageEntity as makeFakeImage } from "../__test__/fixtures/image";
+import { makeFakeRawPost } from "../../../__test__/fixtures/post";
+import { makeFakeImageEntity as makeFakeImage } from "../../../__test__/fixtures/image";
 import makePostPost from "./post-post";
 
 describe("Controller for POST to /post endpoint", () => {

@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "node --watch entry-points/server.js",
         "start": "node entry-points/server.js",
-        "test": "vitest --coverage"
+        "test": "vitest"
     },
     "author": "",
     "license": "ISC",

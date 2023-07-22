@@ -3,8 +3,7 @@ export default function makePostPost({ createPost, handleAttachmentPreview }) {
     try {
       const post = httpRequest.body;
       const image = await handleAttachmentPreview(post);
-      const posted = await createPost({ ...post, ...image.getCdn() });
-
+      const posted = await createPost({ ...post, imgCdn: image.getCdn() });
       // return what res.send() should contain
       return {
         headers: {

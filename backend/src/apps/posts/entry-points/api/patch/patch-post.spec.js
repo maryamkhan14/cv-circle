@@ -1,6 +1,6 @@
 import { describe, expect, beforeEach, vi, test } from "vitest";
-import { makeFakeRawPost } from "../__test__/fixtures/post";
-import { makeFakeImageEntity as makeFakeImage } from "../__test__/fixtures/image";
+import { makeFakeRawPost } from "../../../__test__/fixtures/post";
+import { makeFakeImageEntity as makeFakeImage } from "../../../__test__/fixtures/image";
 import makePatchPost from "./patch-post";
 
 describe("Controller for PATCH to /api/posts/:id endpoint", () => {
@@ -12,13 +12,33 @@ describe("Controller for PATCH to /api/posts/:id endpoint", () => {
   beforeEach(() => {
     patchPost = makePatchPost({ updatePost, handleAttachmentPreview });
   });
-  test("Successfully updates a post when new attachment is provided", async () => {
+  test("Refuses to update a post without valid user credentials", async () => {
     const post = makeFakeRawPost();
     const request = {
       headers: {
         "Content-Type": "application/json",
       },
-      body: { post, attachmentChanged: true },
+      body: { ...post },
+    };
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 400,
+      body: { error: "Not authorized to perform this action." },
+    };
+    const actual = await patchPost(request);
+    expect(actual).toEqual(expected);
+  });
+  test("Successfully updates a post when new attachment is provided", async () => {
+    const post = makeFakeRawPost();
+    const user = { userId: post.userId };
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: { ...post },
+      user,
     };
     const expected = {
       headers: {
@@ -33,18 +53,20 @@ describe("Controller for PATCH to /api/posts/:id endpoint", () => {
   });
 
   test("Returns expected response error when exception is thrown", async () => {
+    const error = {
+      message: "Error thrown by PATCH /api/posts/:id controller",
+    };
     handleAttachmentPreview.mockImplementation(async () => {
       throw new Error(error.message);
     });
-    let post = makeFakeRawPost();
+    const post = makeFakeRawPost({ file: "fakeFile" });
+    const user = { userId: post.userId };
     const request = {
       headers: {
         "Content-Type": "application/json",
       },
-      body: { post, attachmentChanged: true },
-    };
-    const error = {
-      message: "Error thrown by PATCH /api/posts/:id controller",
+      body: { ...post },
+      user,
     };
     const expected = {
       headers: {

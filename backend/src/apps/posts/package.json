@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node --watch entry-points/server.js",
     "start": "node entry-points/server.js",
-    "test": "vitest --coverage"
+    "test": "npx vitest --config ./__test__/vitest.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "vite": "4.4.6",
     "@vitest/coverage-istanbul": "^0.32.2",
     "@vitest/ui": "^0.32.2",
     "@web-std/file": "^3.0.2",

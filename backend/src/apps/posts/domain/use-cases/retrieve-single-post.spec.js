@@ -31,7 +31,6 @@ describe("Retrieve single post use case", () => {
   test("Retrieves a single post successfully", async () => {
     let postId = 1;
     let expected = makeFakePostEntity(...postRecord).getDTO();
-    console.log(expected);
     let actual = await retrieveSinglePost(postId);
     expect(actual).toEqual(expected);
   });
