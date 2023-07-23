@@ -1,9 +1,9 @@
 export default function makeSessionsCache({ cacheStore }) {
-  return Object.freeze({ get, set, setSession });
+  return Object.freeze({ get, set });
   async function get(sessionId) {
     return await cacheStore.client.get(sessionId);
   }
-  async function set(sessionId, sessionDetails = null, ttl = null) {
+  async function set(sessionId, sessionDetails = null) {
     if (sessionDetails) {
       return await cacheStore.set(sessionId, sessionDetails, () => {});
     }
@@ -11,10 +11,5 @@ export default function makeSessionsCache({ cacheStore }) {
   }
   async function destroy(sessionId) {
     return await cacheStore.destroy(sessionId, () => {});
-  }
-  async function setSession(sessionId, sessionDetails) {
-    if (sessionDetails) {
-      return await cacheStore.set(sessionId, sessionDetails, () => {});
-    }
   }
 }
