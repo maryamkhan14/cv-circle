@@ -53,31 +53,32 @@ export default function makePostsDb({ dbClient }) {
   }
 
   async function update(updateDetails) {
+    /**
     let renamedUpdateDetails = renameKeys(
       updateDetails,
       normalizedProfileToDbColumns
-    );
+    );*/
     let result = await dbClient
       .from("posts")
-      .update(renamedUpdateDetails)
-      .eq("id", renamedUpdateDetails.id)
+      .update(updateDetails)
+      .eq("id", updateDetails.id)
       .select(); //possible error with select? TODO: remove comment if not
-
+    console.log(result);
     return {
       ...result,
       data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
     };
   }
   async function remove() {}
-  async function insert({ userId, title, postContent, imgCdn }) {
+  async function insert(insertDetails) {
+    /**
+    let renamedInsertDetails = renameKeys(
+      insertDetails,
+      normalizedProfileToDbColumns
+    );*/
     let result = await dbClient
       .from("posts") // TODO: Add .env for "posts"
-      .insert({
-        fk_uid: userId,
-        title: title,
-        post_content: postContent,
-        img_cdn: imgCdn,
-      })
+      .insert(insertDetails)
       .select();
 
     return {
