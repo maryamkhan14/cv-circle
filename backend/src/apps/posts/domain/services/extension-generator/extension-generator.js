@@ -1,6 +1,6 @@
 export default function buildExtensionGenerator({ uniqueId }) {
   return function generateExtension(posterId) {
-    let extension = posterId + "/" + uniqueId.makeId();
+    let extension = posterId + "/" + uniqueId.makeId() + ".png";
     return extension;
   };
 }

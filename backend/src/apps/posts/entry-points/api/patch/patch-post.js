@@ -4,11 +4,11 @@ export default function makePatchPost({ updatePost, handleAttachmentPreview }) {
       const user = httpRequest.user;
       const post = httpRequest.body;
       if (user && user.userId === post.userId) {
-        let image;
+        let extension = post.imgCdn.split(process.env.DB_BASE_CDN_URL).pop();
         if (post.file) {
-          image = await handleAttachmentPreview(post);
+          await handleAttachmentPreview({ ...post, ...{ extension } });
         }
-        const toUpdate = post.file ? { ...post, imgCdn: image.getCdn() } : post;
+        const toUpdate = post;
         const updated = await updatePost(toUpdate);
         return {
           headers: {
