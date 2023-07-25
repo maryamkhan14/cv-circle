@@ -1,0 +1,7 @@
+#!/bin/bash
+keytool -keystore ssl/kafka.zookeeper-client.truststore.jks -alias ca-cert -import -file ssl/ca-cert -keypass $2 -storepass $2 -noprompt
+keytool -keystore ssl/kafka.zookeeper-client.keystore.jks -alias zookeeper-client -validity 3650 -genkey -keyalg RSA -ext SAN=dns:zookeeper-client -dname "CN=zookeeper,OU=CV Circle,O=SSL,C=US,ST=Oregon,L=Oregon" -keypass $3 -storepass $3
+keytool -keystore ssl/kafka.zookeeper-client.keystore.jks -alias zookeeper-client -certreq -file ssl/ca-request-zookeeper-client -storepass $3
+openssl x509 -req -CA ssl/ca-cert -CAkey ssl/ca-key -in ssl/ca-request-zookeeper-client -out ssl/ca-signed-zookeeper-client -days 3650 -CAcreateserial -passin pass:$1
+keytool -keystore ssl/kafka.zookeeper-client.keystore.jks -alias ca-cert -import -file ssl/ca-cert -storepass $3 -noprompt
+keytool -keystore ssl/kafka.zookeeper-client.keystore.jks -alias zookeeper-client -import -file ssl/ca-signed-zookeeper-client -storepass $3 -noprompt

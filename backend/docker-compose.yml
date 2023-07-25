@@ -1,11 +1,19 @@
 version: "2.19.1"
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    build: ./src/apps/messaging/zookeeper
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SECURE_CLIENT_PORT: 2182
+      ZOOKEEPER_AUTH_PROVIDER_X509: org.apache.zookeeper.server.auth.X509AuthenticationProvider
+      ZOOKEEPER_SERVER_CNXN_FACTORY: org.apache.zookeeper.server.NettyServerCnxnFactory
+      ZOOKEEPER_SSL_TRUSTSTORE_LOCATION: /app/ssl/kafka.zookeeper.truststore.jks
+      ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD: test00
+      ZOOKEEPER_SSL_KEYSTORE_LOCATION: /app/ssl/kafka.zookeeper.keystore.jks
+      ZOOKEEPER_SSL_KEYSTORE_PASSWORD: test00
+      ZOOKEEPER_SSL_CLIENT_AUTH: need
 
   users-redis:
     image: redis
