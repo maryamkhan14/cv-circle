@@ -19,5 +19,6 @@ fi
 
 # Replace passwords in the zookeeper.properties file
 replace_passwords "zookeeper-client.properties"
+rm ssl/ca-cert.srl ssl/ca-request-zookeeper-client ssl/ca-signed-zookeeper-client ssl/ca-signed-zookeeper ssl/ca-request-zookeeper
 # To run zookeeper-client: /bin/zookeeper-shell zookeeper:2182 -zk-tls-config-file zookeeper-client.properties
 echo -e "Ready to receive connections!"
