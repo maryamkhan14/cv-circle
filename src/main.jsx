@@ -13,6 +13,7 @@ import PostForm from "./components/PostForm";
 import AllPosts from "./components/AllPosts";
 import SinglePost from "./components/SinglePost";
 import NotPermitted from "./components/NotPermitted";
+import PostSkeleton from "./components/PostSkeleton";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/post/:id" element={<SinglePost />} />
           <Route path="/edit-post/:id" element={<PostForm />} />
           <Route path="/not-permitted" element={<NotPermitted />} />
+          <Route path="/post-skeleton" element={<PostSkeleton />} />
         </Route>
       </Routes>
     </BrowserRouter>

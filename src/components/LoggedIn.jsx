@@ -42,11 +42,10 @@ const LoggedIn = () => {
     }
   }, [user]);
   return (
-    <div className="flex items-center justify-center w-full h-full">
-      <div className="rounded flex shadow-md border m-3 w-5/6 h-5/6 gap-2 backdrop-blur-xl flex-col justify-center px-3 py-5 font-[700] text-center">
-        <h1 className="text-5xl">You're in!</h1>
-        <p className="text-2xl">Sending you back...</p>
-      </div>
+    <div className="rounded flex shadow-md border m-3 w-5/6 gap-2 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
+      {" "}
+      <h1 className="text-5xl">You're in!</h1>
+      <p className="text-2xl">Sending you back...</p>
     </div>
   );
 };

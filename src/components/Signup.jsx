@@ -7,7 +7,7 @@ const Signup = () => {
     window.location = "http://localhost:3001/auth/google/auth";
   };
   return (
-    <div className="rounded flex shadow-md border m-3 w-5/6 backdrop-blur-xl flex-col justify-center px-3 py-5 font-[700] text-center">
+    <div className="rounded flex shadow-md border m-3 w-5/6 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
       <h2 className="text-4xl text-slate-900">Welcome!</h2>
       <p>We're excited for you to join the CV Circle!</p>
       <span className="flex flex-col items-center justify-center mt-12">

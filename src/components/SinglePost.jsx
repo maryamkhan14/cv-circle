@@ -4,12 +4,14 @@ import { UserContext } from "../context/UserContext";
 import { getPost, upvotePost, checkHasUpvoted, deletePost } from "../services";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import VoteDisplay from "./VoteDisplay";
+import PostSkeleton from "./PostSkeleton";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id: postId } = useParams();
   const navigate = useNavigate();
 
+  const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
   const [error, setError] = useState(null);
   const [upvoted, setHasUpvoted] = useState(false);
@@ -46,6 +48,7 @@ const SinglePost = () => {
       if (data) {
         let { post } = data;
         setPost(post);
+        setPostLoaded(true);
       } else {
         // TODO: navigate to 404 page
       }
@@ -72,9 +75,9 @@ const SinglePost = () => {
     }
   }, [post.id]);
   return (
-    <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
+    <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
-        {post && (
+        {postLoaded ? (
           <>
             <span className="flex flex-col md:gap-10 ">
               <span className="flex flex-col md:flex-row gap-5 pb-3 border-b border-slate-300 items-center">
@@ -138,6 +141,8 @@ const SinglePost = () => {
               )}
             </div>
           </>
+        ) : (
+          <PostSkeleton />
         )}
       </div>
     </div>

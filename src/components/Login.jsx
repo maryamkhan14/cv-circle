@@ -8,7 +8,8 @@ const Login = () => {
     window.location = "http://localhost:3001/api/auth/google";
   };
   return (
-    <div className="rounded flex shadow-md border m-3 w-5/6 backdrop-blur-xl flex-col justify-center px-3 py-5 font-[700] text-center">
+    <div className="rounded flex shadow-md border m-3 w-5/6 gap-2 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
+      {" "}
       <h2 className="text-4xl text-slate-900">Welcome back.</h2>
       <p>We're glad to see you again!</p>
       <span className="flex flex-col items-center justify-center mt-12">

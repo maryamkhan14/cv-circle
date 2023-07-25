@@ -7,7 +7,7 @@ const Layout = () => {
       <div className="flex w-full h-full">
         <Navbar />
       </div>
-      <div className="flex flex-1 justify-center items-stretch bg-swirls w-full bg-cover">
+      <div className="flex flex-1 justify-center items-stretch  w-full bg-gradient-to-r from-blue-200 to-purple-200">
         <Outlet />
       </div>
     </div>
