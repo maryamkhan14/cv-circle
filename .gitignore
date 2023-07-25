@@ -30,4 +30,5 @@ backend/.env
 backend/src/node_modules/*
 backend/coverage
 backend/coverage/*
+backend/src/apps/messaging/zookeeper/ssl
 backend/src/apps/messaging/zookeeper/ssl/*
