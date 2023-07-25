@@ -1,20 +1,14 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { getAllPosts } from "../services";
 import { Link } from "react-router-dom";
 
-const PostsList = ({ postsList }) => {
+const PostsList = ({ postsList, searchFilter, sortFilter }) => {
   const [posts, setPosts] = useState(postsList);
   const [search, setSearch] = useState("");
   const [sortSelect, setSortSelect] = useState("");
 
   const loadPosts = async () => {
-    const { data, error } = await getAllPosts();
-    if (data) {
-      setPosts(data.posts);
-    } else {
-      console.log(error);
-    }
+    setPosts(postsList);
   };
   useEffect(() => {
     if (search != "") {
