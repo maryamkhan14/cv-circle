@@ -1,7 +1,8 @@
 import { makeFakeRawPost } from "./post.js";
 
 export function makeFakeSingleRawPostRecord(overrides) {
-  let { id, createdAt, userId, title, postContent, imgCdn } = makeFakeRawPost();
+  let { id, createdAt, userId, title, postContent, imgCdn, upvoteCount } =
+    makeFakeRawPost();
   let post = {
     id,
     created_at: createdAt,
