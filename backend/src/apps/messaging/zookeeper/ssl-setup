@@ -5,7 +5,11 @@ replace_passwords() {
   sed -i "s|\\\$ZOOKEEPER_SSL_KEYSTORE_PASSWORD|$ZOOKEEPER_SSL_KEYSTORE_PASSWORD|g" "$file"
 }
 
-if ![ -e "ssl/ca-cert" ]; then
+if ! [ -e "ssl" ]; then
+  mkdir ssl
+fi
+
+if ! [ -e "ssl/ca-cert" ]; then
   # Set up Zookeeper security
   ./zookeeper-ssl-setup $ZK_PRIVATE_KEY $ZOOKEEPER_SSL_TRUSTSTORE_PASSWORD $ZOOKEEPER_SSL_KEYSTORE_PASSWORD
   
@@ -15,4 +19,5 @@ fi
 
 # Replace passwords in the zookeeper.properties file
 replace_passwords "zookeeper-client.properties"
-/bin/zookeeper-shell zookeeper:2182 -zk-tls-config-file zookeeper-client.properties
+# To run zookeeper-client: /bin/zookeeper-shell zookeeper:2182 -zk-tls-config-file zookeeper-client.properties
+echo -e "Ready to receive connections!"
