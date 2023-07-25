@@ -1,8 +1,5 @@
 version: "2.19.1"
 services:
-  zookeeper:
-    volumes:
-      - $PWD/src/apps/messaging/zookeeper/:/app
   posts:
     build: 
       context: ./src/apps/posts
