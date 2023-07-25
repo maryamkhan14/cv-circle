@@ -115,7 +115,7 @@ const PostForm = () => {
   }, []);
 
   return (
-    <div className="flex items-stretch min-w-[80%] min-h-[80%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
+    <div className="flex items-stretch min-w-[80%] min-h-[80%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <form className="rounded flex flex-col justify-between gap-5 p-3 min-h-full w-full">
         <h1 className="text-4xl font-semibold text-slate-900">
           {toEditId ? "Edit your post" : "Create a post"}

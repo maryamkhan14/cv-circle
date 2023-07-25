@@ -72,7 +72,7 @@ const SinglePost = () => {
     }
   }, [post.id]);
   return (
-    <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border backdrop-blur-xl">
+    <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
         {post && (
           <>

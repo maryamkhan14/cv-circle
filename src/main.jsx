@@ -13,6 +13,7 @@ import PostForm from "./components/PostForm";
 import AllPosts from "./components/AllPosts";
 import SinglePost from "./components/SinglePost";
 import NotPermitted from "./components/NotPermitted";
+import PostsSkeleton from "./components/PostsSkeleton";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>

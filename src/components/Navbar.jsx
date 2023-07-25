@@ -25,7 +25,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="bg-slate-50 flex p-7 flex-col md:flex-row justify-between items-center gap-5 shadow-md w-full ">
+    <div className="bg-slate-50/80 flex p-7 flex-col md:flex-row justify-between items-center gap-5 shadow-md w-full ">
       <Link to="/">
         <span className="flex items-center gap-3">
           <h1 className="text-blue-800 text-3xl font-[400] uppercase hover:cursor-pointer">
