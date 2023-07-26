@@ -5,6 +5,7 @@ import {
   FAKE_POST_CONTENT,
   FAKE_POST_TITLE,
   FAKE_USER_ID,
+  FAKE_UPVOTE_COUNT,
 } from "./constants";
 
 // Make the object that will be passed into post entity factory function
@@ -16,6 +17,7 @@ export function makeFakeRawPost(overrides) {
     title: FAKE_POST_TITLE,
     postContent: FAKE_POST_CONTENT,
     imgCdn: FAKE_IMAGE_CDN,
+    upvoteCount: FAKE_UPVOTE_COUNT,
   };
   return { ...post, ...overrides };
 }
@@ -44,12 +46,17 @@ export function makeFakePostEntity(overrides) {
     overrides && overrides.hasOwnProperty("createdAt")
       ? overrides.createdAt
       : FAKE_POST_CREATED_AT;
+  let upvoteCount =
+    overrides && overrides.hasOwnProperty("upvoteCount")
+      ? overrides.upvoteCount
+      : FAKE_UPVOTE_COUNT;
   const post = {
     getId: () => id,
     getCreatedAt: () => createdAt,
     getUserId: () => userId,
     getTitle: () => title,
     getPostContent: () => postContent,
+    getUpvoteCount: () => upvoteCount,
     getImage: () => imgCdn,
     setImage: (cdn) => {
       imgCdn = cdn;
@@ -61,7 +68,7 @@ export function makeFakePostEntity(overrides) {
       createdAt = newCreatedAt;
     },
     getDTO: () => {
-      return { id, createdAt, userId, title, postContent, imgCdn };
+      return { id, createdAt, userId, title, postContent, imgCdn, upvoteCount };
     },
   };
 

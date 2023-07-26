@@ -13,6 +13,7 @@ export default function makeCreatePost({ postsDb }) {
       postContent: post.getPostContent(),
       imgCdn: post.getImage(),
     });
+
     if (error) {
       throw new Error(
         `Error saving post to database: ${error.message}. Post creation failed.`

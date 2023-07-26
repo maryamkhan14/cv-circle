@@ -1,8 +1,8 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import makeGetSinglePost from "./get-single-post";
-import { makeFakePostEntity } from "../../../__test__/fixtures/post";
+import { makeFakeRawPost } from "../../../__test__/fixtures/post";
 describe("Controller for GET to /post endpoint", () => {
-  let post = { ...makeFakePostEntity().getDTO() };
+  let post = { ...makeFakeRawPost() };
   let retrieveSinglePost = vi.fn(async () => {
     return post;
   });

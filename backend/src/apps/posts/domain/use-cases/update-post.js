@@ -14,6 +14,7 @@ export default function makeUpdatePost({ postsDb }) {
         `Error saving post to database: ${error.message}. Post update failed.`
       );
     }
-    return { ...post.getDTO(), ...updatedPostRecord };
+    return { ...post.getDTO() };
   };
 }
+//TODO: Add test
