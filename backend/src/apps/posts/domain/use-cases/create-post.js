@@ -1,17 +1,25 @@
 import makePost from "../entities/post/index.js";
 export default function makeCreatePost({ postsDb }) {
-  return async function createPost({ userId, title, postContent, imgCdn }) {
+  return async function createPost({
+    userId,
+    title,
+    postContent,
+    imgCdn,
+    upvoteCount,
+  }) {
     const post = makePost({
       userId, // todo: synchronize names
       title,
       postContent,
       imgCdn,
+      upvoteCount,
     });
     let { data: newPostRecord, error } = await postsDb.insert({
       userId: post.getUserId(),
       title: post.getTitle(),
       postContent: post.getPostContent(),
       imgCdn: post.getImage(),
+      upvoteCount: post.getUpvoteCount(),
     });
     if (error) {
       throw new Error(

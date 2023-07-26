@@ -18,8 +18,17 @@ describe("Retrieve single post use case", () => {
             title,
             post_content: postContent,
             img_cdn: imgCdn,
+            upvote_count: upvoteCount,
           }) => {
-            return { id, createdAt, userId, title, postContent, imgCdn };
+            return {
+              id,
+              createdAt,
+              userId,
+              title,
+              postContent,
+              imgCdn,
+              upvoteCount,
+            };
           }
         ),
         error: null,

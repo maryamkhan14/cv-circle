@@ -26,6 +26,7 @@ describe("Posts-relevant database tests", () => {
     expect(postsDbInsertArgs.title).toEqual(toInsert.title);
     expect(postsDbInsertArgs.post_content).toEqual(toInsert.postContent);
     expect(postsDbInsertArgs.img_cdn).toEqual(toInsert.imgCdn);
+    expect(postsDbInsertArgs.upvote_count).toEqual(toInsert.upvoteCount);
   });
 
   test("Gets all posts successfully", async () => {
