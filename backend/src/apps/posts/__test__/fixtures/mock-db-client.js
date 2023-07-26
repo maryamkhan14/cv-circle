@@ -4,6 +4,13 @@ import {
   makeFakeSingleRawPostRecord,
   makeFakeListOfRawPostRecords,
 } from "./mock-db-client-responses";
+let updateSpy = vi.fn(() => {
+  return {
+    eq: vi.fn(() => {
+      return { data: null, error: null };
+    }),
+  };
+});
 let insertSpy = vi.fn(() => {
   return {
     select: vi.fn(() => {
@@ -39,6 +46,7 @@ const mockTestDbClient = {
     return {
       select: selectSpy,
       insert: insertSpy,
+      update: updateSpy,
     };
   }),
 };
