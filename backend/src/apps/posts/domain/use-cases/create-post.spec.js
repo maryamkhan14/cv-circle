@@ -1,9 +1,6 @@
 import { describe, expect, vi, test, beforeEach } from "vitest";
 import makeCreatePost from "./create-post";
-import {
-  makeFakeRawPost,
-  makeFakePostEntity,
-} from "../../__test__/fixtures/post.js";
+import { makeFakeRawPost } from "../../__test__/fixtures/post.js";
 describe("Create post use case", () => {
   let postsDb;
   let createPost;
