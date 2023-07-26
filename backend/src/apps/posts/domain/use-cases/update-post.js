@@ -17,3 +17,4 @@ export default function makeUpdatePost({ postsDb }) {
     return { ...post.getDTO(), ...updatedPostRecord };
   };
 }
+//TODO: Add test
