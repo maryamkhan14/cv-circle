@@ -24,8 +24,43 @@ export default function makePostsDb({ dbClient }) {
     );
   }
 
-  function formatDbResults(records, keysMap) {
-    return records;
+  function format(records, keysMap) {
+    return records.map((record) => renameKeys(record, keysMap));
+  }
+
+  async function getAll() {
+    let result = await dbClient.from("posts_view").select();
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
+  async function getById(postId) {
+    let result = await dbClient.from("posts_view").select().eq("id", postId);
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
+  async function update(updateDetails) {
+    let result = await dbClient
+      .from("posts")
+      .update(updateDetails)
+      .eq("id", updateDetails.id);
+    return { ...result };
+  }
+  async function remove() {}
+  async function insert(insertDetails) {
+    let result = await dbClient
+      .from("posts") // TODO: Add .env for "posts"
+      .insert(insertDetails)
+      .select();
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
   }
 
   return Object.freeze({
@@ -35,55 +70,4 @@ export default function makePostsDb({ dbClient }) {
     update,
     remove,
   });
-
-  async function getAll() {
-    let result = await dbClient.from("posts").select();
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
-
-  async function getById(postId) {
-    let result = await dbClient.from("posts").select().eq("id", postId);
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
-
-  async function update(updateDetails) {
-    /**
-    let renamedUpdateDetails = renameKeys(
-      updateDetails,
-      normalizedProfileToDbColumns
-    );*/
-    let result = await dbClient
-      .from("posts")
-      .update(updateDetails)
-      .eq("id", updateDetails.id)
-      .select(); //possible error with select? TODO: remove comment if not
-    console.log(result);
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
-  async function remove() {}
-  async function insert(insertDetails) {
-    /**
-    let renamedInsertDetails = renameKeys(
-      insertDetails,
-      normalizedProfileToDbColumns
-    );*/
-    let result = await dbClient
-      .from("posts") // TODO: Add .env for "posts"
-      .insert(insertDetails)
-      .select();
-
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
 }

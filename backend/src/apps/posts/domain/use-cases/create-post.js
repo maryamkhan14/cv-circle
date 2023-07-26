@@ -1,26 +1,19 @@
 import makePost from "../entities/post/index.js";
 export default function makeCreatePost({ postsDb }) {
-  return async function createPost({
-    userId,
-    title,
-    postContent,
-    imgCdn,
-    upvoteCount,
-  }) {
+  return async function createPost({ userId, title, postContent, imgCdn }) {
     const post = makePost({
       userId, // todo: synchronize names
       title,
       postContent,
       imgCdn,
-      upvoteCount,
     });
     let { data: newPostRecord, error } = await postsDb.insert({
       userId: post.getUserId(),
       title: post.getTitle(),
       postContent: post.getPostContent(),
       imgCdn: post.getImage(),
-      upvoteCount: post.getUpvoteCount(),
     });
+
     if (error) {
       throw new Error(
         `Error saving post to database: ${error.message}. Post creation failed.`

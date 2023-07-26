@@ -1,6 +1,7 @@
 import makePost from "../entities/post/index.js";
 export default function makeUpdatePost({ postsDb }) {
   return async function updatePost(postDetails) {
+    console.log(postDetails);
     const post = makePost(postDetails);
     let { data: updatedPostRecord, error } = await postsDb.update({
       id: post.getId(),
