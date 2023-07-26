@@ -11,6 +11,13 @@ let updateSpy = vi.fn(() => {
     }),
   };
 });
+let deleteSpy = vi.fn(() => {
+  return {
+    eq: vi.fn(() => {
+      return { data: null, error: null };
+    }),
+  };
+});
 let insertSpy = vi.fn(() => {
   return {
     select: vi.fn(() => {
@@ -47,6 +54,7 @@ const mockTestDbClient = {
       select: selectSpy,
       insert: insertSpy,
       update: updateSpy,
+      delete: deleteSpy,
     };
   }),
 };
