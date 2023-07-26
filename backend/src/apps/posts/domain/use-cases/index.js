@@ -6,6 +6,7 @@ import makeImage from "../entities/image/index.js";
 import makeHandleAttachmentPreview from "./handle-attachment-preview.js";
 import makeUpdatePost from "./update-post.js";
 import { postsDb, imagesDb } from "../../data-access/index.js";
+import makeRemovePost from "./remove-post.js";
 
 const createPost = makeCreatePost({
   postsDb,
@@ -18,6 +19,7 @@ const handleAttachmentPreview = makeHandleAttachmentPreview({
   makeImage,
 });
 const updatePost = makeUpdatePost({ postsDb });
+const removePost = makeRemovePost({ postsDb });
 const postService = Object.freeze({
   createPost,
   handleAttachmentPreview,
@@ -32,4 +34,5 @@ export {
   retrievePosts,
   retrieveSinglePost,
   updatePost,
+  removePost,
 };

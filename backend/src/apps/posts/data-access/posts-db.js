@@ -51,7 +51,11 @@ export default function makePostsDb({ dbClient }) {
       .eq("id", updateDetails.id);
     return { ...result };
   }
-  async function remove() {}
+  async function remove(postId) {
+    let result = await dbClient.from("posts").delete().eq("id", postId);
+    console.log(result);
+    return { ...result };
+  }
   async function insert(insertDetails) {
     let result = await dbClient
       .from("posts") // TODO: Add .env for "posts"
