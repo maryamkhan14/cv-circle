@@ -19,11 +19,11 @@ const VoteDisplay = ({ existingUpvoteCount, upvoters, downvoters }) => {
       if (vote.voteCount === voteAdjustment) {
         setVote({ ...vote, voteCount: 0 });
         votePost({ ...vote, voteCount: -voteAdjustment });
-        setUpvoteCount(existingUpvoteCount + -voteAdjustment);
+        setUpvoteCount(upvoteCount + -voteAdjustment);
       } else {
         setVote({ ...vote, voteCount: voteAdjustment });
         votePost({ ...vote, voteCount: voteAdjustment });
-        setUpvoteCount(existingUpvoteCount + voteAdjustment);
+        setUpvoteCount(upvoteCount + voteAdjustment);
       }
     }
   };
