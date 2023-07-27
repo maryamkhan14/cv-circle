@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { getPost, upvotePost, checkHasUpvoted, deletePost } from "../services";
+import { getPost, deletePost } from "../services";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import VoteDisplay from "./VoteDisplay";
 import PostSkeleton from "./PostSkeleton";
@@ -10,27 +10,9 @@ const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id: postId } = useParams();
   const navigate = useNavigate();
-
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
   const [error, setError] = useState(null);
-  const [upvoted, setHasUpvoted] = useState(false);
-
-  const handleUpvoteClick = async () => {
-    if (Object.keys(user).length > 0) {
-      //TODO: Add error handling
-      const { data: newUpvotes, error } = await upvotePost(postId, {
-        userId: user.id,
-      });
-      if (newUpvotes) {
-        setPost({ ...post, upvoteCount: newUpvotes });
-        setUpvotedStatus(true);
-      } else {
-        console.log(error);
-        setError({ category: "upvote", msg: "Upvoting failed." });
-      }
-    }
-  };
 
   const handleDeleteClick = async () => {
     // TODO: add confirmation dialog
@@ -55,25 +37,6 @@ const SinglePost = () => {
     });
   }, []);
 
-  const setUpvotedStatus = async () => {
-    /**
-    //TODO: Improve by implementing stored function that returns join of upvotes and posts
-    const { data, error } = await checkHasUpvoted(postId, {
-      userId: user.id,
-    });
-    if (data) {
-      setHasUpvoted(data.length && Object.keys(...data).length ? true : false);
-    } else {
-      //TODO: handle error
-      console.log(error);
-    }*/
-  };
-
-  useEffect(() => {
-    if (post && Object.keys(post).length && Object.keys(user).length) {
-      setUpvotedStatus();
-    }
-  }, [post.id]);
   return (
     <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
@@ -83,8 +46,9 @@ const SinglePost = () => {
               <span className="flex flex-col md:flex-row gap-5 pb-3 border-b border-slate-300 items-center">
                 <VoteDisplay
                   postId={post.id}
-                  userId={user.id}
                   existingUpvoteCount={post.upvoteCount}
+                  upvoters={post.upvoters}
+                  downvoters={post.downvoters}
                 />
                 <h1 className="text-4xl font-semibold text-slate-900">
                   {post.title}
