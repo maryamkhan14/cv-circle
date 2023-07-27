@@ -16,6 +16,6 @@ router.get("/", makeCallback(getAllPosts));
 router.get("/:id", makeCallback(getSinglePost));
 router.patch("/:id", authMiddleware, makeCallback(patchPost));
 router.delete("/:id", authMiddleware, makeCallback(deletePost));
-router.post("/", authMiddleware, makeCallback(postVote));
+router.post("/vote", authMiddleware, makeCallback(postVote));
 
 export default router;
