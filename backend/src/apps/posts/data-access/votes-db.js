@@ -15,14 +15,7 @@ export default function makeVotesDb({ dbClient }) {
     );
   }
 
-  async function upvote(voteDetails) {
-    let result = await dbClient.rpc("vote", {
-      ...renameKeys(voteDetails, normalizedProfileToDbColumns),
-    });
-    return { ...result };
-  }
-
-  async function downvote(voteDetails) {
+  async function vote(voteDetails) {
     let result = await dbClient.rpc("vote", {
       ...renameKeys(voteDetails, normalizedProfileToDbColumns),
     });
@@ -30,7 +23,6 @@ export default function makeVotesDb({ dbClient }) {
   }
 
   return Object.freeze({
-    upvote,
-    downvote,
+    vote,
   });
 }
