@@ -1,4 +1,4 @@
-import makeVote from "../entities/vote";
+import makeVote from "../entities/vote/index.js";
 export default function makeVotePost({ votesDb }) {
   return async function votePost(voteDetails) {
     const vote = makeVote(voteDetails);
