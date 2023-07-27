@@ -4,6 +4,7 @@ import {
   makeFakeSingleRawPostRecord,
   makeFakeListOfRawPostRecords,
 } from "./mock-db-client-responses";
+import { VOTE_RPC } from "./constants";
 let updateSpy = vi.fn(() => {
   return {
     eq: vi.fn(() => {
@@ -56,6 +57,9 @@ const mockTestDbClient = {
       update: updateSpy,
       delete: deleteSpy,
     };
+  }),
+  rpc: vi.fn((rpc_method) => {
+    return rpc_method === VOTE_RPC ? { data: null, error: null } : null;
   }),
 };
 export default mockTestDbClient;

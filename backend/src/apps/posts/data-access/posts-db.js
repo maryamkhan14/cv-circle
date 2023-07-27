@@ -1,5 +1,4 @@
 export default function makePostsDb({ dbClient }) {
-  // upvote, downvote not added yet
   const dbColumnsToNormalizedProfile = {
     fk_uid: "userId",
     post_content: "postContent",
