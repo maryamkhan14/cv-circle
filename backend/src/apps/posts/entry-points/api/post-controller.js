@@ -16,7 +16,7 @@ const postPost = makePostPost({ createPost, handleAttachmentPreview });
 const getAllPosts = makeGetAllPosts({ retrievePosts });
 const getSinglePost = makeGetSinglePost({ retrieveSinglePost });
 const patchPost = makePatchPost({ updatePost, handleAttachmentPreview });
-const deletePost = makeDeletePost({ removePost });
+const deletePost = makeDeletePost({ retrieveSinglePost, removePost });
 const postController = Object.freeze({
   postPost,
   getAllPosts,

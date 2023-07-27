@@ -4,7 +4,6 @@ import makeDeletePost from "./delete-post";
 
 describe("Controller for DELETE to /api/posts/:id endpoint", () => {
   let removePost = vi.fn(async (post) => {
-    console.log("passed in", post);
     return post;
   });
   let deletePost;

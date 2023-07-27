@@ -76,7 +76,7 @@ const upvotePost = async (postId, userId) => {
 };
 const checkHasUpvoted = async (postId, userId) => {
   let { data: hasUpvoted } = await axios.post(
-    `http://localhost:3000/post/hasUpvoted/${postId}`,
+    `http://localhost:3000/post/hasUpvoted/${id}`,
     userId,
     {
       headers: {
@@ -87,13 +87,16 @@ const checkHasUpvoted = async (postId, userId) => {
   return hasUpvoted;
 };
 const deletePost = async (postId) => {
-  if (postId) {
+  try {
     let { data: deletedPost } = await axios.delete(
-      `http://localhost:3000/post/${postId}`
+      `http://localhost:3000/api/posts/${postId}`
     );
     return deletedPost;
-  } else {
-    return null;
+  } catch (e) {
+    console.log(e);
+    let { data, status, statusText } = e.response;
+    let errorMsg = data.error;
+    return { error: errorMsg || statusText, status };
   }
 };
 export {

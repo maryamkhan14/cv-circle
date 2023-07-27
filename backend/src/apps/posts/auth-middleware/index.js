@@ -3,7 +3,6 @@ export default function (req, res, next) {
     req.user = req.session.user;
     next();
   } else {
-    console.log("not allowed");
     res.redirect(process.env.NOT_PERMITTED_REDIRECT);
   }
 }
