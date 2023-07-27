@@ -4,7 +4,8 @@ export default function makePostsDb({ dbClient }) {
     post_content: "postContent",
     img_cdn: "imgCdn",
     created_at: "createdAt",
-    upvotecount: "upvoteCount",
+    upvote_count: "upvoteCount",
+    parent_id: "parentId",
   };
 
   const normalizedProfileToDbColumns = {
@@ -12,6 +13,7 @@ export default function makePostsDb({ dbClient }) {
     postContent: "post_content",
     imgCdn: "img_cdn",
     createdAt: "created_at",
+    parentId: "parent_id",
   };
 
   function renameKeys(obj, keysMap) {
@@ -47,7 +49,7 @@ export default function makePostsDb({ dbClient }) {
   async function update(updateDetails) {
     let result = await dbClient
       .from("posts")
-      .update(updateDetails)
+      .update({ ...renameKeys(updateDetails, normalizedProfileToDbColumns) })
       .eq("id", updateDetails.id);
     return { ...result };
   }
@@ -62,7 +64,7 @@ export default function makePostsDb({ dbClient }) {
   async function insert(insertDetails) {
     let result = await dbClient
       .from("posts") // TODO: Add .env for "posts"
-      .insert(insertDetails)
+      .insert({ ...renameKeys(insertDetails, normalizedProfileToDbColumns) })
       .select();
     return {
       ...result,
