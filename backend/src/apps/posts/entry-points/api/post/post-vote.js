@@ -2,7 +2,7 @@ export default function makePostVote({ votePost }) {
   return async function postVote(httpRequest) {
     try {
       const vote = httpRequest.body;
-      const voted = await votePost({ vote });
+      const voted = await votePost({ ...vote });
       // return what res.send() should contain
       return {
         headers: {
