@@ -5,6 +5,7 @@ import { getPost, deletePost } from "../services";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import VoteDisplay from "./VoteDisplay";
 import PostSkeleton from "./PostSkeleton";
+import Reply from "./Reply";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
@@ -103,6 +104,11 @@ const SinglePost = () => {
                   </button>
                 </>
               )}
+            </div>
+
+            <div className="border-t border-slate-300">
+              <Reply level={6} />
+              <Reply level={4} />
             </div>
           </>
         ) : (
