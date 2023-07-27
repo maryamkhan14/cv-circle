@@ -1,12 +1,11 @@
-export default function makeDeletePost({ removePost }) {
+export default function makeDeletePost({ retrieveSinglePost, removePost }) {
   return async function deletePost(httpRequest) {
     try {
       const user = httpRequest.user;
-      const post = httpRequest.body;
-      console.log(post);
+      const { id: postId } = httpRequest.params;
+      const post = await retrieveSinglePost(postId);
       if (user && user.userId === post.userId) {
         const deleted = await removePost(post);
-        console.log(deleted, removePost);
         return {
           headers: {
             "Content-Type": "application/json",

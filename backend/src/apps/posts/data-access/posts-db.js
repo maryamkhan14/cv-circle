@@ -51,9 +51,12 @@ export default function makePostsDb({ dbClient }) {
       .eq("id", updateDetails.id);
     return { ...result };
   }
-  async function remove(postId) {
-    let result = await dbClient.from("posts").delete().eq("id", postId);
-    console.log(result);
+  async function remove(postId, userId) {
+    let result = await dbClient
+      .from("posts")
+      .delete()
+      .eq("id", postId)
+      .eq("userId", userId);
     return { ...result };
   }
   async function insert(insertDetails) {
