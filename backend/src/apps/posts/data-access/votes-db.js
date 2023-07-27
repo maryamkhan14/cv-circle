@@ -1,8 +1,8 @@
 export default function makeVotesDb({ dbClient }) {
   const normalizedProfileToDbColumns = {
-    voteCount: "vote_count",
-    userId: "fk_uid",
-    postId: "fk_pid",
+    voteCount: "delta_votes",
+    userId: "uid",
+    postId: "pid",
   };
 
   function renameKeys(obj, keysMap) {

@@ -4,6 +4,7 @@ export default function makePostsDb({ dbClient }) {
     post_content: "postContent",
     img_cdn: "imgCdn",
     created_at: "createdAt",
+    upvotecount: "upvoteCount",
   };
 
   const normalizedProfileToDbColumns = {
