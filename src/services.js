@@ -57,34 +57,23 @@ const createPost = async (post) => {
     return { error: errorMsg, status };
   }
 };
-const upvotePost = async (postId, userId) => {
-  console.log(postId, userId);
-  if (postId) {
-    let { data: upvoteCount } = await axios.post(
-      `http://localhost:3000/post/upvote/${postId}`,
-      userId,
+const votePost = async (vote) => {
+  try {
+    let { data: voted } = await axios.post(
+      "http://localhost:3000/api/posts/vote",
+      vote,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
-    return upvoteCount;
-  } else {
-    return null;
+    return voted;
+  } catch (e) {
+    let { data, status } = e.response;
+    let errorMsg = data.error;
+    return { error: errorMsg, status };
   }
-};
-const checkHasUpvoted = async (postId, userId) => {
-  let { data: hasUpvoted } = await axios.post(
-    `http://localhost:3000/post/hasUpvoted/${id}`,
-    userId,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return hasUpvoted;
 };
 const deletePost = async (postId) => {
   try {
@@ -99,12 +88,4 @@ const deletePost = async (postId) => {
     return { error: errorMsg || statusText, status };
   }
 };
-export {
-  createPost,
-  updatePost,
-  getPost,
-  getAllPosts,
-  upvotePost,
-  checkHasUpvoted,
-  deletePost,
-};
+export { createPost, updatePost, getPost, getAllPosts, deletePost, votePost };

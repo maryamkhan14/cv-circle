@@ -1,10 +1,10 @@
 export default function makePostsDb({ dbClient }) {
-  // upvote, downvote not added yet
   const dbColumnsToNormalizedProfile = {
     fk_uid: "userId",
     post_content: "postContent",
     img_cdn: "imgCdn",
     created_at: "createdAt",
+    upvotecount: "upvoteCount",
   };
 
   const normalizedProfileToDbColumns = {

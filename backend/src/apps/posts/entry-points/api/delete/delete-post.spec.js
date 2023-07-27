@@ -6,10 +6,13 @@ describe("Controller for DELETE to /api/posts/:id endpoint", () => {
   let removePost = vi.fn(async (post) => {
     return post;
   });
+  let retrieveSinglePost = vi.fn(async (postId) => {
+    return makeFakeRawPost({ id: postId });
+  });
   let deletePost;
 
   beforeEach(() => {
-    deletePost = makeDeletePost({ removePost });
+    deletePost = makeDeletePost({ removePost, retrieveSinglePost });
   });
   test("Refuses to update a post without valid user credentials", async () => {
     const post = makeFakeRawPost();
@@ -17,6 +20,7 @@ describe("Controller for DELETE to /api/posts/:id endpoint", () => {
       headers: {
         "Content-Type": "application/json",
       },
+      params: { id: post.id },
       body: { ...post },
     };
     const expected = {
@@ -36,6 +40,7 @@ describe("Controller for DELETE to /api/posts/:id endpoint", () => {
       headers: {
         "Content-Type": "application/json",
       },
+      params: { id: post.id },
       body: { ...post },
       user,
     };
@@ -63,6 +68,7 @@ describe("Controller for DELETE to /api/posts/:id endpoint", () => {
       headers: {
         "Content-Type": "application/json",
       },
+      params: { id: post.id },
       body: { ...post },
       user,
     };
