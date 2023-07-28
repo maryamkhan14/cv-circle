@@ -1,6 +1,6 @@
 import { describe, expect, vi, test, beforeEach } from "vitest";
 import makeVotePost from "./vote-post";
-import { makeFakeRawVote } from "../../../__test__/fixtures/vote.js";
+import { makeFakeRawVote } from "../../__test__/fixtures/vote.js";
 describe("Vote post use case", () => {
   let votesDb;
   let votePost;

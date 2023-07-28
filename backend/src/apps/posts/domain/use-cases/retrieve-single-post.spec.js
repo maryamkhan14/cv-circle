@@ -19,6 +19,10 @@ describe("Retrieve single post use case", () => {
             post_content: postContent,
             img_cdn: imgCdn,
             upvote_count: upvoteCount,
+            upvoters: upvoters,
+            downvoters: downvoters,
+            parent_id: parentId,
+            replies: replies,
           }) => {
             return {
               id,
@@ -28,6 +32,10 @@ describe("Retrieve single post use case", () => {
               postContent,
               imgCdn,
               upvoteCount,
+              upvoters,
+              downvoters,
+              parentId,
+              replies,
             };
           }
         ),
