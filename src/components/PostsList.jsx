@@ -2,36 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const PostsList = ({ postsList, searchFilter, sortFilter }) => {
-  const [posts, setPosts] = useState(postsList);
-  const [search, setSearch] = useState("");
-  const [sortSelect, setSortSelect] = useState("");
-
-  const loadPosts = async () => {
-    setPosts(postsList);
-  };
-  useEffect(() => {
-    if (search != "") {
-      setPosts(posts.filter((post) => post.title.includes(search)));
-    } else {
-      loadPosts();
-    }
-  }, [search]);
-
-  useEffect(() => {
-    if (sortSelect != "") {
-      console.log(sortSelect);
-      setPosts(
-        posts.sort((a, b) =>
-          a[sortSelect] > b[sortSelect]
-            ? 1
-            : b[sortSelect] > a[sortSelect]
-            ? -1
-            : 0
-        )
-      );
-    }
-  }, [sortSelect]);
+const PostsList = ({ posts, searchFilter, sortFilter }) => {
   return (
     <>
       {posts && posts.length > 0 ? (
