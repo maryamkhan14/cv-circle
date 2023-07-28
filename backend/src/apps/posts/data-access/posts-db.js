@@ -46,6 +46,14 @@ export default function makePostsDb({ dbClient }) {
     };
   }
 
+  async function getReplyById(postId) {
+    let result = await dbClient.from("replies_view").select().eq("id", postId);
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
   async function update(updateDetails) {
     let result = await dbClient
       .from("posts")
@@ -58,7 +66,7 @@ export default function makePostsDb({ dbClient }) {
       .from("posts")
       .delete()
       .eq("id", postId)
-      .eq("userId", userId);
+      .eq("fk_uid", userId);
     return { ...result };
   }
   async function insert(insertDetails) {
@@ -74,6 +82,7 @@ export default function makePostsDb({ dbClient }) {
 
   return Object.freeze({
     getAll,
+    getReplyById,
     getById,
     insert,
     update,
