@@ -5,7 +5,8 @@ import { getPost, deletePost } from "../services";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import VoteDisplay from "./VoteDisplay";
 import PostSkeleton from "./PostSkeleton";
-import Reply from "./Reply";
+import ReplyList from "./ReplyList";
+import ReplyForm from "./ReplyForm";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
@@ -14,7 +15,8 @@ const SinglePost = () => {
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
   const [error, setError] = useState(null);
-
+  const [replies, setReplies] = useState([]);
+  const [replyFormActive, setReplyFormActive] = useState(false);
   const handleDeleteClick = async () => {
     // TODO: add confirmation dialog
     const { data, error } = await deletePost(postId);
@@ -31,6 +33,7 @@ const SinglePost = () => {
       if (data) {
         let { post } = data;
         setPost(post);
+        setReplies(post.replies);
         setPostLoaded(true);
       } else {
         // TODO: navigate to 404 page
@@ -102,14 +105,25 @@ const SinglePost = () => {
                   >
                     Delete
                   </button>
+
+                  <button
+                    className={`text-slate-50 disabled:opacity-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center `}
+                    onClick={(e) => setReplyFormActive(true)}
+                    disabled={replyFormActive}
+                  >
+                    Reply
+                  </button>
                 </>
               )}
             </div>
-
-            <div className="border-t border-slate-300">
-              <Reply level={6} />
-              <Reply level={4} />
-            </div>
+            {replyFormActive && (
+              <ReplyForm
+                original={post}
+                mode="create"
+                setReplyFormActive={setReplyFormActive}
+              />
+            )}
+            <ReplyList replies={post.replies} />
           </>
         ) : (
           <PostSkeleton />
