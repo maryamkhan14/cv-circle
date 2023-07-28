@@ -11,6 +11,8 @@ export function makeFakeSingleRawPostRecord(overrides) {
     upvoteCount,
     upvoters,
     downvoters,
+    replies,
+    parentId,
   } = makeFakeRawPost();
   let post = {
     id,
@@ -22,6 +24,8 @@ export function makeFakeSingleRawPostRecord(overrides) {
     upvote_count: upvoteCount,
     upvoters,
     downvoters,
+    replies,
+    parent_id: parentId,
   };
   return [{ ...post, ...overrides }];
 }
@@ -38,6 +42,8 @@ export function makeFakeListOfRawPostRecords(overrides) {
       upvote_count: post.upvoteCount,
       upvoters: post.upvoters,
       downvoters: post.downvoters,
+      replies: post.replies,
+      parent_id: post.parentId,
     };
     return { ...newPost, ...overrides };
   });

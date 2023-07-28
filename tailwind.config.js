@@ -15,7 +15,14 @@ export default {
       headings: ["Work Sans", "sans-serif"],
       plainText: ["Barlow", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      padding: {
+        "lvl-1": "0.5em",
+        "lvl-2": "1em",
+        "lvl-3": "1.5em",
+        "lvl-4": "2em",
+      },
+    },
   },
   plugins: [],
 };

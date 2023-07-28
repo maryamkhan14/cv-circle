@@ -18,6 +18,8 @@ export function makeFakeRawPost(overrides) {
     postContent: FAKE_POST_CONTENT,
     imgCdn: FAKE_IMAGE_CDN,
     upvoteCount: FAKE_UPVOTE_COUNT,
+    replies: [],
+    parentId: null,
     upvoters: [],
     downvoters: [],
   };
@@ -58,7 +60,12 @@ export function makeFakePostEntity(overrides) {
     overrides && overrides.hasOwnProperty("downvoters")
       ? overrides.downvoters
       : [];
-
+  let parentId =
+    overrides && overrides.hasOwnProperty("parentId")
+      ? overrides.parentId
+      : null;
+  let replies =
+    overrides && overrides.hasOwnProperty("replies") ? overrides.replies : [];
   const post = {
     getId: () => id,
     getCreatedAt: () => createdAt,
@@ -68,6 +75,9 @@ export function makeFakePostEntity(overrides) {
     getUpvoteCount: () => upvoteCount,
     getImage: () => imgCdn,
     getUpvoters: () => upvoters,
+
+    getReplies: () => replies,
+    getParentId: () => parseInt(parentId),
     getDownvoters: () => downvoters,
     setImage: (cdn) => {
       imgCdn = cdn;
@@ -89,6 +99,8 @@ export function makeFakePostEntity(overrides) {
         upvoteCount,
         upvoters,
         downvoters,
+        replies,
+        parentId,
       };
     },
   };

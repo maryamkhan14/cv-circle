@@ -1,12 +1,12 @@
 import { describe, expect, beforeEach, vi, test } from "vitest";
 import { makeFakeRawVote } from "../../../__test__/fixtures/vote";
-import makeVotePost from "./vote-post";
+import makePostVote from "./post-vote";
 
 describe("Controller for POST to /vote endpoint", () => {
   let votePost = vi.fn(async (post) => post);
   let postVote;
   beforeEach(() => {
-    postVote = makeVotePost({ votePost });
+    postVote = makePostVote({ votePost });
   });
 
   test("Successfully votes on post", async () => {

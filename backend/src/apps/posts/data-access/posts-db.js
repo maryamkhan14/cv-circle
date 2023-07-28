@@ -4,7 +4,8 @@ export default function makePostsDb({ dbClient }) {
     post_content: "postContent",
     img_cdn: "imgCdn",
     created_at: "createdAt",
-    upvotecount: "upvoteCount",
+    upvote_count: "upvoteCount",
+    parent_id: "parentId",
   };
 
   const normalizedProfileToDbColumns = {
@@ -12,6 +13,7 @@ export default function makePostsDb({ dbClient }) {
     postContent: "post_content",
     imgCdn: "img_cdn",
     createdAt: "created_at",
+    parentId: "parent_id",
   };
 
   function renameKeys(obj, keysMap) {
@@ -44,10 +46,18 @@ export default function makePostsDb({ dbClient }) {
     };
   }
 
+  async function getReplyById(postId) {
+    let result = await dbClient.from("replies_view").select().eq("id", postId);
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
   async function update(updateDetails) {
     let result = await dbClient
       .from("posts")
-      .update(updateDetails)
+      .update({ ...renameKeys(updateDetails, normalizedProfileToDbColumns) })
       .eq("id", updateDetails.id);
     return { ...result };
   }
@@ -56,13 +66,13 @@ export default function makePostsDb({ dbClient }) {
       .from("posts")
       .delete()
       .eq("id", postId)
-      .eq("userId", userId);
+      .eq("fk_uid", userId);
     return { ...result };
   }
   async function insert(insertDetails) {
     let result = await dbClient
       .from("posts") // TODO: Add .env for "posts"
-      .insert(insertDetails)
+      .insert({ ...renameKeys(insertDetails, normalizedProfileToDbColumns) })
       .select();
     return {
       ...result,
@@ -72,6 +82,7 @@ export default function makePostsDb({ dbClient }) {
 
   return Object.freeze({
     getAll,
+    getReplyById,
     getById,
     insert,
     update,
