@@ -8,6 +8,7 @@ export default function makeUpdatePost({ postsDb }) {
       title: post.getTitle(),
       postContent: post.getPostContent(),
       imgCdn: post.getImage(),
+      parentId: post.getParentId(),
     });
     if (error) {
       throw new Error(
