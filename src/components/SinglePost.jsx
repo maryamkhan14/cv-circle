@@ -93,6 +93,13 @@ const SinglePost = () => {
             <div className="w-full flex gap-2 items-stretch">
               {Object.keys(user).length > 0 && user.userId == post.userId && (
                 <>
+                  <button
+                    className={`text-slate-50 disabled:opacity-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center `}
+                    onClick={(e) => setReplyFormActive(true)}
+                    disabled={replyFormActive}
+                  >
+                    Reply
+                  </button>
                   <Link to={`/edit-post/${post.id}`}>
                     <button className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center  h-full justify-center">
                       Edit
@@ -104,14 +111,6 @@ const SinglePost = () => {
                     onClick={handleDeleteClick}
                   >
                     Delete
-                  </button>
-
-                  <button
-                    className={`text-slate-50 disabled:opacity-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center `}
-                    onClick={(e) => setReplyFormActive(true)}
-                    disabled={replyFormActive}
-                  >
-                    Reply
                   </button>
                 </>
               )}

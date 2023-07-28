@@ -20,39 +20,19 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
 
   const uploadEditedPost = async (e) => {
     e.preventDefault();
-    console.log("FRONTEND", post);
-    let { data, error } = await updatePost({ ...post }, post.id); //TODO: set status
+    await updatePost({ ...post }, post.id); //TODO: set status
 
     clear();
-    if (error) {
-      setStatus({
-        error: true,
-        msg: error,
-        success: null,
-      });
-    }
+    navigate(0);
   };
 
   const uploadNewPost = async (e) => {
     e.preventDefault();
 
-    let { data, error } = await createPost({ ...post });
+    await createPost({ ...post });
 
-    console.log(post);
     clear();
-    if (error) {
-      setStatus({
-        error: true,
-        msg: error,
-        success: null,
-      });
-    } else {
-      setStatus({
-        error: null,
-        msg: "Post created successfully!",
-        success: true,
-      });
-    }
+    navigate(0);
   };
 
   const clear = () => {
@@ -65,7 +45,6 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
       userId: "",
       file: null,
     });
-    setStatus({});
   };
 
   const close = () => {
