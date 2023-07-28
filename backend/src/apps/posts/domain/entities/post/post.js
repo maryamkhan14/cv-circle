@@ -16,7 +16,7 @@ export default function buildMakePost() {
     if (!userId) {
       throw new Error("Post must have an author.");
     }
-    if (!title) {
+    if (!title && !parentId) {
       throw new Error("Post must have a title.");
     }
     if (!postContent) {
@@ -51,7 +51,7 @@ export default function buildMakePost() {
         createdAt = newCreatedAt;
       },
       getReplies: () => replies,
-      getParentId: () => parentId,
+      getParentId: () => parseInt(parentId),
       getDTO: () => {
         return {
           id,
