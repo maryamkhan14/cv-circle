@@ -1,10 +1,12 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { getPost, createPost, updatePost } from "../services";
+import { createPost, updatePost } from "../services";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 const ReplyForm = ({ mode, setReplyFormActive, original }) => {
   const { user } = useContext(UserContext);
-  const [status, setStatus] = useState({});
+  const navigate = useNavigate();
+
   const [post, setPost] = useState({
     createdAt: "",
     id: "",
@@ -76,7 +78,6 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
     if (mode == "edit") {
       setPost({ ...original, userId: user.userId });
     } else {
-      console.log(original, mode);
       setPost({ ...post, parentId: original.id, userId: user.userId });
     }
   }, []);
