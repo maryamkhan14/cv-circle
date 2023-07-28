@@ -122,7 +122,7 @@ const SinglePost = () => {
                 setReplyFormActive={setReplyFormActive}
               />
             )}
-            <ReplyList replies={post.replies} />
+            <ReplyList replies={replies} />
           </>
         ) : (
           <PostSkeleton />

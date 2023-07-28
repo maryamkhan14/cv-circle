@@ -5,17 +5,16 @@ import { UserContext } from "../context/UserContext";
 const ReplyList = ({ replies }) => {
   const { user } = useContext(UserContext);
   const [replyList, setReplyList] = useState([]);
-
   return (
     <div className="flex flex-col border-t border-slate-300 py-3">
-      {replies.length ? (
+      {replies.length && replies[0].length ? (
         <div>
           <h3 className="text-3xl font-semibold text-slate-900 mb-5">
             {" "}
             Insights{" "}
           </h3>
-          {replies.map((reply) => (
-            <Reply reply={reply} />
+          {replies.map(([reply]) => (
+            <Reply reply={reply} key={reply.id} />
           ))}
         </div>
       ) : (
