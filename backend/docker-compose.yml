@@ -9,6 +9,7 @@ services:
     depends_on:
       - users
       - posts
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -33,8 +34,19 @@ services:
       - zookeeper
     ports:
       - 9092:9092
-    env_file:
-      - ./src/apps/messaging/broker/.env
+    volumes:
+      - kafka:/var/lib/kafka/data
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
 
   schema-registry:
     image: confluentinc/cp-schema-registry:latest
@@ -48,18 +60,33 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:29092
 
   kafka-connect:
-    build: ./src/apps/messaging/kafka-connect
+    image: confluentinc/cp-kafka-connect:latest
     container_name: kafka-connect
     depends_on:
       - broker
       - schema-registry
     ports:
       - 8083:8083
-    env_file:
-      - ./src/apps/messaging/kafka-connect/.env
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: kafka-connect
+      CONNECT_CONFIG_STORAGE_TOPIC: _connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: _connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: _connect-status
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components,/data/connect-jars
     volumes:
       - ./src/apps/messaging/kafka-connect/data:/var/lib/kafka/data
       - ./src/apps/messaging/kafka-connect/secrets:/etc/kafka/secrets
+      - ./src/apps/messaging/kafka-connect/connectors-config:/home/appuser/connectors-config
     command:
       - bash
       - -c
@@ -67,7 +94,7 @@ services:
         confluent-hub install --no-prompt redis/redis-enterprise-kafka:6.7.4 
         confluent-hub install --no-prompt jcustenborder/kafka-connect-redis:latest
         /etc/confluent/docker/run &
-        /app/connectors-config 8083
+        /home/appuser/connectors-config 8083
         sleep infinity
 
   ksqldb:
@@ -92,8 +119,10 @@ services:
       KSQL_KSQL_CONNECT_URL: http://kafka-connect:8083
       KSQL_KSQL_SERVICE_ID: ksql_service
       KSQL_KSQL_HIDDEN_TOPICS: "^_.*"
+
   posts:
     build: ./src/apps/posts
+    image: posts
     container_name: posts
     depends_on:
       - kafka-connect
@@ -107,9 +136,13 @@ services:
 
   users:
     build: ./src/apps/users
+    image: users
     container_name: users
     links:
       - "users-redis:redis"
     env_file:
       - ./src/apps/users/.env
     restart: always
+
+volumes:
+  kafka:
