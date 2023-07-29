@@ -1,25 +1,29 @@
 version: "2.19.1"
 services:
+  nginx:
+    ports:
+      - "3000:80"
+      - "3001:80"
   posts:
-    build: 
+    build:
       context: ./src/apps/posts
-      args: 
+      args:
         NODE_ENV: development
     volumes:
       - ./src/apps/posts/:/app:ro
       - /app/__test__
       - /app/node_modules
-    environment: 
+    environment:
       - NODE_ENV=development
     command: npm run dev
   users:
-    build: 
+    build:
       context: ./src/apps/users
-      args: 
+      args:
         NODE_ENV: development
     volumes:
       - ./src/apps/users/:/app:ro
       - /app/node_modules
-    environment: 
+    environment:
       - NODE_ENV=development
     command: npm run dev

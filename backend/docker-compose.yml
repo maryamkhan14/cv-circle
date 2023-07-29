@@ -1,5 +1,14 @@
 version: "2.19.1"
 services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - $PWD/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - users
+      - posts
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -52,9 +61,9 @@ services:
       - ./src/apps/messaging/kafka-connect/data:/var/lib/kafka/data
       - ./src/apps/messaging/kafka-connect/secrets:/etc/kafka/secrets
     command:
-      - bash 
-      - -c 
-      - | 
+      - bash
+      - -c
+      - |
         confluent-hub install --no-prompt redis/redis-enterprise-kafka:6.7.4 
         confluent-hub install --no-prompt jcustenborder/kafka-connect-redis:latest
         /etc/confluent/docker/run &
@@ -82,27 +91,25 @@ services:
       KSQL_STREAMS_PRODUCER_MAX_BLOCK_MS: 9223372036854775807
       KSQL_KSQL_CONNECT_URL: http://kafka-connect:8083
       KSQL_KSQL_SERVICE_ID: ksql_service
-      KSQL_KSQL_HIDDEN_TOPICS: '^_.*'
+      KSQL_KSQL_HIDDEN_TOPICS: "^_.*"
   posts:
     build: ./src/apps/posts
+    container_name: posts
     depends_on:
       - kafka-connect
       - broker
       - schema-registry
     links:
       - "broker:broker"
-    ports:
-      - "3000:3000"
-    env_file: 
+    env_file:
       - ./src/apps/posts/.env
     restart: always
-    
+
   users:
     build: ./src/apps/users
+    container_name: users
     links:
       - "users-redis:redis"
-    ports:
-      - "3001:3001"
-    env_file: 
+    env_file:
       - ./src/apps/users/.env
     restart: always
