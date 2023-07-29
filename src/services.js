@@ -13,7 +13,7 @@ const getPost = async (postId) => {
 };
 const getAllPosts = async () => {
   try {
-    return await axios.get(`http://localhost:3000/api/posts`, {
+    return await axios.get(`http://localhost:3000/api/posts/`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -42,7 +42,7 @@ const updatePost = async (post, id) => {
 const createPost = async (post) => {
   try {
     let { data: newPost } = await axios.post(
-      "http://localhost:3000/api/posts",
+      "http://localhost:3000/api/posts/",
       post,
       {
         headers: {

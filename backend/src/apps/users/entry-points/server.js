@@ -30,7 +30,7 @@ app.use(
 
 app.use(configuredPassportInstance.initialize());
 app.use(configuredPassportInstance.session());
-app.use("/api/auth", userRoutes);
+app.use("/", userRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
