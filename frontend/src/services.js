@@ -2,7 +2,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 const getPost = async (postId) => {
   try {
-    return await axios.get(`http://localhost:3000/api/posts/${postId}`, {
+    return await axios.get(`https://cv-circle.com/api/posts/${postId}`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -13,7 +13,7 @@ const getPost = async (postId) => {
 };
 const getAllPosts = async () => {
   try {
-    return await axios.get(`http://localhost:3000/api/posts/`, {
+    return await axios.get(`https://cv-circle.com/api/posts/`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -26,7 +26,7 @@ const getAllPosts = async () => {
 const updatePost = async (post, id) => {
   try {
     let { data: updatedPost } = await axios.patch(
-      `http://localhost:3000/api/posts/${id}`,
+      `https://cv-circle.com/api/posts/${id}`,
       post,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
@@ -42,7 +42,7 @@ const updatePost = async (post, id) => {
 const createPost = async (post) => {
   try {
     let { data: newPost } = await axios.post(
-      "http://localhost:3000/api/posts/",
+      "https://cv-circle.com/api/posts/",
       post,
       {
         headers: {
@@ -60,7 +60,7 @@ const createPost = async (post) => {
 const votePost = async (vote) => {
   try {
     let { data: voted } = await axios.post(
-      "http://localhost:3000/api/posts/vote",
+      "https://cv-circle.com/api/posts/vote",
       vote,
       {
         headers: {
@@ -78,7 +78,7 @@ const votePost = async (vote) => {
 const deletePost = async (postId) => {
   try {
     let { data: deletedPost } = await axios.delete(
-      `http://localhost:3000/api/posts/${postId}`
+      `https://cv-circle.com/api/posts/${postId}`
     );
     return deletedPost;
   } catch (e) {
