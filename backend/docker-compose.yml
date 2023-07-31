@@ -179,8 +179,8 @@ volumes:
       device: $FRONTEND_DIR
       o: bind
   dhparam:
-  driver: local
-  driver_opts:
-    type: none
-    device: $PWD/dhparam/
-    o: bind
+    driver: local
+    driver_opts:
+      type: none
+      device: $BACKEND_DIR/dhparam/
+      o: bind
