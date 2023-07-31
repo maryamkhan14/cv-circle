@@ -9,20 +9,21 @@ import configuredPassportInstance from "../authentication/passport-setup/index.j
 let redisStore = new RedisStore({ client: redisClient, prefix: "sess:" });
 
 const app = express();
-
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(
   session({
     store: redisStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
-    cookie: { maxAge: 86400000 },
+    proxy: true,
+    cookie: { maxAge: 86400000, secure: true, sameSite: "none" },
     saveUninitialized: false,
   })
 );
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://cv-circle.onrender.com",
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })

@@ -3,12 +3,28 @@ services:
   nginx:
     image: nginx:stable-alpine
     volumes:
-      - $PWD/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+      - dhparam:/etc/ssl/certs
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - users
       - posts
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email kmaryam818@gmail.com --agree-tos --no-eff-email --force-renewal -d cv-circle.com  -d www.cv-circle.com
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -124,7 +140,6 @@ services:
       KSQL_KSQL_HIDDEN_TOPICS: "^_.*"
 
   posts:
-    build: ./src/apps/posts
     image: cvcircle/posts
     container_name: posts
     depends_on:
@@ -138,7 +153,6 @@ services:
     restart: always
 
   users:
-    build: ./src/apps/users
     image: cvcircle/users
     container_name: users
     links:
@@ -154,3 +168,17 @@ volumes:
     external: true
   kafka:
     external: true
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: $FRONTEND_DIR
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: $BACKEND_DIR/dhparam/
+      o: bind

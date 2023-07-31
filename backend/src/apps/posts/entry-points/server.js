@@ -8,12 +8,14 @@ import { sessionDetailsConsumer } from "./message-queue/index.js";
 import { cacheStore } from "../data-access/index.js";
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(
   session({
     store: cacheStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
+    proxy: true,
     saveUninitialized: false,
   })
 );
@@ -21,7 +23,7 @@ app.use(
 app.use(expressFileUpload());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://cv-circle.onrender.com",
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })
