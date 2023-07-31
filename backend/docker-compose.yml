@@ -22,7 +22,7 @@ services:
       - web-root:/var/www/html
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email kmaryam818@gmail.com --agree-tos --no-eff-email --staging -d cv-circle.com  -d www.cv-circle.com
+    command: certonly --webroot --webroot-path=/var/www/html --email kmaryam818@gmail.com --agree-tos --no-eff-email --force-renewal -d cv-circle.com  -d www.cv-circle.com
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
