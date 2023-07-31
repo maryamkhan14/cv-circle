@@ -30,3 +30,4 @@ backend/.env
 backend/src/node_modules/*
 backend/coverage
 backend/coverage/*
+backend/dhparam/*.pem
