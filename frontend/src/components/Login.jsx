@@ -2,10 +2,10 @@ import React from "react";
 
 const Login = () => {
   const loginWithGithub = () => {
-    window.location = "http://localhost:3001/api/auth/github";
+    window.location = "https://cv-circle.com/api/auth/github";
   };
   const loginWithGoogle = () => {
-    window.location = "http://localhost:3001/api/auth/google";
+    window.location = "https://cv-circle.com/api/auth/google";
   };
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 gap-2 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
