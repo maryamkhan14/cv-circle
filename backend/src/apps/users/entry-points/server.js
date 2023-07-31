@@ -16,9 +16,8 @@ app.use(
     store: redisStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
-    sameSite: "none",
     proxy: true,
-    cookie: { maxAge: 86400000, secure: true },
+    cookie: { maxAge: 86400000, secure: true, sameSite: "none" },
     saveUninitialized: false,
   })
 );
