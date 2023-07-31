@@ -174,5 +174,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/cv-circle-admin/cv-circle/frontend/
+      device: $FRONTEND_DIR
       o: bind
