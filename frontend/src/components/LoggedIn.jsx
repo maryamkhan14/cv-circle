@@ -6,7 +6,7 @@ import { UserContext } from "../context/UserContext";
 const LoggedIn = () => {
   const { user, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
-  const BaseURL = "http://localhost:3001/api/auth/success";
+  const BaseURL = "https://cv-circle.com/api/auth/success";
   const getUser = () => {
     fetch(BaseURL, {
       method: "GET",
