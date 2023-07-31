@@ -6,7 +6,7 @@ export default function buildGoogleStrategy({
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `https://cv-circle.com/api/auth${process.env.GOOGLE_CALLBACK_URL}`,
+      callbackURL: `/api/auth${process.env.GOOGLE_CALLBACK_URL}`,
     },
     verificationCallback
   );
