@@ -18,8 +18,25 @@ describe("Retrieve single post use case", () => {
             title,
             post_content: postContent,
             img_cdn: imgCdn,
+            upvote_count: upvoteCount,
+            upvoters: upvoters,
+            downvoters: downvoters,
+            parent_id: parentId,
+            replies: replies,
           }) => {
-            return { id, createdAt, userId, title, postContent, imgCdn };
+            return {
+              id,
+              createdAt,
+              userId,
+              title,
+              postContent,
+              imgCdn,
+              upvoteCount,
+              upvoters,
+              downvoters,
+              parentId,
+              replies,
+            };
           }
         ),
         error: null,
@@ -31,7 +48,6 @@ describe("Retrieve single post use case", () => {
   test("Retrieves a single post successfully", async () => {
     let postId = 1;
     let expected = makeFakePostEntity(...postRecord).getDTO();
-    console.log(expected);
     let actual = await retrieveSinglePost(postId);
     expect(actual).toEqual(expected);
   });

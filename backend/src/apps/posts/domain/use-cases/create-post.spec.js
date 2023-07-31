@@ -1,9 +1,6 @@
 import { describe, expect, vi, test, beforeEach } from "vitest";
 import makeCreatePost from "./create-post";
-import {
-  makeFakeRawPost,
-  makeFakePostEntity,
-} from "../../__test__/fixtures/post.js";
+import { makeFakeRawPost } from "../../__test__/fixtures/post.js";
 describe("Create post use case", () => {
   let postsDb;
   let createPost;
@@ -15,9 +12,8 @@ describe("Create post use case", () => {
     createPost = makeCreatePost({ postsDb });
   });
   test("Creates post successfully", async () => {
-    let post = makeFakeRawPost({ id: null, createdAt: null });
-
-    let expected = makeFakeRawPost();
+    let post = makeFakeRawPost({ id: null, createdAt: null, upvoteCount: 0 });
+    let expected = makeFakeRawPost({ upvoteCount: 0 });
     let actual = await createPost(post);
     let postsDbInsertArgs = postsDb.insert.mock.calls[0][0];
     expect(actual).toEqual(expected);

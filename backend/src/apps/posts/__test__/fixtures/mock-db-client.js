@@ -4,6 +4,21 @@ import {
   makeFakeSingleRawPostRecord,
   makeFakeListOfRawPostRecords,
 } from "./mock-db-client-responses";
+import { VOTE_RPC } from "./constants";
+let updateSpy = vi.fn(() => {
+  return {
+    eq: vi.fn(() => {
+      return { data: null, error: null };
+    }),
+  };
+});
+let deleteSpy = vi.fn(() => {
+  return {
+    eq: vi.fn(() => {
+      return { data: null, error: null };
+    }),
+  };
+});
 let insertSpy = vi.fn(() => {
   return {
     select: vi.fn(() => {
@@ -39,7 +54,12 @@ const mockTestDbClient = {
     return {
       select: selectSpy,
       insert: insertSpy,
+      update: updateSpy,
+      delete: deleteSpy,
     };
+  }),
+  rpc: vi.fn((rpc_method) => {
+    return rpc_method === VOTE_RPC ? { data: null, error: null } : null;
   }),
 };
 export default mockTestDbClient;

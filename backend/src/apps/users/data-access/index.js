@@ -1,4 +1,7 @@
-import dbClient from "../../../common-utilities/db/index.js";
+import dbClient from "./db-client.js";
+import cacheClient from "./cache-client.js";
+import makeSessionsCache from "./sessions-cache.js";
 import makeUsersDb from "./users-db.js";
 const usersDb = makeUsersDb({ dbClient });
-export { usersDb };
+const sessionsCache = makeSessionsCache({ cacheClient });
+export { usersDb, cacheClient, sessionsCache };

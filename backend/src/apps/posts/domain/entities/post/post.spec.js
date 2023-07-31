@@ -47,6 +47,7 @@ describe("post", () => {
   test("can get DTO", () => {
     const post = makeFakeRawPost();
     const fakePost = makePost(post);
+    console.log(post);
     expect(fakePost.getDTO()).toEqual(post);
   });
 });

@@ -5,6 +5,7 @@ import {
   FAKE_POST_CONTENT,
   FAKE_POST_TITLE,
   FAKE_USER_ID,
+  FAKE_UPVOTE_COUNT,
 } from "./constants";
 
 // Make the object that will be passed into post entity factory function
@@ -16,6 +17,11 @@ export function makeFakeRawPost(overrides) {
     title: FAKE_POST_TITLE,
     postContent: FAKE_POST_CONTENT,
     imgCdn: FAKE_IMAGE_CDN,
+    upvoteCount: FAKE_UPVOTE_COUNT,
+    replies: [],
+    parentId: null,
+    upvoters: [],
+    downvoters: [],
   };
   return { ...post, ...overrides };
 }
@@ -44,13 +50,35 @@ export function makeFakePostEntity(overrides) {
     overrides && overrides.hasOwnProperty("createdAt")
       ? overrides.createdAt
       : FAKE_POST_CREATED_AT;
+  let upvoteCount =
+    overrides && overrides.hasOwnProperty("upvoteCount")
+      ? overrides.upvoteCount
+      : FAKE_UPVOTE_COUNT;
+  let upvoters =
+    overrides && overrides.hasOwnProperty("upvoters") ? overrides.upvoters : [];
+  let downvoters =
+    overrides && overrides.hasOwnProperty("downvoters")
+      ? overrides.downvoters
+      : [];
+  let parentId =
+    overrides && overrides.hasOwnProperty("parentId")
+      ? overrides.parentId
+      : null;
+  let replies =
+    overrides && overrides.hasOwnProperty("replies") ? overrides.replies : [];
   const post = {
     getId: () => id,
     getCreatedAt: () => createdAt,
     getUserId: () => userId,
     getTitle: () => title,
     getPostContent: () => postContent,
+    getUpvoteCount: () => upvoteCount,
     getImage: () => imgCdn,
+    getUpvoters: () => upvoters,
+
+    getReplies: () => replies,
+    getParentId: () => parseInt(parentId),
+    getDownvoters: () => downvoters,
     setImage: (cdn) => {
       imgCdn = cdn;
     },
@@ -61,7 +89,19 @@ export function makeFakePostEntity(overrides) {
       createdAt = newCreatedAt;
     },
     getDTO: () => {
-      return { id, createdAt, userId, title, postContent, imgCdn };
+      return {
+        id,
+        createdAt,
+        userId,
+        title,
+        postContent,
+        imgCdn,
+        upvoteCount,
+        upvoters,
+        downvoters,
+        replies,
+        parentId,
+      };
     },
   };
 

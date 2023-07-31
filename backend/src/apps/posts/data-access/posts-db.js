@@ -1,10 +1,11 @@
 export default function makePostsDb({ dbClient }) {
-  // upvote, downvote not added yet
   const dbColumnsToNormalizedProfile = {
     fk_uid: "userId",
     post_content: "postContent",
     img_cdn: "imgCdn",
     created_at: "createdAt",
+    upvote_count: "upvoteCount",
+    parent_id: "parentId",
   };
 
   const normalizedProfileToDbColumns = {
@@ -12,6 +13,7 @@ export default function makePostsDb({ dbClient }) {
     postContent: "post_content",
     imgCdn: "img_cdn",
     createdAt: "created_at",
+    parentId: "parent_id",
   };
 
   function renameKeys(obj, keysMap) {
@@ -24,71 +26,66 @@ export default function makePostsDb({ dbClient }) {
     );
   }
 
-  function formatDbResults(records, keysMap) {
-    if (records.length) {
-      return records.map((record) => renameKeys(record, keysMap));
-    }
-    return null;
+  function format(records, keysMap) {
+    return records.map((record) => renameKeys(record, keysMap));
+  }
+
+  async function getAll() {
+    let result = await dbClient.from("posts_view").select();
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
+  async function getById(postId) {
+    let result = await dbClient.from("posts_view").select().eq("id", postId);
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
+  async function getReplyById(postId) {
+    let result = await dbClient.from("replies_view").select().eq("id", postId);
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
+  }
+
+  async function update(updateDetails) {
+    let result = await dbClient
+      .from("posts")
+      .update({ ...renameKeys(updateDetails, normalizedProfileToDbColumns) })
+      .eq("id", updateDetails.id);
+    return { ...result };
+  }
+  async function remove(postId, userId) {
+    let result = await dbClient
+      .from("posts")
+      .delete()
+      .eq("id", postId)
+      .eq("fk_uid", userId);
+    return { ...result };
+  }
+  async function insert(insertDetails) {
+    let result = await dbClient
+      .from("posts") // TODO: Add .env for "posts"
+      .insert({ ...renameKeys(insertDetails, normalizedProfileToDbColumns) })
+      .select();
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
   }
 
   return Object.freeze({
     getAll,
+    getReplyById,
     getById,
     insert,
     update,
     remove,
   });
-
-  async function getAll() {
-    let result = await dbClient
-      .from("posts")
-      .select()
-      .order("created_at", { ascending: false });
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
-
-  async function getById(postId) {
-    let result = await dbClient.from("posts").select().eq("id", postId);
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
-
-  async function update(updateDetails) {
-    let renamedUpdateDetails = renameKeys(
-      updateDetails,
-      normalizedProfileToDbColumns
-    );
-    let result = await dbClient
-      .from("posts")
-      .update(renamedUpdateDetails)
-      .eq("id", renamedUpdateDetails.id)
-      .select(); //possible error with select? TODO: remove comment if not
-
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
-  async function remove() {}
-  async function insert({ userId, title, postContent, imgCdn }) {
-    let result = await dbClient
-      .from("posts") // TODO: Add .env for "posts"
-      .insert({
-        fk_uid: userId,
-        title: title,
-        post_content: postContent,
-        img_cdn: imgCdn,
-      })
-      .select();
-
-    return {
-      ...result,
-      data: formatDbResults(result.data, dbColumnsToNormalizedProfile),
-    };
-  }
 }
