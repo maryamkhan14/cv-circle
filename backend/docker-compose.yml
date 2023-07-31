@@ -140,7 +140,6 @@ services:
       KSQL_KSQL_HIDDEN_TOPICS: "^_.*"
 
   posts:
-    build: ./src/apps/posts
     image: cvcircle/posts
     container_name: posts
     depends_on:
@@ -154,7 +153,6 @@ services:
     restart: always
 
   users:
-    build: ./src/apps/users
     image: cvcircle/users
     container_name: users
     links:
