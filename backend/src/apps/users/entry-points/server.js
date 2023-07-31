@@ -9,7 +9,7 @@ import configuredPassportInstance from "../authentication/passport-setup/index.j
 let redisStore = new RedisStore({ client: redisClient, prefix: "sess:" });
 
 const app = express();
-app.enable("trust proxy");
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(
   session({

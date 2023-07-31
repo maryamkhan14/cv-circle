@@ -8,7 +8,7 @@ import { sessionDetailsConsumer } from "./message-queue/index.js";
 import { cacheStore } from "../data-access/index.js";
 
 const app = express();
-app.enable("trust proxy");
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(
   session({
