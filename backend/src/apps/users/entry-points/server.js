@@ -18,7 +18,7 @@ app.use(
     resave: false,
     sameSite: "none",
     proxy: true,
-    cookie: { maxAge: 86400000 },
+    cookie: { maxAge: 86400000, secure: true },
     saveUninitialized: false,
   })
 );
