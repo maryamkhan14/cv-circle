@@ -21,7 +21,7 @@ app.use(
 app.use(expressFileUpload());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://cv-circle.onrender.com",
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })
