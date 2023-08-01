@@ -10,7 +10,7 @@ import ReplyForm from "./ReplyForm";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
-  const { id: postId } = useParams();
+  const { id: postId, updated } = useParams();
   const navigate = useNavigate();
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
@@ -68,7 +68,11 @@ const SinglePost = () => {
 
                 <span className="flex flex-col pl-5 md:w-[25%] justify-center self-center">
                   <Link
-                    to={post.imgCdn}
+                    to={
+                      updated === true
+                        ? post.imgCdn + "?t=" + Date.now()
+                        : post.imgCdn
+                    }
                     className="hover:cursor-pointer w-full flex justify-center md:justify-end"
                     target="_blank"
                     aria-label="View image in full size"
