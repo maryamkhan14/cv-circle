@@ -58,13 +58,11 @@ const SinglePost = () => {
                   {post.title}
                 </h1>
               </span>
-
               <span className="flex flex-col pt-3 md:pt-0 md:flex-row gap-3 justify-between">
                 <p
-                  className="text-lg flex-1 break-words hyphens-auto pr-5"
+                  className="text-lg flex-1 break-words whitespace-pre-wrap pr-5"
                   lang="en"
                 >
-                  {" "}
                   {post.postContent}
                 </p>
 
