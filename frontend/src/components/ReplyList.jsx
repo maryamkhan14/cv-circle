@@ -13,7 +13,7 @@ const ReplyList = ({ replies }) => {
             {" "}
             Insights{" "}
           </h3>
-          {replies.map(([reply]) => (
+          {replies[0].map((reply) => (
             <Reply reply={reply} key={reply.id} />
           ))}
         </div>
