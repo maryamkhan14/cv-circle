@@ -3,7 +3,7 @@
 # CV Circle
 This web app allows users to exchange resumes and cover letters and receive feedback on them from others!
 
-![Figure 1](/.eraser/eI5y2LS9WNWkJZPiNXvt___TDpnkbXtRtf8pwmjWbxCbY6vOrQ2___---figure---WkM-GMiMqWsS5tk0aNMNR---figure---Sx4pQBzDJB-GXINllSV6ig.png "Figure 1")
+![Figure 1](/.eraser/eI5y2LS9WNWkJZPiNXvt___TDpnkbXtRtf8pwmjWbxCbY6vOrQ2___---figure---v3khAaoEv0OR08dKbQyW9---figure---Sx4pQBzDJB-GXINllSV6ig.png "Figure 1")
 
 ## Video Walkthrough
 Here's a walkthrough of implemented user stories:
