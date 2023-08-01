@@ -69,9 +69,7 @@ const SinglePost = () => {
                 <span className="flex flex-col pl-5 md:w-[25%] justify-center self-center">
                   <Link
                     to={
-                      updated === true
-                        ? post.imgCdn + "?t=" + Date.now()
-                        : post.imgCdn
+                      updated ? post.imgCdn + "?t=" + Date.now() : post.imgCdn
                     }
                     className="hover:cursor-pointer w-full flex justify-center md:justify-end"
                     target="_blank"
