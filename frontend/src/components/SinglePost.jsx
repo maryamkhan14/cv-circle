@@ -11,6 +11,8 @@ import ReplyForm from "./ReplyForm";
 const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id: postId, updated } = useParams();
+  console.log(updated);
+  console.log(updated ? "true" : "f");
   const navigate = useNavigate();
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
@@ -77,7 +79,9 @@ const SinglePost = () => {
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={post.imgCdn}
+                      src={
+                        updated ? post.imgCdn + "?t=" + Date.now() : post.imgCdn
+                      }
                       referrerPolicy="no-referrer"
                       alt="Post image"
                       className="border-blue border rounded-lg object-contain"
