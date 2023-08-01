@@ -26,9 +26,11 @@ const PostForm = () => {
     let { file } = post;
     if (!file) {
       let result = await updatePost({ ...post, id: toEditId }, toEditId); //TODO: set status
+      navigate(`/post/${toEditId}`);
       console.log(result);
     } else if (checkFileConstraints(file)) {
       let result = await updatePost({ ...post, id: toEditId }, toEditId); //TODO: set status
+      navigate(`/post/${toEditId}/updated`);
     } else {
       setStatus({
         error: true,
@@ -36,8 +38,6 @@ const PostForm = () => {
         success: null,
       });
     }
-
-    navigate(`/post/${toEditId}`);
   };
 
   const uploadNewPost = async (e) => {
