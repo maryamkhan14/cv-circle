@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/logged-in" element={<LoggedIn />} />
           <Route path="/logged-out" element={<LoggedOut />} />
           <Route path="/create-post" element={<PostForm />} />
-          <Route path="/post/:id" element={<SinglePost />} />
+          <Route path="/post/:id/:updated?" element={<SinglePost />} />
           <Route path="/edit-post/:id" element={<PostForm />} />
           <Route path="/not-permitted" element={<NotPermitted />} />
           <Route path="/post-skeleton" element={<PostSkeleton />} />
