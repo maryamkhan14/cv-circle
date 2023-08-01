@@ -149,11 +149,11 @@ const PostForm = () => {
           <textarea
             id="post-content"
             name="post-content"
-            rows="4"
+            rows="10"
             cols="50"
             value={post.postContent}
             onChange={(e) => setPost({ ...post, postContent: e.target.value })}
-            className="border border-slate-800 w-full p-2 rounded"
+            className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
           ></textarea>
         </span>
         <span className="flex flex-col md:flex-row justify-center items-center">
