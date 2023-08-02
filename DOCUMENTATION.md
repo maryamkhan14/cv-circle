@@ -1,5 +1,5 @@
 # CV Circle: Documentation
-
+**NOTE: This documentation is outdated. Up-to-date information will be posted soon.**
 ## Backend
 
 Here are some notes on the architecture of CV circle's backend. It's a work in progress! Diagrams are generated with mermaid.js. Swagger documentation to be added soon as well!
