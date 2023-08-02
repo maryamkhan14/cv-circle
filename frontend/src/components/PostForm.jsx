@@ -72,7 +72,7 @@ const PostForm = () => {
         success: 0,
       });
     } else if (checkFileConstraints(file)) {
-      let { error } = await createPost({ ...post });
+      let { data, error } = await createPost({ ...post });
       if (error) {
         setStatus({
           error: true,
@@ -80,7 +80,8 @@ const PostForm = () => {
           success: 0,
         });
       } else {
-        navigate(`/post/${post.id}`);
+        let { posted } = data;
+        navigate(`/post/${posted.id}`);
       }
     } else {
       setStatus({
@@ -202,10 +203,7 @@ const PostForm = () => {
               name="file"
               id="file"
               accept="image/png,image/jpg,image/jpeg,application/pdf"
-              onInput={(e) => {
-                console.log(e);
-                setPost({ ...post, file: e.target.files[0] });
-              }}
+              onInput={(e) => setPost({ ...post, file: e.target.files[0] })}
               disabled={status && status.success === 1}
             />
             {post && post.file && post.file.name ? (
