@@ -7,13 +7,9 @@ This web app allows users to exchange resumes and cover letters and receive feed
 ![Architectural Diagram](architectural-diagram.png "Architectural Diagram")
 _Made with Eraser_
 
-## Video Walkthrough
+## Video Demonstration
 
-Here's a walkthrough of implemented user stories:
-
-![Video Walkthrough](final-project.gif "Video Walkthrough")
-
-GIF created with ScreenToGif
+Coming soon! Head over to [CV Circle](https://www.cv-circle.onrender.com) to try the app for yourself
 
 ## Notes
 
