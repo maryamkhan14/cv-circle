@@ -537,6 +537,10 @@ h1,
   margin: 0.75rem;
 }
 
+.m-0 {
+  margin: 0px;
+}
+
 .-ml-1 {
   margin-left: -0.25rem;
 }
@@ -557,8 +561,20 @@ h1,
   margin-right: 0.5rem;
 }
 
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
 .mt-12 {
   margin-top: 3rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.inline {
+  display: inline;
 }
 
 .flex {
@@ -720,6 +736,43 @@ h1,
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -764,6 +817,10 @@ h1,
   gap: 1.25rem;
 }
 
+.self-end {
+  align-self: flex-end;
+}
+
 .self-center {
   align-self: center;
 }
@@ -776,11 +833,6 @@ h1,
 
 .text-ellipsis {
   text-overflow: ellipsis;
-}
-
-.hyphens-auto {
-  -webkit-hyphens: auto;
-          hyphens: auto;
 }
 
 .whitespace-pre-wrap {
@@ -888,6 +940,10 @@ h1,
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-amber-800\/50 {
+  background-color: rgb(146 64 14 / 0.5);
 }
 
 .bg-gradient-to-r {
@@ -1091,6 +1147,11 @@ h1,
   color: rgb(30 64 175 / var(--tw-text-opacity));
 }
 
+.text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
 .text-slate-50 {
   --tw-text-opacity: 1;
   color: rgb(248 250 252 / var(--tw-text-opacity));
@@ -1099,6 +1160,11 @@ h1,
 .text-slate-900 {
   --tw-text-opacity: 1;
   color: rgb(15 23 42 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .shadow-md {
@@ -1170,8 +1236,19 @@ body {
   --tw-ring-color: rgb(253 186 116 / 0.5);
 }
 
+.disabled\:bg-amber-800\/50:disabled {
+  background-color: rgb(146 64 14 / 0.5);
+}
+
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark\:text-gray-600 {
+    --tw-text-opacity: 1;
+    color: rgb(75 85 99 / var(--tw-text-opacity));
+  }
 }
 
 @media (min-width: 768px) {
@@ -1209,6 +1286,10 @@ body {
 
   .md\:gap-10 {
     gap: 2.5rem;
+  }
+
+  .md\:gap-4 {
+    gap: 1rem;
   }
 
   .md\:self-end {
