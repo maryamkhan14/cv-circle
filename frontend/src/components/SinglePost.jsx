@@ -10,7 +10,9 @@ import ReplyForm from "./ReplyForm";
 
 const SinglePost = () => {
   const { user } = useContext(UserContext);
-  const { id: postId } = useParams();
+  const { id: postId, updated } = useParams();
+  console.log(updated);
+  console.log(updated ? "true" : "f");
   const navigate = useNavigate();
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
@@ -58,26 +60,28 @@ const SinglePost = () => {
                   {post.title}
                 </h1>
               </span>
-
               <span className="flex flex-col pt-3 md:pt-0 md:flex-row gap-3 justify-between">
                 <p
-                  className="text-lg flex-1 break-words hyphens-auto pr-5"
+                  className="text-lg flex-1 break-words whitespace-pre-wrap pr-5"
                   lang="en"
                 >
-                  {" "}
                   {post.postContent}
                 </p>
 
                 <span className="flex flex-col pl-5 md:w-[25%] justify-center self-center">
                   <Link
-                    to={post.imgCdn}
+                    to={
+                      updated ? post.imgCdn + "?t=" + Date.now() : post.imgCdn
+                    }
                     className="hover:cursor-pointer w-full flex justify-center md:justify-end"
                     target="_blank"
                     aria-label="View image in full size"
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={post.imgCdn}
+                      src={
+                        updated ? post.imgCdn + "?t=" + Date.now() : post.imgCdn
+                      }
                       referrerPolicy="no-referrer"
                       alt="Post image"
                       className="border-blue border rounded-lg object-contain"
@@ -91,7 +95,7 @@ const SinglePost = () => {
             </span>
 
             <div className="w-full flex gap-2 items-stretch">
-              {Object.keys(user).length > 0 && user.userId == post.userId && (
+              {Object.keys(user).length > 0 && (
                 <>
                   <button
                     className={`text-slate-50 disabled:opacity-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center `}
@@ -100,18 +104,22 @@ const SinglePost = () => {
                   >
                     Reply
                   </button>
-                  <Link to={`/edit-post/${post.id}`}>
-                    <button className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center  h-full justify-center">
-                      Edit
-                    </button>
-                  </Link>
+                  {user.userId == post.userId && (
+                    <>
+                      <Link to={`/edit-post/${post.id}`}>
+                        <button className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center  h-full justify-center">
+                          Edit
+                        </button>
+                      </Link>
 
-                  <button
-                    className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
-                    onClick={handleDeleteClick}
-                  >
-                    Delete
-                  </button>
+                      <button
+                        className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
+                        onClick={handleDeleteClick}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </>
               )}
             </div>

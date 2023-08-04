@@ -13,9 +13,11 @@ const ReplyList = ({ replies }) => {
             {" "}
             Insights{" "}
           </h3>
-          {replies.map(([reply]) => (
-            <Reply reply={reply} key={reply.id} />
-          ))}
+          {replies.map((replyChain) =>
+            replyChain.map((reply) => {
+              return <Reply reply={reply} key={reply.id} />;
+            })
+          )}
         </div>
       ) : (
         <div className="flex justify-center m-3 italic">

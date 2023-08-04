@@ -74,7 +74,7 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
           cols="50"
           value={post.postContent}
           onChange={(e) => setPost({ ...post, postContent: e.target.value })}
-          className="border border-slate-800 w-full p-2 rounded"
+          className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
         ></textarea>
         <span className="flex flex-row md:flex-col justify-center gap-3 m-3">
           <button

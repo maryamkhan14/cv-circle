@@ -35,7 +35,9 @@ const Reply = ({ reply: reply }) => {
             replyFormActive && mode === "edit" && "hidden"
           } w-full`}
         >
-          {reply.postContent}
+          <p className="flex-1 break-words whitespace-pre-wrap pr-5" lang="en">
+            {reply.postContent}
+          </p>
           {replyFormActive && mode === "create" && (
             <ReplyForm
               setReplyFormActive={setReplyFormActive}
