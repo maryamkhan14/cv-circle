@@ -1,11 +1,11 @@
 import React from "react";
-
+import { AUTH_URL_GITHUB, AUTH_URL_GOOGLE } from "../services";
 const Login = () => {
   const loginWithGithub = () => {
-    window.location = "https://cv-circle.com/api/auth/github";
+    window.location = AUTH_URL_GITHUB;
   };
   const loginWithGoogle = () => {
-    window.location = "https://cv-circle.com/api/auth/google";
+    window.location = AUTH_URL_GOOGLE;
   };
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 gap-2 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">

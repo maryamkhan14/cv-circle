@@ -2,11 +2,12 @@ import React from "react";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { AUTH_SUCCESS_URL } from "../services";
 
 const LoggedIn = () => {
   const { user, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
-  const BaseURL = "https://cv-circle.com/api/auth/success";
+  const BaseURL = AUTH_SUCCESS_URL;
   const getUser = () => {
     fetch(BaseURL, {
       method: "GET",
