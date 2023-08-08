@@ -32,4 +32,3 @@ backend/coverage
 backend/coverage/*
 backend/dhparam/*.pem
 backend/nginx/default.conf
-frontend/src/services.js
