@@ -1,5 +1,11 @@
 export default function buildMakeUser() {
-  return function makeUser({ userId, name, email, profilePic } = {}) {
+  return function makeUser({
+    userId,
+    name,
+    email,
+    profilePic,
+    voteHistory,
+  } = {}) {
     if (!userId) throw new Error("User must have an ID.");
     if (!name) throw new Error("User must have a name.");
     if (!email) throw new Error("User must have an email.");
@@ -10,12 +16,14 @@ export default function buildMakeUser() {
       getName: () => name,
       getEmail: () => email,
       getProfilePic: () => profilePic,
+      getVoteHistory: () => voteHistory,
       getDTO: () => {
         return {
           userId,
           name,
           email,
           profilePic,
+          voteHistory,
         };
       },
     });

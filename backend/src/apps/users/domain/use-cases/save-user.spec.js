@@ -12,7 +12,7 @@ describe("Authenticate user use case tests", () => {
   beforeEach(() => {
     usersDb = {
       upsert: vi.fn(async (user) => {
-        Promise.resolve(user);
+        return Promise.resolve({ data: [user], error: null });
       }),
     };
     isolateProfileDetails = vi.fn(() => fakeRawUser);
@@ -24,15 +24,19 @@ describe("Authenticate user use case tests", () => {
     });
   });
 
-  test("Successfully upsert user to database", () => {
-    saveUser(fakeRawUser);
-    expect(makeUser).toHaveBeenCalledTimes(1);
+  test("Successfully saves user", async () => {
+    let savedUser = await saveUser(fakeRawUser);
+    expect(makeUser).toHaveBeenCalledTimes(2);
     expect(usersDb.upsert).toHaveBeenCalledTimes(1);
 
     let makeUserArgs = makeUser.mock.calls[0][0];
     expect(makeUserArgs).toEqual(fakeRawUser);
 
     let usersDbUpsertArgs = usersDb.upsert.mock.calls[0][0];
-    expect(usersDbUpsertArgs).toEqual(fakeRawUser);
+    expect(usersDbUpsertArgs.userId).toEqual(fakeRawUser.userId);
+    expect(usersDbUpsertArgs.name).toEqual(fakeRawUser.name);
+    expect(usersDbUpsertArgs.email).toEqual(fakeRawUser.email);
+    expect(usersDbUpsertArgs.profilePic).toEqual(fakeRawUser.profilePic);
+    expect(savedUser.getDTO()).toEqual(fakeRawUser);
   });
 });

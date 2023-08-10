@@ -1,14 +1,14 @@
 import { vi } from "vitest";
-import realTestDbClient from "./db";
 
-let upsertSpy = vi.fn(() => {
+let upsertSpy = vi.fn((user) => {
   return {
-    select: vi.fn(() => {}),
+    select: vi.fn(() => {
+      return { data: [user], error: null };
+    }),
   };
 });
 
 const mockTestDbClient = {
-  ...realTestDbClient,
   upsertSpy: upsertSpy,
   from: vi.fn(() => {
     return {
