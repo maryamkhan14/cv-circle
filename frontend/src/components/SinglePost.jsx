@@ -53,8 +53,6 @@ const SinglePost = () => {
                 <VoteDisplay
                   postId={post.id}
                   existingUpvoteCount={post.upvoteCount}
-                  upvoters={post.upvoters}
-                  downvoters={post.downvoters}
                 />
                 <h1 className="text-4xl font-semibold text-slate-900">
                   {post.title}
