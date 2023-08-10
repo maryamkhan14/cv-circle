@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { createPost, updatePost } from "../services";
+import { createPost, updatePost } from "../services/posts-services";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 const ReplyForm = ({ mode, setReplyFormActive, original }) => {

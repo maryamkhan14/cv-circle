@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { getAllPosts } from "../services";
+import { getAllPosts } from "../services/posts-services";
 import SearchBar from "./SearchBar";
 import PostsList from "./PostsList";
 import PostsSkeleton from "./PostsSkeleton";

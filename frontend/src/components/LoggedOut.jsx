@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { AUTH_LOGOUT_URL } from "../services";
+import { AUTH_LOGOUT_URL } from "../services/posts-services";
 
 const LoggedOut = () => {
   const { user, dispatch } = useContext(UserContext);

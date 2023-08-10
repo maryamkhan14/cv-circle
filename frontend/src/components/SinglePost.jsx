@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { getPost, deletePost } from "../services";
+import { getPost, deletePost } from "../services/posts-services";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import VoteDisplay from "./VoteDisplay";
 import PostSkeleton from "./PostSkeleton";

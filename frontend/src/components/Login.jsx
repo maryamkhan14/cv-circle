@@ -1,5 +1,5 @@
 import React from "react";
-import { AUTH_URL_GITHUB, AUTH_URL_GOOGLE } from "../services";
+import { AUTH_URL_GITHUB, AUTH_URL_GOOGLE } from "../services/posts-services";
 const Login = () => {
   const loginWithGithub = () => {
     window.location = AUTH_URL_GITHUB;

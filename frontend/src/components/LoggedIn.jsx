@@ -3,7 +3,7 @@ import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { useSessionStorage } from "../hooks";
-import { AUTH_SUCCESS_URL } from "../services";
+import { AUTH_SUCCESS_URL } from "../services/posts-services";
 
 const LoggedIn = () => {
   const navigate = useNavigate();
