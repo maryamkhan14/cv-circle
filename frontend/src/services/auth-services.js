@@ -1,5 +1,4 @@
 import axios from "axios";
-
 axios.interceptors.response.use(
   (response) => {
     return response;
@@ -41,4 +40,7 @@ const postLogout = async () => {
     return { error: { message: errorMsg, status } };
   }
 };
-export { getAuthStatus, postLogout };
+
+const AUTH_URL_GITHUB = `${DOMAIN}/api/auth/github`;
+const AUTH_URL_GOOGLE = `${DOMAIN}/api/auth/google`;
+export { getAuthStatus, postLogout, AUTH_URL_GITHUB, AUTH_URL_GOOGLE };
