@@ -13,7 +13,7 @@ const getAuthStatus = async () => {
     console.log(e.response);
     let errorMsg = e.response?.data?.error;
     let status = e.response?.status;
-    return { error: { error: errorMsg, status } };
+    return { error: { message: errorMsg, status } };
   }
 };
 export { getAuthStatus };
