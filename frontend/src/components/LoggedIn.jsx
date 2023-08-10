@@ -24,11 +24,22 @@ const LoggedIn = () => {
       })
       .then((resObject) => {
         console.log(resObject);
-        dispatch({ type: "USER_SIGNED_IN", payload: { user: resObject.user } });
+        let { name, userId, email, profilePic, voteHistory } = resObject.user;
+        let user = {
+          name,
+          userId,
+          email,
+          profilePic,
+          upvoted: voteHistory.upvoted || [],
+          downvoted: voteHistory.downvoted || [],
+        };
+        dispatch({ type: "USER_SIGNED_IN", payload: { user } });
         sessionStorage.setItem("uname", resObject.user.name);
         sessionStorage.setItem("uid", resObject.user.userId);
         sessionStorage.setItem("email", resObject.user.email);
         sessionStorage.setItem("profilePic", resObject.user.profilePic);
+        sessionStorage.setItem("upvoted", JSON.stringify(user.upvoted));
+        sessionStorage.setItem("downvoted", JSON.stringify(user.downvoted));
       })
       .catch((err) => {
         console.log(err);
