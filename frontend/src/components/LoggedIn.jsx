@@ -51,18 +51,18 @@ const LoggedIn = () => {
           </span>
           <span className="flex flex-col gap-5 py-3 h-1/2 justify-center">
             <h2 className="text-3xl">The details:</h2>
-            <p className="flex justify-center self-center gap-3">
+            <span className="flex justify-center self-center gap-3">
               Error code:{" "}
               <p className="text-amber-800">
                 {error.status || "[no error code found]"}
               </p>
-            </p>
-            <p className="flex justify-center self-center gap-3">
+            </span>
+            <span className="flex justify-center self-center gap-3">
               Error message:{" "}
               <p className="text-amber-800">
                 {error.message || "[no error message found]"}
               </p>
-            </p>
+            </span>
             <a
               href="https://github.com/maryamkhan14/cv-circle/issues"
               className="flex w-auto self-center items-center justify-center p-5 text-base font-medium rounded border-2 border-slate-700 bg-slate-50 hover:bg-slate-100"
