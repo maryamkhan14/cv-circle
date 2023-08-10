@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function getRecordOrDefault(voteType) {
   const stored = sessionStorage.getItem(voteType);
@@ -12,8 +12,9 @@ export function useVotedPosts(voteType) {
   const [votes, setVotes] = useState(getRecordOrDefault(voteType));
 
   const setVotesRecord = (posts) => {
-    setVotes((prevPosts) => new Set(posts));
-    sessionStorage.setItem(voteType, JSON.stringify([...posts.values()]));
+    let newPosts = new Set(posts);
+    setVotes((prevPosts) => newPosts);
+    sessionStorage.setItem(voteType, JSON.stringify([...newPosts.values()]));
   };
 
   return [votes, setVotesRecord];

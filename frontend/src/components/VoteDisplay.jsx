@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { useVotedPosts, useVote } from "../hooks/index.js";
-import { votePost } from "../services";
+import { votePost } from "../services/posts-services.js";
 import { UserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 

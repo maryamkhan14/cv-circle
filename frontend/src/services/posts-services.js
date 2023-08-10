@@ -83,19 +83,4 @@ const deletePost = async (postId) => {
     return { error: errorMsg || statusText, status };
   }
 };
-const AUTH_URL_GITHUB = `${DOMAIN}/api/auth/github`;
-const AUTH_URL_GOOGLE = `${DOMAIN}/api/auth/google`;
-const AUTH_SUCCESS_URL = `${DOMAIN}/api/auth/success`;
-const AUTH_LOGOUT_URL = `${DOMAIN}/api/auth/logout`;
-export {
-  createPost,
-  updatePost,
-  getPost,
-  getAllPosts,
-  deletePost,
-  votePost,
-  AUTH_URL_GITHUB,
-  AUTH_URL_GOOGLE,
-  AUTH_SUCCESS_URL,
-  AUTH_LOGOUT_URL,
-};
+export { createPost, updatePost, getPost, getAllPosts, deletePost, votePost };
