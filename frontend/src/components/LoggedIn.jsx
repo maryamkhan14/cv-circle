@@ -2,11 +2,15 @@ import React from "react";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { useSessionStorage } from "../hooks";
 import { AUTH_SUCCESS_URL } from "../services";
 
 const LoggedIn = () => {
-  const { user, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
+  const { dispatch } = useContext(UserContext);
+  const [user, setUser] = useSessionStorage("user", "");
+  const [upvoted, setUpvoted] = useSessionStorage("upvoted", []);
+  const [downvoted, setDownvoted] = useSessionStorage("downvoted", []);
   const BaseURL = AUTH_SUCCESS_URL;
   const getUser = () => {
     fetch(BaseURL, {
@@ -23,23 +27,17 @@ const LoggedIn = () => {
         throw new Error("Authentication has been failed!");
       })
       .then((resObject) => {
-        console.log(resObject);
         let { name, userId, email, profilePic, voteHistory } = resObject.user;
-        let user = {
+        let loggedInUser = {
           name,
           userId,
           email,
           profilePic,
-          upvoted: voteHistory.upvoted || [],
-          downvoted: voteHistory.downvoted || [],
         };
-        dispatch({ type: "USER_SIGNED_IN", payload: { user } });
-        sessionStorage.setItem("uname", resObject.user.name);
-        sessionStorage.setItem("uid", resObject.user.userId);
-        sessionStorage.setItem("email", resObject.user.email);
-        sessionStorage.setItem("profilePic", resObject.user.profilePic);
-        sessionStorage.setItem("upvoted", JSON.stringify(user.upvoted));
-        sessionStorage.setItem("downvoted", JSON.stringify(user.downvoted));
+        dispatch({ type: "USER_SIGNED_IN", payload: { user: loggedInUser } });
+        setUser(loggedInUser);
+        setDownvoted(voteHistory.downvoted);
+        setUpvoted(voteHistory.upvoted);
       })
       .catch((err) => {
         console.log(err);
@@ -49,7 +47,7 @@ const LoggedIn = () => {
     getUser();
   }, []);
   useEffect(() => {
-    if (Object.keys(user).length != 0) {
+    if (user) {
       navigate("/");
     }
   }, [user]);
