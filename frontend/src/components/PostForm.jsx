@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPost, createPost, updatePost } from "../services";
+import { getPost, createPost, updatePost } from "../services/posts-services";
 
 const PostForm = () => {
   const { user } = useContext(UserContext);

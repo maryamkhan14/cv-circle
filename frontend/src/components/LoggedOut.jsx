@@ -1,34 +1,25 @@
 import React from "react";
-import axios from "axios";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { AUTH_LOGOUT_URL } from "../services";
+import { postLogout } from "../services/auth-services";
 
 const LoggedOut = () => {
   const { user, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
-  const BaseURL = AUTH_LOGOUT_URL;
 
-  const logOutUser = () => {
-    axios
-      .post(BaseURL, {}, { withCredentials: true })
-      .then((response) => {
-        dispatch({ type: "USER_SIGNED_OUT", payload: null });
-        sessionStorage.clear();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const logOutUser = async () => {
+    if (user) {
+      await postLogout();
+      dispatch({ type: "USER_SIGNED_OUT", payload: null });
+      sessionStorage.clear();
+    }
+    navigate("/");
   };
+
   useEffect(() => {
     logOutUser();
   }, []);
-  useEffect(() => {
-    if (Object.keys(user).length == 0) {
-      navigate("/");
-    }
-  }, [user]);
 
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 gap-2 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { deletePost } from "../services";
+import { deletePost } from "../services/posts-services";
 
 const ReplyOptions = ({ setReplyFormActive, setMode, user, reply }) => {
   const navigate = useNavigate();
