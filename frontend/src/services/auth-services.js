@@ -1,8 +1,20 @@
 import axios from "axios";
-axios.defaults.withCredentials = true;
+
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (typeof error.response === "undefined") {
+      window.location = `http://localhost:5173/network-error`;
+    }
+    return Promise.reject(error);
+  }
+);
 const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
+
 const getAuthStatus = async () => {
   try {
     let { data: authStatus } = await axios.get(`${DOMAIN}/api/auth/success`, {
@@ -10,10 +22,23 @@ const getAuthStatus = async () => {
     });
     return authStatus;
   } catch (e) {
-    console.log(e.response);
     let errorMsg = e.response?.data?.error;
     let status = e.response?.status;
     return { error: { message: errorMsg, status } };
   }
 };
-export { getAuthStatus };
+const postLogout = async () => {
+  try {
+    let { data: authStatus } = await axios.post(
+      `${DOMAIN}/api/auth/logout`,
+      {},
+      { withCredentials: true }
+    );
+    return authStatus;
+  } catch (e) {
+    let errorMsg = e.response?.data?.error;
+    let status = e.response?.status;
+    return { error: { message: errorMsg, status } };
+  }
+};
+export { getAuthStatus, postLogout };

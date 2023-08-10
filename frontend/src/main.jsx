@@ -14,6 +14,7 @@ import AllPosts from "./components/AllPosts";
 import SinglePost from "./components/SinglePost";
 import NotPermitted from "./components/NotPermitted";
 import PostSkeleton from "./components/PostSkeleton";
+import NetworkError from "./components/NetworkError";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/edit-post/:id" element={<PostForm />} />
           <Route path="/not-permitted" element={<NotPermitted />} />
           <Route path="/post-skeleton" element={<PostSkeleton />} />
+          <Route path="/network-error" element={<NetworkError />} />
         </Route>
       </Routes>
     </BrowserRouter>

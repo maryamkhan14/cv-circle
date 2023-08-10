@@ -537,6 +537,25 @@ h1,
   margin: 0.75rem;
 }
 
+.m-4 {
+  margin: 1rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.mx-5 {
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
+
 .-ml-1 {
   margin-left: -0.25rem;
 }
@@ -728,6 +747,14 @@ h1,
 
 .w-auto {
   width: auto;
+}
+
+.w-2\/3 {
+  width: 66.666667%;
+}
+
+.w-3\/4 {
+  width: 75%;
 }
 
 .min-w-0 {
