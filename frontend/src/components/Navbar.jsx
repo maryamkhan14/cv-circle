@@ -1,21 +1,19 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { useSessionStorage } from "../hooks";
 import { Link } from "react-router-dom";
 const Navbar = () => {
   const [hidden, setHidden] = useState(true);
   const { user, dispatch } = useContext(UserContext);
+
+  const [savedUser, setSavedUser] = useSessionStorage("user", "");
   const updateUser = () => {
-    if (Object.keys(user).length == 0 && sessionStorage && sessionStorage.uid) {
+    if (Object.keys(user).length == 0 && savedUser) {
       dispatch({
         type: "USER_SIGNED_IN",
         payload: {
-          user: {
-            name: sessionStorage.uname,
-            userId: sessionStorage.uid,
-            profilePic: sessionStorage.profilePic,
-            email: sessionStorage.email,
-          },
+          user: savedUser,
         },
       });
     }

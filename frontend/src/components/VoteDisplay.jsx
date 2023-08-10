@@ -1,39 +1,48 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
+import { useVotedPosts, useVote } from "../hooks/index.js";
 import { votePost } from "../services";
 import { UserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 
-const VoteDisplay = ({ existingUpvoteCount, upvoters, downvoters }) => {
+const VoteDisplay = ({ existingUpvoteCount }) => {
+  const [allUpvoted, setAllUpvoted] = useVotedPosts("upvoted");
+  const [allDownvoted, setAllDownvoted] = useVotedPosts("downvoted");
   const { user } = useContext(UserContext);
   const { id: postId } = useParams();
-
   const [upvoteCount, setUpvoteCount] = useState(existingUpvoteCount);
-  const [vote, setVote] = useState({
-    userId: user.userId,
+  const [currentVote, setCurrentVote] = useVote(
+    user.userId,
     postId,
-    voteCount: 0,
-  });
+    allUpvoted.has(postId) ? 1 : allDownvoted.has(postId) ? -1 : 0
+  );
   const adjustVote = (voteAdjustment) => {
-    if (vote.userId && vote.postId) {
-      if (vote.voteCount === voteAdjustment) {
-        setVote({ ...vote, voteCount: 0 });
-        votePost({ ...vote, voteCount: -voteAdjustment });
-        setUpvoteCount(upvoteCount + -voteAdjustment);
-      } else {
-        setVote({ ...vote, voteCount: voteAdjustment });
-        votePost({ ...vote, voteCount: voteAdjustment });
-        setUpvoteCount(upvoteCount + voteAdjustment);
-      }
-    }
+    // reverse effect if user is clicking on the same vote button
+    if (voteAdjustment == currentVote.voteCount)
+      voteAdjustment = -voteAdjustment;
+    votePost({ ...currentVote, voteCount: voteAdjustment });
+    setCurrentVote(voteAdjustment);
+    setUpvoteCount(upvoteCount + voteAdjustment);
   };
+
   useEffect(() => {
-    if (upvoters.includes(user.userId)) {
-      setVote({ ...vote, voteCount: 1 });
-    } else if (downvoters.includes(user.userId)) {
-      setVote({ ...vote, voteCount: -1 });
+    switch (currentVote.voteCount) {
+      case 0:
+        // remove current post from allUpvoted and allDownvoted
+        setAllUpvoted([...allUpvoted.values()].filter((id) => id !== postId));
+        setAllDownvoted(
+          [...allDownvoted.values()].filter((id) => id !== postId)
+        );
+        break;
+      case 1:
+        setAllUpvoted([...allUpvoted.values(), postId]);
+        break;
+      case -1:
+        setAllDownvoted([...allDownvoted.values(), postId]);
+        break;
     }
-  }, [user]);
+  }, [currentVote]);
+
   return (
     <div
       className={`${
@@ -50,7 +59,7 @@ const VoteDisplay = ({ existingUpvoteCount, upvoters, downvoters }) => {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           className={`w-10 h-10 stroke-slate-900 ${
-            vote.voteCount === 1 ? "fill-amber-100" : "fill-slate-100"
+            currentVote.voteCount === 1 ? "fill-amber-100" : "fill-slate-100"
           }`}
         >
           <path
@@ -76,7 +85,7 @@ const VoteDisplay = ({ existingUpvoteCount, upvoters, downvoters }) => {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           className={`w-10 h-10 stroke-slate-900 ${
-            vote.voteCount === -1 ? "fill-amber-100" : "fill-slate-100"
+            currentVote.voteCount === -1 ? "fill-amber-100" : "fill-slate-100"
           }`}
         >
           <path

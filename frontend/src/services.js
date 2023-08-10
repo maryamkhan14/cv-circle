@@ -1,8 +1,11 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
+const DOMAIN = import.meta.env.DEV
+  ? "http://localhost"
+  : "https://cv-circle.com";
 const getPost = async (postId) => {
   try {
-    return await axios.get(`https://cv-circle.com/api/posts/${postId}`, {
+    return await axios.get(`${DOMAIN}/api/posts/${postId}`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -13,7 +16,7 @@ const getPost = async (postId) => {
 };
 const getAllPosts = async () => {
   try {
-    return await axios.get(`https://cv-circle.com/api/posts/`, {
+    return await axios.get(`${DOMAIN}/api/posts/`, {
       withCredentials: true,
     });
   } catch (e) {
@@ -26,7 +29,7 @@ const getAllPosts = async () => {
 const updatePost = async (post, id) => {
   try {
     let { data: updatedPost } = await axios.patch(
-      `https://cv-circle.com/api/posts/${id}`,
+      `${DOMAIN}/api/posts/${id}`,
       post,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
@@ -41,15 +44,11 @@ const updatePost = async (post, id) => {
 
 const createPost = async (post) => {
   try {
-    let { data: newPost } = await axios.post(
-      "https://cv-circle.com/api/posts/",
-      post,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    let { data: newPost } = await axios.post(`${DOMAIN}/api/posts/`, post, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return newPost;
   } catch (e) {
     let { data, status } = e.response;
@@ -59,15 +58,11 @@ const createPost = async (post) => {
 };
 const votePost = async (vote) => {
   try {
-    let { data: voted } = await axios.post(
-      "https://cv-circle.com/api/posts/vote",
-      vote,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    let { data: voted } = await axios.post(`${DOMAIN}/api/posts/vote`, vote, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return voted;
   } catch (e) {
     let { data, status } = e.response;
@@ -78,7 +73,7 @@ const votePost = async (vote) => {
 const deletePost = async (postId) => {
   try {
     let { data: deletedPost } = await axios.delete(
-      `https://cv-circle.com/api/posts/${postId}`
+      `${DOMAIN}/api/posts/${postId}`
     );
     return deletedPost;
   } catch (e) {
@@ -88,4 +83,19 @@ const deletePost = async (postId) => {
     return { error: errorMsg || statusText, status };
   }
 };
-export { createPost, updatePost, getPost, getAllPosts, deletePost, votePost };
+const AUTH_URL_GITHUB = `${DOMAIN}/api/auth/github`;
+const AUTH_URL_GOOGLE = `${DOMAIN}/api/auth/google`;
+const AUTH_SUCCESS_URL = `${DOMAIN}/api/auth/success`;
+const AUTH_LOGOUT_URL = `${DOMAIN}/api/auth/logout`;
+export {
+  createPost,
+  updatePost,
+  getPost,
+  getAllPosts,
+  deletePost,
+  votePost,
+  AUTH_URL_GITHUB,
+  AUTH_URL_GOOGLE,
+  AUTH_SUCCESS_URL,
+  AUTH_LOGOUT_URL,
+};

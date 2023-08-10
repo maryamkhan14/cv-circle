@@ -21,9 +21,19 @@ app.use(
 );
 
 app.use(expressFileUpload());
+const whitelist = [
+  "https://cv-circle.onrender.com",
+  process.env.DEV_FRONTEND_URL,
+];
 app.use(
   cors({
-    origin: "https://cv-circle.onrender.com",
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })
