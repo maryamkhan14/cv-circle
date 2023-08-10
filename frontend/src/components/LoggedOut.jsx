@@ -10,7 +10,7 @@ const LoggedOut = () => {
 
   const logOutUser = async () => {
     if (user) {
-      let { success } = await postLogout();
+      await postLogout();
       dispatch({ type: "USER_SIGNED_OUT", payload: null });
       sessionStorage.clear();
     }
