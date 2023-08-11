@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { useSessionStorage } from "../hooks";
+import { useSessionStorage, useVotedPosts } from "../hooks";
 import { getAuthStatus } from "../services/auth-services";
 import ReportButton from "./ReportButton";
 
@@ -11,8 +11,8 @@ const LoggedIn = () => {
   const { dispatch } = useContext(UserContext);
   const [user, setUser] = useSessionStorage("user", "");
   const [error, setError] = useState({});
-  const [upvoted, setUpvoted] = useSessionStorage("upvoted", []);
-  const [downvoted, setDownvoted] = useSessionStorage("downvoted", []);
+  const [upvoted, setUpvoted] = useVotedPosts("upvoted", []);
+  const [downvoted, setDownvoted] = useVotedPosts("downvoted", []);
 
   const getUser = async () => {
     let { user: loggedInUser, error } = await getAuthStatus();
