@@ -3,7 +3,7 @@ export default function makeDeletePost({ retrieveSinglePost, removePost }) {
     try {
       const user = httpRequest.user;
       const { id: postId } = httpRequest.params;
-      const post = await retrieveSinglePost(postId);
+      const post = await retrieveSinglePost(postId, false);
       if (user && user.userId === post.userId) {
         const deleted = await removePost(post);
         return {
