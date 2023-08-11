@@ -36,7 +36,7 @@ export default function buildMakePost() {
       getUserId: () => userId,
       getTitle: () => title,
       getPostContent: () => postContent,
-      getUpvoteCount: () => upvoteCount,
+      getUpvoteCount: () => upvoteCount || 0,
       getImage: () => imgCdn,
       getPath: () => path,
       setImage: (cdn) => {
@@ -58,7 +58,7 @@ export default function buildMakePost() {
           title,
           postContent,
           imgCdn,
-          upvoteCount,
+          upvoteCount: upvoteCount || 0,
           replies,
           isReply,
           level,
