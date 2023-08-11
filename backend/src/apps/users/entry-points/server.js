@@ -21,7 +21,8 @@ app.use(
     cookie: {
       maxAge: 86400000,
       secure: process.env.DEV ? false : true,
-      sameSite: "none",
+      sameSite: process.env.DEV ? true : "none",
+      httpOnly: true,
     },
     saveUninitialized: false,
   })
@@ -48,5 +49,18 @@ app.use("/", userRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
+  console.log("Server setup", {
+    store: redisStore,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    proxy: true,
+    cookie: {
+      maxAge: 86400000,
+      secure: process.env.DEV ? false : true,
+      sameSite: process.env.DEV ? true : "none",
+      httpOnly: true,
+    },
+    saveUninitialized: false,
+  });
 });
 export default app;
