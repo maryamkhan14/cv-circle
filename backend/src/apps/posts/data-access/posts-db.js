@@ -14,7 +14,7 @@ export default function makePostsDb({ dbClient }) {
     postContent: "post_content",
     imgCdn: "img_cdn",
     createdAt: "created_at",
-    parentId: "parent_id",
+    isReply: "is_reply",
   };
 
   function renameKeys(obj, keysMap) {

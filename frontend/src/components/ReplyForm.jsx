@@ -39,7 +39,7 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
   };
 
   const clear = () => {
-    setPost({ defaults });
+    setPost({ ...defaults });
   };
 
   const close = () => {
