@@ -14,7 +14,7 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
     title: "",
     userId: user?.userId || "",
     file: null,
-    path: original.path,
+    path: original.path || "",
     isReply: true,
   };
   const [post, setPost] = useState({
@@ -31,7 +31,6 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
 
   const uploadNewPost = async (e) => {
     e.preventDefault();
-
     await createPost({ ...post });
 
     clear();
