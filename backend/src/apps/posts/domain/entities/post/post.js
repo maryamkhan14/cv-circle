@@ -8,6 +8,7 @@ export default function buildMakePost() {
     imgCdn,
     upvoteCount = 0,
     isReply,
+    path,
     level,
     ...rest
   } = {}) {
@@ -37,6 +38,7 @@ export default function buildMakePost() {
       getPostContent: () => postContent,
       getUpvoteCount: () => upvoteCount,
       getImage: () => imgCdn,
+      getPath: () => path,
       setImage: (cdn) => {
         imgCdn = cdn;
       },
@@ -47,6 +49,7 @@ export default function buildMakePost() {
         createdAt = newCreatedAt;
       },
       getReplies: () => replies,
+      isReply: () => isReply,
       getDTO: () => {
         return {
           id,
@@ -59,6 +62,7 @@ export default function buildMakePost() {
           replies,
           isReply,
           level,
+          path,
         };
       },
     });
