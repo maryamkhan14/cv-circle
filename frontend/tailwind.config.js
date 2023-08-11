@@ -18,9 +18,9 @@ export default {
     extend: {
       padding: {
         "lvl-1": "0.5em",
-        "lvl-2": "1em",
-        "lvl-3": "1.5em",
-        "lvl-4": "2em",
+        "lvl-2": "1.5em",
+        "lvl-3": "2em",
+        "lvl-4": "3em",
       },
     },
   },
