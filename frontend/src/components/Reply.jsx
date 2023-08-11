@@ -20,7 +20,7 @@ const Reply = ({ reply: reply }) => {
       case 4:
         return "pl-lvl-4";
       default:
-        return "pl-lvl-1";
+        return "pl-lvl-4";
     }
   };
   return (

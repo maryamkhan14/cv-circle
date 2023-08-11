@@ -11,8 +11,6 @@ import ReplyForm from "./ReplyForm";
 const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id: postId, updated } = useParams();
-  console.log(updated);
-  console.log(updated ? "true" : "f");
   const navigate = useNavigate();
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});

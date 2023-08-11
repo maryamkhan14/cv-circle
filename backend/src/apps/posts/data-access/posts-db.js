@@ -56,17 +56,27 @@ export default function makePostsDb({ dbClient }) {
     };
   }
 
-  async function getById(postId) {
-    let result = await dbClient
-      .from("posts_tree")
-      .select(
-        '"id", "createdAt", "userId", title, "postContent", "imgCdn", "upvoteCount", path, "isReply", level'
-      )
-      .containedBy("path", postId);
-    return {
-      ...result,
-      data: [nest(result.data, postId)],
-    };
+  async function getById(postId, toNest = true) {
+    if (toNest) {
+      let result = await dbClient
+        .from("posts_tree")
+        .select(
+          '"id", "createdAt", "userId", title, "postContent", "imgCdn", "upvoteCount", path, "isReply", level'
+        )
+        .containedBy("path", postId);
+      return {
+        ...result,
+        data: [nest(result.data, postId)],
+      };
+    } else {
+      let result = await dbClient
+        .from("posts_tree")
+        .select(
+          '"id", "createdAt", "userId", title, "postContent", "imgCdn", "upvoteCount", path, "isReply", level'
+        )
+        .eq("id", postId);
+      return result;
+    }
   }
 
   async function getReplyById(postId) {

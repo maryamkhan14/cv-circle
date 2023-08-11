@@ -8,6 +8,7 @@ export default function buildMakePost() {
     imgCdn,
     upvoteCount = 0,
     isReply,
+    path,
     level,
     ...rest
   } = {}) {
@@ -35,8 +36,9 @@ export default function buildMakePost() {
       getUserId: () => userId,
       getTitle: () => title,
       getPostContent: () => postContent,
-      getUpvoteCount: () => upvoteCount,
+      getUpvoteCount: () => upvoteCount || 0,
       getImage: () => imgCdn,
+      getPath: () => path,
       setImage: (cdn) => {
         imgCdn = cdn;
       },
@@ -47,6 +49,7 @@ export default function buildMakePost() {
         createdAt = newCreatedAt;
       },
       getReplies: () => replies,
+      isReply: () => isReply,
       getDTO: () => {
         return {
           id,
@@ -55,10 +58,11 @@ export default function buildMakePost() {
           title,
           postContent,
           imgCdn,
-          upvoteCount,
+          upvoteCount: upvoteCount || 0,
           replies,
           isReply,
           level,
+          path,
         };
       },
     });
