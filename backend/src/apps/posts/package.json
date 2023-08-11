@@ -23,7 +23,8 @@
     "kafkajs": "2.2.4",
     "@kafkajs/confluent-schema-registry": "3.3.0",
     "redis": "4.6.7",
-    "connect-redis": "7.1.0"
+    "connect-redis": "7.1.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -32,7 +33,6 @@
     "@vitest/ui": "^0.32.2",
     "@web-std/file": "^3.0.2",
     "supertest": "^6.3.3",
-    "vitest": "^0.32.0",
-    "lodash": "^4.17.21"
+    "vitest": "^0.32.0"
   }
 }
