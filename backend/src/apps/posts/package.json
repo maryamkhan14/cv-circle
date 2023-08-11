@@ -32,6 +32,7 @@
     "@vitest/ui": "^0.32.2",
     "@web-std/file": "^3.0.2",
     "supertest": "^6.3.3",
-    "vitest": "^0.32.0"
+    "vitest": "^0.32.0",
+    "lodash": "^4.17.21"
   }
 }
