@@ -21,7 +21,7 @@ app.use(
     cookie: {
       maxAge: 86400000,
       secure: process.env.DEV ? false : true,
-      sameSite: "none",
+      sameSite: process.env.DEV ? true : "none",
     },
     saveUninitialized: false,
   })
