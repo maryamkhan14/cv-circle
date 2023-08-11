@@ -51,7 +51,7 @@ const PostForm = () => {
     } else {
       setStatus({
         error: true,
-        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files.",
+        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
         success: 0,
       });
     }
@@ -86,7 +86,7 @@ const PostForm = () => {
     } else {
       setStatus({
         error: true,
-        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files.",
+        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
         success: 0,
       });
     }
@@ -107,10 +107,12 @@ const PostForm = () => {
 
   const checkFileConstraints = (file) => {
     return (
-      file.type == "image/png" ||
-      file.type == "image/jpg" ||
-      file.type == "image/jpeg" ||
-      file.type == "application/pdf" //TODO: change to constants
+      file.size < 1000000 &&
+      (file.type == "image/png" ||
+        file.type == "image/jpg" ||
+        file.type == "image/jpeg" ||
+        file.type == "application/pdf")
+      //TODO: change to constants
     );
   };
 
