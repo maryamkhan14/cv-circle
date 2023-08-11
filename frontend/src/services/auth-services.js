@@ -1,15 +1,5 @@
 import axios from "axios";
-axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (typeof error.response === "undefined") {
-      window.location = `http://localhost:5173/network-error`;
-    }
-    return Promise.reject(error);
-  }
-);
+
 const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
@@ -18,6 +8,11 @@ const getAuthStatus = async () => {
   try {
     let { data: authStatus } = await axios.get(`${DOMAIN}/api/auth/success`, {
       withCredentials: true,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+      },
     });
     return authStatus;
   } catch (e) {
