@@ -7,9 +7,9 @@ export default function makeCreatePost({ postsDb }) {
       title: post.getTitle(),
       postContent: post.getPostContent(),
       imgCdn: post.getImage(),
-      parentId: post.getParentId(),
+      path: post.getPath(),
+      isReply: post.isReply(),
     });
-
     if (error) {
       throw new Error(
         `Error saving post to database: ${error.message}. Post creation failed.`

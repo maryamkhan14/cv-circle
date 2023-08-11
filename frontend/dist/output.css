@@ -549,6 +549,10 @@ h1,
   margin-bottom: 0.75rem;
 }
 
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
 .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -567,10 +571,6 @@ h1,
 
 .mt-12 {
   margin-top: 3rem;
-}
-
-.mb-4 {
-  margin-bottom: 1rem;
 }
 
 .flex {
@@ -1045,19 +1045,15 @@ h1,
 }
 
 .pl-lvl-2 {
-  padding-left: 1em;
-}
-
-.pl-lvl-3 {
   padding-left: 1.5em;
 }
 
-.pl-lvl-4 {
+.pl-lvl-3 {
   padding-left: 2em;
 }
 
-.pl-3 {
-  padding-left: 0.75rem;
+.pl-lvl-4 {
+  padding-left: 3em;
 }
 
 .text-center {

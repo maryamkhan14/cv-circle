@@ -6,16 +6,19 @@ import { UserContext } from "../context/UserContext";
 const ReplyForm = ({ mode, setReplyFormActive, original }) => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
-
-  const [post, setPost] = useState({
+  const defaults = {
     createdAt: "",
     id: "",
     imgCdn: "",
     postContent: "",
     title: "",
-    userId: "",
+    userId: user?.userId || "",
     file: null,
-    parentId: 0,
+    path: original.path || "",
+    isReply: true,
+  };
+  const [post, setPost] = useState({
+    ...defaults,
   });
 
   const uploadEditedPost = async (e) => {
@@ -28,7 +31,6 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
 
   const uploadNewPost = async (e) => {
     e.preventDefault();
-
     await createPost({ ...post });
 
     clear();
@@ -36,15 +38,7 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
   };
 
   const clear = () => {
-    setPost({
-      createdAt: "",
-      id: "",
-      imgCdn: "",
-      postContent: "",
-      title: "",
-      userId: "",
-      file: null,
-    });
+    setPost({ ...defaults });
   };
 
   const close = () => {
@@ -53,11 +47,8 @@ const ReplyForm = ({ mode, setReplyFormActive, original }) => {
   };
   // automatically populate fields if editing existing post
   useEffect(() => {
-    clear();
     if (mode == "edit") {
-      setPost({ ...original, userId: user.userId });
-    } else {
-      setPost({ ...post, parentId: original.id, userId: user.userId });
+      setPost({ ...original });
     }
   }, []);
 

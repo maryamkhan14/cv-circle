@@ -11,13 +11,10 @@ import ReplyForm from "./ReplyForm";
 const SinglePost = () => {
   const { user } = useContext(UserContext);
   const { id: postId, updated } = useParams();
-  console.log(updated);
-  console.log(updated ? "true" : "f");
   const navigate = useNavigate();
   const [postLoaded, setPostLoaded] = useState(false);
   const [post, setPost] = useState({});
   const [error, setError] = useState(null);
-  const [replies, setReplies] = useState([]);
   const [replyFormActive, setReplyFormActive] = useState(false);
   const handleDeleteClick = async () => {
     // TODO: add confirmation dialog
@@ -35,7 +32,6 @@ const SinglePost = () => {
       if (data) {
         let { post } = data;
         setPost(post);
-        setReplies(post.replies);
         setPostLoaded(true);
       } else {
         // TODO: navigate to 404 page
@@ -128,7 +124,7 @@ const SinglePost = () => {
                 setReplyFormActive={setReplyFormActive}
               />
             )}
-            <ReplyList replies={replies} />
+            <ReplyList replies={post?.replies} />
           </>
         ) : (
           <PostSkeleton />

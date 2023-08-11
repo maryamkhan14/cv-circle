@@ -1,3 +1,4 @@
+import _ from "lodash";
 export default function makePostsDb({ dbClient }) {
   const dbColumnsToNormalizedProfile = {
     fk_uid: "userId",
@@ -13,7 +14,7 @@ export default function makePostsDb({ dbClient }) {
     postContent: "post_content",
     imgCdn: "img_cdn",
     createdAt: "created_at",
-    parentId: "parent_id",
+    isReply: "is_reply",
   };
 
   function renameKeys(obj, keysMap) {
@@ -30,6 +31,23 @@ export default function makePostsDb({ dbClient }) {
     return records.map((record) => renameKeys(record, keysMap));
   }
 
+  function nest(posts, rootPostId) {
+    let nestedRoot = {};
+    if (posts) {
+      posts.map((post) => {
+        let { path } = post;
+        _.setWith(
+          nestedRoot,
+          post.isReply ? path.replace(/\./g, ".replies.") : path,
+          post,
+          Object
+        );
+      });
+      return nestedRoot[rootPostId];
+    }
+    return nestedRoot;
+  }
+
   async function getAll() {
     let result = await dbClient.from("posts_view").select();
     return {
@@ -38,12 +56,27 @@ export default function makePostsDb({ dbClient }) {
     };
   }
 
-  async function getById(postId) {
-    let result = await dbClient.from("posts_view").select().eq("id", postId);
-    return {
-      ...result,
-      data: format(result.data, dbColumnsToNormalizedProfile),
-    };
+  async function getById(postId, toNest = true) {
+    if (toNest) {
+      let result = await dbClient
+        .from("posts_tree")
+        .select(
+          '"id", "createdAt", "userId", title, "postContent", "imgCdn", "upvoteCount", path, "isReply", level'
+        )
+        .containedBy("path", postId);
+      return {
+        ...result,
+        data: [nest(result.data, postId)],
+      };
+    } else {
+      let result = await dbClient
+        .from("posts_tree")
+        .select(
+          '"id", "createdAt", "userId", title, "postContent", "imgCdn", "upvoteCount", path, "isReply", level'
+        )
+        .eq("id", postId);
+      return result;
+    }
   }
 
   async function getReplyById(postId) {
