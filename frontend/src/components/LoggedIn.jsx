@@ -18,7 +18,7 @@ const LoggedIn = () => {
     let { user: loggedInUser, error } = await getAuthStatus();
     if (error) {
       setError(error);
-    } else {
+    } else if (loggedInUser) {
       let { name, userId, email, profilePic, voteHistory } = loggedInUser;
       let profile = {
         name,

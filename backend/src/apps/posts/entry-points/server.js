@@ -16,6 +16,12 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     proxy: true,
+    cookie: {
+      maxAge: 86400000,
+      secure: process.env.DEV ? false : true,
+      sameSite: process.env.DEV ? true : "none",
+      httpOnly: true,
+    },
     saveUninitialized: false,
   })
 );
