@@ -2,10 +2,7 @@ export default function makeSaveUser({ usersDb, makeUser }) {
   return async function saveUser({ ...profileDetails }) {
     const user = makeUser({ ...profileDetails });
     let { data, error } = await usersDb.upsert({
-      userId: user.getUserId(),
-      name: user.getName(),
-      email: user.getEmail(),
-      profilePic: user.getProfilePic(),
+      ...user.getDTO(),
     });
     if (error) {
       throw new Error("User could not be saved: ", error.message);

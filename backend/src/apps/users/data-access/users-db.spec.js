@@ -16,6 +16,6 @@ describe("Users database tests", () => {
     expect(upserted.uid).toEqual(toInsert.userId);
     expect(upserted.name).toEqual(toInsert.name);
     expect(upserted.email).toEqual(toInsert.email);
-    expect(upserted.profilepic).toEqual(toInsert.profilePic);
+    expect(upserted.profile_pic).toEqual(toInsert.profilePic);
   });
 });
