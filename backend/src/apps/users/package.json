@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node --watch entry-points/server.js",
     "start": "node entry-points/server.js",
-    "test": "npx vitest --config ./__test__/vitest.config.js"
+    "test": "npx vitest --config ./__test__/vitest.config.js",
+    "coverage": "npx vitest --config ./__test__/vitest.config.js --coverage"
   },
   "author": "",
   "license": "ISC",
