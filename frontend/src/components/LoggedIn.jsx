@@ -19,13 +19,8 @@ const LoggedIn = () => {
     if (error) {
       setError(error);
     } else if (loggedInUser) {
-      let { name, userId, email, profilePic, voteHistory } = loggedInUser;
-      let profile = {
-        name,
-        userId,
-        email,
-        profilePic,
-      };
+      let { voteHistory, ...profile } = loggedInUser;
+
       dispatch({ type: "USER_SIGNED_IN", payload: { user: profile } });
       setUser(profile);
       setDownvoted(voteHistory.downvoted);
