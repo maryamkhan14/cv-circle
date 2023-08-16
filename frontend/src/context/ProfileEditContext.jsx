@@ -8,6 +8,8 @@ export const profileEditContextReducer = (state, action) => {
         ...state,
         profile: { ...state.profile, ...action.payload },
       };
+    case "UPDATE_STATUS":
+      return { ...state, status: { ...state.status, ...action.payload } };
     default:
       return state;
   }
@@ -25,7 +27,7 @@ export const ProfileEditContextProvider = ({ children }) => {
       file: null,
     },
     status: {
-      error: true,
+      error: 0,
       msg: "",
       success: 0,
     },

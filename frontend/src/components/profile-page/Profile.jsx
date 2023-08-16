@@ -7,12 +7,12 @@ import Socials from "./Socials";
 const Profile = () => {
   return (
     <ProfileEditContextProvider>
-      <div className="rounded flex shadow-md border m-3 w-5/6 bg-slate-100/50 flex-col items-center px-3 py-5 font-[700] text-center">
+      <form className="rounded flex shadow-md border m-3 w-5/6 bg-slate-100/50 flex-col items-center px-3 py-5 font-[700] text-center">
         <MainDetails />
         <BasicInformation />
         <Socials />
         <AccountActions />
-      </div>
+      </form>
     </ProfileEditContextProvider>
   );
 };

@@ -13,21 +13,32 @@ const MainDetails = () => {
   return (
     <div
       id="main-details"
-      className="flex flex-col md:flex-row items-center border-b-2 border-slate-50 py-5 w-full gap-5 wrap justify-center"
+      className="flex flex-wrap flex-col md:flex-row items-center border-b-2 border-slate-50 py-5 w-full gap-5 wrap justify-center"
     >
       <img
-        className="self-center rounded-full w-40 h-40"
-        src={profile.profilePic}
+        className="self-center rounded-full w-40 h-40 border-2 border-blue-800"
+        src={user.profilePic}
         alt="profile"
       />
       <div
         className="flex flex-col justify-center  md:items-start gap-5 md:ml-5 "
         id="name-and-email"
       >
-        <h1 className="text-5xl">{profile.name}</h1>{" "}
+        <h1 className="text-5xl">{user.displayName || user.name}</h1>{" "}
         {/* TODO: change to displayName */}
-        <h2 className="text-3xl italic">{profile.email}</h2>
+        <h2 className="text-3xl italic">{user.email}</h2>
       </div>
+      {status.msg && (
+        <p
+          className={`md:basis-full text-2xl bg-blue-50  p-3 ${
+            status.success
+              ? "text-blue-800 bg-blue-50 "
+              : "text-red-800 bg-red-50"
+          }`}
+        >
+          {status.msg}
+        </p>
+      )}
     </div>
   );
 };

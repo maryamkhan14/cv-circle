@@ -1,14 +1,44 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProfileEditContext } from "../../context/ProfileEditContext";
 import ProfileSection from "./ProfileSection";
 const BasicInformation = () => {
-  const { profile, dispatch } = useContext(ProfileEditContext);
+  const { profile, dispatch, status } = useContext(ProfileEditContext);
+  const [profilePic, setProfilePic] = useState("");
+
+  const bufferToImage = (file) => {
+    return URL.createObjectURL(file);
+  };
+
+  const checkFileConstraints = (file) => {
+    return (
+      file.size < 2500000 &&
+      (file.type == "image/png" ||
+        file.type == "image/jpg" ||
+        file.type == "image/jpeg")
+      //TODO: change to constants
+    );
+  };
   const handleChange = (e) => {
     if (e.target.name === "file") {
-      dispatch({
-        type: "UPDATE_PROFILE",
-        payload: { ...profile, file: e.target.files[0] },
-      });
+      let file = e.target.files[0];
+      URL.revokeObjectURL(profilePic);
+      if (checkFileConstraints(file)) {
+        setProfilePic(bufferToImage(file));
+        file.mimetype = file.type;
+        dispatch({
+          type: "UPDATE_PROFILE",
+          payload: { ...profile, file },
+        });
+      } else {
+        dispatch({
+          type: "UPDATE_STATUS",
+          payload: {
+            error: true,
+            msg: "Error: Please only attach .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
+            success: 0,
+          },
+        });
+      }
     } else {
       dispatch({
         type: "UPDATE_PROFILE",
@@ -16,8 +46,13 @@ const BasicInformation = () => {
       });
     }
   };
+  useEffect(() => {
+    if (!profilePic) {
+      setProfilePic(profile.profilePic);
+    }
+  }, [profile]);
   return (
-    <ProfileSection>
+    <ProfileSection status={status}>
       <h3 className="text-3xl">Basic information</h3>
       <div
         id="edit-name"
@@ -31,28 +66,13 @@ const BasicInformation = () => {
           type="text"
           value={profile.displayName}
           name="displayName"
+          disabled={status && status.success === 1}
           required="required"
-          placeholder="What should we call you?"
+          placeholder="By default, your full name is used."
           onChange={handleChange}
         />
       </div>
-      <div
-        id="edit-email"
-        className="flex flex-col md:flex-row w-full  md:items-center justify-between md:gap-3"
-      >
-        <label htmlFor="email" className="font-medium">
-          Email:
-        </label>
-        <input
-          className="border border-slate-800 md:w-[90%]  p-2 rounded bg-slate-50/50 focus:bg-slate-50"
-          type="text"
-          value={profile.email}
-          name="email"
-          required="required"
-          placeholder="What email do you prefer?"
-          onChange={handleChange}
-        />
-      </div>
+
       <div
         id="edit-bio"
         className="flex flex-col md:flex-row w-full  md:items-center justify-between md:gap-3"
@@ -61,9 +81,10 @@ const BasicInformation = () => {
           Bio:
         </label>
         <textarea
-          className="border border-slate-800 md:w-[90%]  p-2 rounded bg-slate-50/50 focus:bg-slate-50 whitespace-pre-wrap"
+          className="border border-slate-800 md:w-[90%]  p-2 rounded bg-slate-50/50 focus:bg-slate-50 whitespace-pre-wrap disabled:bg-slate-50/50"
           name="bio"
           rows="5"
+          disabled={status && status.success === 1}
           maxLength={1000}
           value={profile.bio}
           onChange={handleChange}
@@ -72,19 +93,24 @@ const BasicInformation = () => {
       </div>
       <div
         id="edit-pic"
-        className="flex flex-col md:flex-row w-full md:items-center md:gap-3"
+        className="flex flex-col md:flex-row w-full md:items-center md:gap-3 "
       >
         <p className="font-medium">Profile picture: </p>
-        <div id="edit-pic-input" className="flex self-center gap-5">
+        <div
+          id="edit-pic-input"
+          className="flex justify-center self-center gap-5 flex-wrap"
+        >
           <img
-            className="self-center rounded-full w-20 h-20"
-            src={profile.profilePic}
+            className="self-center rounded-full w-20 h-20 border-2 border-blue-800"
+            src={profilePic}
             alt="profile"
           />
           <label
             htmlFor="file"
             className={`font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center self-center ${
-              status && status.success === 1 && "bg-amber-800/50"
+              status &&
+              status.success === 1 &&
+              "bg-amber-800/50 hover:bg-amber-800/50"
             }`}
           >
             <svg
@@ -113,6 +139,25 @@ const BasicInformation = () => {
             onChange={handleChange}
             disabled={status && status.success === 1}
           />
+          <span className="flex self-center items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              className="w-6 h-6 mr-2 shrink-0 stroke-amber-800"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+              />
+            </svg>
+            <p className="font-medium text-amber-800">
+              Only .png, .jpg, .jpeg files allowed. Changes to your profile
+              picture may take up to an hour to show up.
+            </p>
+          </span>
         </div>
       </div>
     </ProfileSection>

@@ -1,50 +1,56 @@
 import { useState, useContext } from "react";
 import { ProfileEditContext } from "../../context/ProfileEditContext";
+import { updateUser } from "../../services/auth-services";
+import StatusNotification from "../status-update/StatusNotification";
 const AccountActions = () => {
   const [deletePromptActive, setDeletePromptActive] = useState(false);
   const { profile, status, dispatch } = useContext(ProfileEditContext);
-  const checkFileConstraints = (file) => {
-    return (
-      file.size < 1000000 &&
-      (file.type == "image/png" ||
-        file.type == "image/jpg" ||
-        file.type == "image/jpeg" ||
-        file.type == "application/pdf")
-      //TODO: change to constants
-    );
-  };
-  /**
-  const updateProfile = async (e) => 
+
+  const updateProfile = async (e) => {
     e.preventDefault();
-    let { file } = post;
-    if (!file || checkFileConstraints(file)) {
-      let { data, error } = await createPost({ ...post });
-      if (error) {
-        setStatus({
+    dispatch({
+      type: "UPDATE_STATUS",
+      payload: {
+        error: false,
+        msg: "Updating your profile...",
+        success: 1,
+      },
+    });
+    let { updated, error } = await updateUser({ ...profile });
+    if (error) {
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
           error: true,
-          msg: error,
+          msg: error.message,
           success: 0,
-        });
-      } else {
-        let { posted } = data;
-        navigate(`/post/${posted.id}`);
-      }
+        },
+      });
     } else {
-      setStatus({
-        error: true,
-        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
-        success: 0,
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          error: false,
+          msg: "Successfully updated profile! Feel free to log out and log back in to see your changes.",
+          success: 2,
+        },
       });
     }
-  };*/
+  };
   return (
     <div className="flex flex-col md:flex-row w-full md:items-center m-2 ">
-      <button className="whitespace-nowrap text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-10">
+      <button
+        className="whitespace-nowrap text-slate-50 disabled:bg-amber-800/50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-10"
+        onClick={updateProfile}
+        disabled={status && status.success === 1}
+        type="Submit"
+      >
         Save Changes
       </button>
       <button
-        className="whitespace-nowrap text-slate-50 bg-red-500 hover:bg-red-500/90  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-5"
+        className="whitespace-nowrap disabled:bg-red-500/50 text-slate-50 bg-red-500 hover:bg-red-500/90  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-5"
         onClick={(e) => setDeletePromptActive(!deletePromptActive)}
+        disabled={status && status.success === 1}
       >
         {deletePromptActive ? "Cancel" : "Delete Account"}
       </button>
@@ -66,13 +72,15 @@ const AccountActions = () => {
             placeholder={profile.email}
           />
           <button
-            className="whitespace-nowrap text-slate-50 bg-red-500 hover:bg-red-500/90  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-5"
+            className="whitespace-nowrap text-slate-50 bg-red-500 hover:bg-red-500/90 disabled:bg-red-500/50  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-5"
             onClick={(e) => setDeletePromptActive(!deletePromptActive)}
+            disabled={status && status.success === 1}
           >
             Delete Anyway
           </button>
         </div>
       )}
+      <StatusNotification status={status} />
     </div>
   );
 };

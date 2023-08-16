@@ -35,7 +35,27 @@ const postLogout = async () => {
     return { error: { message: errorMsg, status } };
   }
 };
-
+const updateUser = async (user) => {
+  try {
+    let updatedUser = await axios.patch(`${DOMAIN}/api/auth/user`, user, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(updatedUser);
+    return updatedUser;
+  } catch (e) {
+    let errorMsg = e.response?.data?.error;
+    let status = e.response?.status;
+    return { error: { message: errorMsg, status } };
+  }
+};
 const AUTH_URL_GITHUB = `${DOMAIN}/api/auth/github`;
 const AUTH_URL_GOOGLE = `${DOMAIN}/api/auth/google`;
-export { getAuthStatus, postLogout, AUTH_URL_GITHUB, AUTH_URL_GOOGLE };
+export {
+  getAuthStatus,
+  postLogout,
+  updateUser,
+  AUTH_URL_GITHUB,
+  AUTH_URL_GOOGLE,
+};
