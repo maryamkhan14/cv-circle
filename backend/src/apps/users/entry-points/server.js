@@ -1,5 +1,6 @@
 import "dotenv/config";
 import userRoutes from "./api/index.js";
+import expressFileUpload from "express-fileupload";
 import express from "express";
 import { cacheClient as redisClient } from "../data-access/index.js";
 import RedisStore from "connect-redis";
@@ -27,6 +28,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(expressFileUpload());
 app.use(
   cors({
     origin: function (origin, callback) {
