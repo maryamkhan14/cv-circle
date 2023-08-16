@@ -13,6 +13,7 @@ services:
     volumes:
       - ./src/apps/posts/:/app:ro
       - /app/__test__
+      - ./src/apps/posts/__test__/coverage:/app/__test__/coverage
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -26,6 +27,7 @@ services:
     volumes:
       - ./src/apps/users/:/app:ro
       - /app/__test__
+      - ./src/apps/users/__test__/coverage:/app/__test__/coverage
       - /app/node_modules
     environment:
       - NODE_ENV=development

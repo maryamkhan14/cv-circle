@@ -102,9 +102,8 @@ const Navbar = () => {
             <span>
               <img
                 src={user.profilePic}
-                width={40}
                 referrerPolicy="no-referrer"
-                className="rounded-full border-2 border-blue-800"
+                className="rounded-full w-[3em] h-[3em] border-2 border-blue-800"
               />
             </span>
           </>

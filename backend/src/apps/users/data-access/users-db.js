@@ -1,17 +1,28 @@
 export default function buildUsersDb({ dbClient }) {
-  return Object.freeze({ upsert });
+  return Object.freeze({ upsert, update });
 
-  async function upsert({ userId, name, email, profilePic }) {
+  async function update({
+    userId,
+    email,
+    profilePic,
+    displayName,
+    linkedin,
+    twitter,
+    bio,
+  }) {
     let result = await dbClient
       .from("users")
-      .upsert({
-        uid: userId,
-        name,
+      .update({
         email,
-        profilepic: profilePic,
+        avatar: profilePic,
+        display_name: displayName,
+        linkedin,
+        twitter,
+        bio,
       })
+      .eq("uid", userId)
       .select(
-        "userId:uid, name, email, profilePic:profilepic, voteHistory:users_votes_view(upvoted, downvoted)"
+        "userId:uid, name, email, profilePic:avatar, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, linkedin, twitter, bio"
       );
     return {
       ...result,
@@ -19,6 +30,31 @@ export default function buildUsersDb({ dbClient }) {
         {
           ...result.data[0],
           voteHistory: formatVoteHistory(result.data[0]?.voteHistory || []),
+        },
+      ],
+    };
+  }
+  async function upsert({ userId, name, email, profilePic }) {
+    let result = await dbClient
+      .from("users")
+      .upsert({
+        uid: userId,
+        name,
+        email,
+        profile_pic: profilePic,
+      })
+      .select(
+        "userId:uid, name, email, profilePic:profile_pic, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, avatar, linkedin, twitter, bio"
+      );
+    return {
+      ...result,
+      data: [
+        {
+          ...result.data[0],
+          voteHistory: formatVoteHistory(result.data[0]?.voteHistory || []),
+          profilePic: result.data[0].avatar
+            ? result.data[0].avatar
+            : result.data[0].profilePic,
         },
       ],
     };
