@@ -1,4 +1,8 @@
-import { updateCache } from "../../domain/use-cases/index.js";
+import {
+  saveUser,
+  handlePicture,
+  updateCache,
+} from "../../domain/use-cases/index.js";
 import authenticator from "../../domain/services/authenticator/index.js";
 import makeGetGoogleAuth from "./get/get-google-auth.js";
 import makeGetGithubAuth from "./get/get-github-auth.js";
@@ -6,6 +10,7 @@ import makeGetGithubAuthCallback from "./get/get-github-auth-callback.js";
 import makeGetGoogleAuthCallback from "./get/get-google-auth-callback.js";
 import makeGetAuthSuccess from "./get/get-auth-success.js";
 import makePostLogout from "./post/post-logout.js";
+import makePatchUser from "./patch/patch-user.js";
 
 const { authGoogle, authGoogleCallback, authGithub, authGithubCallback } =
   authenticator;
@@ -21,7 +26,7 @@ const getGithubAuthCallback = makeGetGithubAuthCallback({
 
 const getAuthSuccess = makeGetAuthSuccess({ updateCache });
 const postLogout = makePostLogout({ updateCache });
-
+const patchUser = makePatchUser({ saveUser, handlePicture });
 const userController = Object.freeze({
   getGoogleAuth,
   getGoogleAuthCallback,
@@ -29,6 +34,7 @@ const userController = Object.freeze({
   getGithubAuthCallback,
   getAuthSuccess,
   postLogout,
+  patchUser,
 });
 
 export default { userController };
@@ -40,4 +46,5 @@ export {
   getGithubAuthCallback,
   getAuthSuccess,
   postLogout,
+  patchUser,
 };
