@@ -5,6 +5,7 @@
   html {
     @apply text-slate-600;
     @apply font-plainText;
+    @apply scroll-smooth;
   }
   h1,
   h2,
@@ -17,6 +18,7 @@
 html,
 body {
   height: 100vh;
+  scroll-behavior: smooth !important;
 }
 
 #root {
