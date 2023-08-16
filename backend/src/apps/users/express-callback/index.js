@@ -22,9 +22,6 @@ export default function makeExpressCallback(controller, requiresAuth = false) {
       },
     };
     try {
-      if (requiresAuth && !req.isAuthenticated()) {
-        throw new Error("Not authenticated");
-      }
       let httpResponse = await controller(httpRequest);
       if (httpResponse.headers) {
         res.set(httpResponse.headers);
