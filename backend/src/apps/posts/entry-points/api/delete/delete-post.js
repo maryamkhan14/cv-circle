@@ -18,8 +18,8 @@ export default function makeDeletePost({ retrieveSinglePost, removePost }) {
         headers: {
           "Content-Type": "application/json",
         },
-        statusCode: 400,
-        body: { error: "Not authorized to perform this action." },
+        statusCode: 403,
+        body: { error: "Unauthorized" },
       };
     } catch (e) {
       //TODO: Error logging
