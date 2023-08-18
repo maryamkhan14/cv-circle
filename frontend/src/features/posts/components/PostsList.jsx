@@ -1,8 +1,7 @@
 import React from "react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const PostsList = ({ posts, searchFilter, sortFilter }) => {
+const PostsList = ({ posts }) => {
   return (
     <>
       {posts && posts.length > 0 ? (

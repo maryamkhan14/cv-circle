@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App";
 import "./main.css";
 import Layout from "./layouts/Layout";
 import { UserContextProvider } from "./features/authentication/context/UserContext";

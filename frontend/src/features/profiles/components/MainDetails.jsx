@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { ProfileEditContext } from "../context/ProfileEditContext";
 import { UserContext } from "../../../features/authentication/context/UserContext";
 const MainDetails = () => {
-  const { profile, status, dispatch } = useContext(ProfileEditContext);
+  const { status, dispatch } = useContext(ProfileEditContext);
   const { user } = useContext(UserContext);
 
   useEffect(() => {

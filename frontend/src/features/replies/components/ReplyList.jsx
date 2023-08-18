@@ -1,10 +1,9 @@
 import Reply from "./Reply";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { UserContext } from "../../authentication/context/UserContext";
 
 const ReplyList = ({ replies }) => {
   const { user } = useContext(UserContext);
-  const [replyList, setReplyList] = useState([]);
   return (
     <div className="flex flex-col border-t border-slate-300 py-3">
       {Object.keys(replies).length ? (
