@@ -52,7 +52,7 @@ describe("Create attachment preview use case", () => {
   });
 
   test("Successfully creates attachment preview for non-pdf files", async () => {
-    let file = { mimetype: "image/png", data: previewImage.getImageData() };
+    let file = { type: "image/png", data: previewImage.getImageData() };
     let result = await handleAttachmentPreview({ file, userId: FAKE_USER_ID });
 
     let makeImageArgs = makeImage.mock.calls[0][0];

@@ -27,8 +27,8 @@ describe("Controller for DELETE to /api/posts/:id endpoint", () => {
       headers: {
         "Content-Type": "application/json",
       },
-      statusCode: 400,
-      body: { error: "Not authorized to perform this action." },
+      statusCode: 403,
+      body: { error: "Unauthorized" },
     };
     const actual = await deletePost(request);
     expect(actual).toEqual(expected);
