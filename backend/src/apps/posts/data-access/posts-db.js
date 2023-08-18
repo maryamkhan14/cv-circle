@@ -99,8 +99,12 @@ export default function makePostsDb({ dbClient }) {
       .from("posts")
       .delete()
       .eq("id", postId)
-      .eq("fk_uid", userId);
-    return { ...result };
+      .eq("fk_uid", userId)
+      .select();
+    return {
+      ...result,
+      data: format(result.data, dbColumnsToNormalizedProfile),
+    };
   }
   async function insert(insertDetails) {
     let result = await dbClient
