@@ -96,7 +96,7 @@ const Navbar = () => {
             <Link to="/create-post" className="text-amber-800 font-semibold">
               Create post
             </Link>
-            <Link to="/logged-out" className="text-amber-800 font-semibold">
+            <Link to="/logout" className="text-amber-800 font-semibold">
               Log out
             </Link>
             <span>
