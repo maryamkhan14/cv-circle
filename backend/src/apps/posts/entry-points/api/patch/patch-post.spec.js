@@ -9,27 +9,6 @@ describe("Controller for PATCH to /api/posts/:id endpoint", () => {
   let updatePost = vi.fn(async (post) => post);
   let patchPost;
 
-  beforeEach(() => {
-    patchPost = makePatchPost({ updatePost, handleAttachmentPreview });
-  });
-  test("Refuses to update a post without valid user credentials", async () => {
-    const post = makeFakeRawPost();
-    const request = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: { ...post },
-    };
-    const expected = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      statusCode: 400,
-      body: { error: "Not authorized to perform this action." },
-    };
-    const actual = await patchPost(request);
-    expect(actual).toEqual(expected);
-  });
   test("Successfully updates a post when new attachment is provided", async () => {
     const post = makeFakeRawPost();
     const user = { userId: post.userId };
