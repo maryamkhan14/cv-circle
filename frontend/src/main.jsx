@@ -1,21 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import Layout from "./components/Layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import { UserContextProvider } from "./context/UserContext";
+import App from "./App";
 import "./main.css";
-import LoggedIn from "./components/LoggedIn";
-import LoggedOut from "./components/LoggedOut";
-import PostForm from "./components/PostForm";
-import AllPosts from "./components/AllPosts";
-import SinglePost from "./components/SinglePost";
-import NotPermitted from "./components/NotPermitted";
-import PostSkeleton from "./components/PostSkeleton";
-import NetworkError from "./components/NetworkError";
-import Profile from "./components/profile-page/Profile";
+import Layout from "./layouts/Layout";
+import { UserContextProvider } from "./features/authentication/context/UserContext";
+import LoggedIn from "./features/authentication/components/LoggedIn";
+import PostForm from "./features/posts/components/PostForm";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import AllPosts from "./pages/AllPosts";
+import SinglePost from "./pages/SinglePost";
+import Logout from "./pages/Logout";
+import NotPermitted from "./pages/NotPermitted";
+import NetworkError from "./pages/NetworkError";
+import Profile from "./pages/Profile";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UserContextProvider>
@@ -26,12 +25,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/logged-in" element={<LoggedIn />} />
-          <Route path="/logged-out" element={<LoggedOut />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/create-post" element={<PostForm />} />
           <Route path="/post/:id/:updated?" element={<SinglePost />} />
           <Route path="/edit-post/:id" element={<PostForm />} />
           <Route path="/not-permitted" element={<NotPermitted />} />
-          <Route path="/post-skeleton" element={<PostSkeleton />} />
           <Route path="/network-error" element={<NetworkError />} />
           <Route path="/edit-profile" element={<Profile />} />
         </Route>
