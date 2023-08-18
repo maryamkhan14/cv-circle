@@ -1,7 +1,9 @@
 export default function (sameUserNecessary = false) {
   return function (req, res, next) {
     req.user = req.session?.user;
-    req.isAuthenticated = () => (req.user ? true : false);
+    if (!req.hasOwnProperty("isAuthenticated")) {
+      req.isAuthenticated = () => (req.user ? true : false);
+    }
     if (!req.isAuthenticated()) {
       console.log("no user");
       res.status(403).send({ error: "Unauthorized" });
