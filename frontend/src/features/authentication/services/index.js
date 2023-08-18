@@ -14,11 +14,14 @@ const getAuthStatus = async () => {
         "Access-Control-Allow-Credentials": true,
       },
     });
-    return authStatus;
+    return authStatus.user;
   } catch (e) {
     let errorMsg = e.response?.data?.error;
     let status = e.response?.status;
-    return { error: { message: errorMsg, status } };
+    throw {
+      message: errorMsg || "An unknown error has happened!",
+      status: status || e.code,
+    };
   }
 };
 const postLogout = async () => {
@@ -32,7 +35,10 @@ const postLogout = async () => {
   } catch (e) {
     let errorMsg = e.response?.data?.error;
     let status = e.response?.status;
-    return { error: { message: errorMsg, status } };
+    throw {
+      message: errorMsg || "An unknown error has happened!",
+      status: status || e.code,
+    };
   }
 };
 

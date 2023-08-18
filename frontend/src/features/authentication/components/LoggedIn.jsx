@@ -1,39 +1,35 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
+import useUser from "../hooks/useUser";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
 import { useSessionStorage, useVotedPosts } from "../../../hooks";
-import { getAuthStatus } from "../services";
 import ReportButton from "../../../components/ReportButton";
 
 const LoggedIn = () => {
   const navigate = useNavigate();
-  const { dispatch } = useContext(UserContext);
-  const [user, setUser] = useSessionStorage("user", "");
-  const [error, setError] = useState({});
-  const [upvoted, setUpvoted] = useVotedPosts("upvoted", []);
-  const [downvoted, setDownvoted] = useVotedPosts("downvoted", []);
+  const { isLoading, isError, data: user, error } = useUser();
+  const [, setUser] = useSessionStorage("user", "");
 
-  const getUser = async () => {
-    let { user: loggedInUser, error } = await getAuthStatus();
-    if (error) {
-      setError(error);
-    } else if (loggedInUser) {
-      let { voteHistory, ...profile } = loggedInUser;
-
-      dispatch({ type: "USER_SIGNED_IN", payload: { user: profile } });
+  const [, setUpvoted] = useVotedPosts("upvoted", []);
+  const [, setDownvoted] = useVotedPosts("downvoted", []);
+  useEffect(() => {
+    if (user) {
+      let { voteHistory, ...profile } = user;
       setUser(profile);
-      setDownvoted(voteHistory.downvoted);
       setUpvoted(voteHistory.upvoted);
+      setDownvoted(voteHistory.downvoted);
+
       navigate("/");
     }
-  };
-  useEffect(() => {
-    getUser();
-  }, []);
+  }, [user]);
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 gap-5 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
-      {Object.keys(error).length ? (
+      {isLoading ? (
+        <>
+          <h1 className="text-5xl">Verifying your details...</h1>
+          <p className="text-2xl">You'll be in in just a bit!</p>
+        </>
+      ) : isError ? (
         <>
           <span className="flex flex-col justify-center border-b-2 border-slate-50 gap-5 h-1/2">
             <h1 className="text-5xl">Login failed :(</h1>

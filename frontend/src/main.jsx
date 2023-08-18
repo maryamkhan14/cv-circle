@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./main.css";
 import Layout from "./layouts/Layout";
 import { UserContextProvider } from "./features/authentication/context/UserContext";
@@ -14,25 +15,27 @@ import Logout from "./pages/Logout";
 import NotPermitted from "./pages/NotPermitted";
 import NetworkError from "./pages/NetworkError";
 import Profile from "./pages/Profile";
-
+const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <UserContextProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index={true} element={<AllPosts />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/logged-in" element={<LoggedIn />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/create-post" element={<PostForm />} />
-          <Route path="/post/:id/:updated?" element={<SinglePost />} />
-          <Route path="/edit-post/:id" element={<PostForm />} />
-          <Route path="/not-permitted" element={<NotPermitted />} />
-          <Route path="/network-error" element={<NetworkError />} />
-          <Route path="/edit-profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </UserContextProvider>
+  <QueryClientProvider client={queryClient}>
+    <UserContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index={true} element={<AllPosts />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/logged-in" element={<LoggedIn />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/create-post" element={<PostForm />} />
+            <Route path="/post/:id/:updated?" element={<SinglePost />} />
+            <Route path="/edit-post/:id" element={<PostForm />} />
+            <Route path="/not-permitted" element={<NotPermitted />} />
+            <Route path="/network-error" element={<NetworkError />} />
+            <Route path="/edit-profile" element={<Profile />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserContextProvider>
+  </QueryClientProvider>
 );
