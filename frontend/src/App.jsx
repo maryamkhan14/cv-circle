@@ -1,7 +1,8 @@
 import React from "react";
-
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./main.css";
+import useUser from "./features/authentication/hooks/useUser";
 import Layout from "./layouts/Layout";
 import LoggedIn from "./features/authentication/components/LoggedIn";
 import PostForm from "./features/posts/components/PostForm";
@@ -14,10 +15,17 @@ import NotPermitted from "./pages/NotPermitted";
 import NetworkError from "./pages/NetworkError";
 import Profile from "./pages/Profile";
 const App = () => {
+  let { data } = useUser();
+  let [user, setUser] = useState(null);
+  useEffect(() => {
+    if (data) {
+      setUser({ ...data });
+    }
+  }, [data]);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout user={user} setUser={setUser} />}>
           <Route index={true} element={<AllPosts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

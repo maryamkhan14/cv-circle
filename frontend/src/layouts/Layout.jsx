@@ -2,16 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import useUser from "../features/authentication/hooks/useUser";
 
-const Layout = () => {
-  let { data } = useUser();
-  let [user, setUser] = useState(null);
-  useEffect(() => {
-    if (data) {
-      setUser({ ...data });
-    }
-  }, [data]);
+const Layout = ({ user, setUser }) => {
   return (
     <div className="flex min-w-0 min-h-screen h-fit flex-col w-screen items-center">
       <div className="flex w-full h-full">
