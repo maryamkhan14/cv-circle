@@ -6,26 +6,29 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { postLogout } from "../services";
 
 const LoggedOut = () => {
-  const [, setUser] = useOutletContext();
+  const [user, setUser] = useOutletContext();
   const navigate = useNavigate();
   const queryClient = new QueryClient();
   const { isLoading, isError, error, mutateAsync } = useMutation({
     mutationFn: postLogout,
     cacheTime: 0,
   });
-  const existingUser = queryClient.getQueriesData(["user"]);
   useEffect(() => {
-    mutateAsync(
-      {},
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries("user");
-          queryClient.removeQueries("user");
-          setUser(null);
-          navigate("/");
-        },
-      }
-    );
+    if (user) {
+      mutateAsync(
+        {},
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries("user");
+            queryClient.removeQueries("user");
+            setUser(null);
+            navigate("/");
+          },
+        }
+      );
+    } else {
+      navigate("/");
+    }
   }, []);
   return (
     <div className="rounded flex shadow-md border m-3 w-5/6 gap-5 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
