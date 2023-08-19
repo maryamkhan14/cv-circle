@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./main.css";
 import useUser from "./features/authentication/hooks/useUser";
+import { useSessionStorage } from "./hooks/index";
 import Layout from "./layouts/Layout";
 import LoggedIn from "./features/authentication/components/LoggedIn";
 import PostForm from "./features/posts/components/PostForm";
@@ -16,10 +17,20 @@ import NetworkError from "./pages/NetworkError";
 import Profile from "./pages/Profile";
 const App = () => {
   let { data } = useUser();
-  let [user, setUser] = useState(null);
+  const [user, setUser] = useState(data);
+  const [voteHistory] = useSessionStorage("voteHistory", {});
   useEffect(() => {
     if (data) {
-      setUser({ ...data });
+      let combinedVoteHistory = {
+        ...data.voteHistory,
+        ...voteHistory,
+      };
+      setUser({
+        ...data,
+        voteHistory: Object.keys(combinedVoteHistory).reduce((next, key) => {
+          return { ...next, [key]: new Set(combinedVoteHistory[key]) };
+        }, {}),
+      });
     }
   }, [data]);
   return (

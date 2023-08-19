@@ -2,7 +2,7 @@ import makeVote from "../entities/vote/index.js";
 export default function makeVotePost({ votesDb }) {
   return async function votePost(voteDetails) {
     const vote = makeVote(voteDetails);
-    let { error } = await votesDb.vote({
+    let { data, error } = await votesDb.vote({
       userId: vote.getUserId(),
       postId: vote.getPostId(),
       voteCount: vote.getVoteCount(),

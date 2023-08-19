@@ -1,48 +1,68 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
-import { useVote } from "../hooks/useVote.js";
-import { votePost } from "../../posts/services/index.js";
-import { useVotedPosts } from "../../../hooks";
-import { UserContext } from "../../authentication/context/UserContext.jsx";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSessionStorage } from "../../../hooks";
+import votePost from "../services/votePost";
+import { useMutation, QueryClient } from "@tanstack/react-query";
+import { useParams, useOutletContext } from "react-router-dom";
 
 const VoteDisplay = ({ existingUpvoteCount }) => {
-  const [allUpvoted, setAllUpvoted] = useVotedPosts("upvoted");
-  const [allDownvoted, setAllDownvoted] = useVotedPosts("downvoted");
-  const { user } = useContext(UserContext);
+  const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
+  const [user] = useOutletContext();
+  const queryClient = new QueryClient();
   const { id: postId } = useParams();
   const [upvoteCount, setUpvoteCount] = useState(existingUpvoteCount);
-  const [currentVote, setCurrentVote] = useVote(
-    user.userId,
-    postId,
-    allUpvoted.has(postId) ? 1 : allDownvoted.has(postId) ? -1 : 0
-  );
+  const [currentVote, setCurrentVote] = useState(0);
+
+  //TODO: Make loading indication
+  const { isLoading, mutateAsync } = useMutation({
+    mutationFn: votePost,
+    onMutate: () => {
+      let u = new Set(voteHistory?.upvoted);
+      let d = new Set(voteHistory?.downvoted);
+      if (voteHistory) {
+        if (currentVote === 0) {
+          // remove current post from upvoted and downvoted
+          u.delete(postId);
+          d.delete(postId);
+        } else if (currentVote === 1) {
+          u.add(postId);
+        } else if (currentVote === -1) {
+          d.add(postId);
+        }
+      }
+      return { upvoted: u, downvoted: d };
+    },
+    onSuccess: (data, variables, context) => {
+      let newVotes = { ...context };
+      setVoteHistory(
+        Object.keys(newVotes).reduce((next, key) => {
+          return { ...next, [key]: Array.from(newVotes[key]) };
+        }, {})
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
   const adjustVote = (voteAdjustment) => {
     // reverse effect if user is clicking on the same vote button
-    if (voteAdjustment == currentVote.voteCount)
-      voteAdjustment = -voteAdjustment;
-    votePost({ ...currentVote, voteCount: voteAdjustment });
-    setCurrentVote(voteAdjustment);
+    if (voteAdjustment == currentVote) voteAdjustment = -voteAdjustment;
+    setCurrentVote((prev) => prev + voteAdjustment);
+    mutateAsync({ userId: user?.userId, postId, voteCount: voteAdjustment });
     setUpvoteCount(upvoteCount + voteAdjustment);
   };
 
   useEffect(() => {
-    switch (currentVote.voteCount) {
-      case 0:
-        // remove current post from allUpvoted and allDownvoted
-        setAllUpvoted([...allUpvoted.values()].filter((id) => id !== postId));
-        setAllDownvoted(
-          [...allDownvoted.values()].filter((id) => id !== postId)
-        );
-        break;
-      case 1:
-        setAllUpvoted([...allUpvoted.values(), postId]);
-        break;
-      case -1:
-        setAllDownvoted([...allDownvoted.values(), postId]);
-        break;
+    if (user) {
+      setCurrentVote(
+        user.voteHistory.upvoted.has(postId)
+          ? 1
+          : user.voteHistory.downvoted.has(postId)
+          ? -1
+          : 0
+      );
     }
-  }, [currentVote]);
+  }, [user]);
 
   return (
     <div
@@ -60,7 +80,7 @@ const VoteDisplay = ({ existingUpvoteCount }) => {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           className={`w-10 h-10 stroke-slate-900 ${
-            currentVote.voteCount === 1 ? "fill-amber-100" : "fill-slate-100"
+            currentVote === 1 ? "fill-amber-100" : "fill-slate-100"
           }`}
         >
           <path
@@ -75,7 +95,6 @@ const VoteDisplay = ({ existingUpvoteCount }) => {
       >
         {upvoteCount}
       </p>
-
       <button
         aria-label="Downvote post"
         onClick={() => adjustVote(-1)}
@@ -86,7 +105,7 @@ const VoteDisplay = ({ existingUpvoteCount }) => {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           className={`w-10 h-10 stroke-slate-900 ${
-            currentVote.voteCount === -1 ? "fill-amber-100" : "fill-slate-100"
+            currentVote === -1 ? "fill-amber-100" : "fill-slate-100"
           }`}
         >
           <path
