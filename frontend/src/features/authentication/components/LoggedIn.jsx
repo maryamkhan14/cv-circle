@@ -2,7 +2,6 @@ import React from "react";
 import useUser from "../hooks/useUser";
 import { useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { useVotedPosts } from "../../../hooks";
 import ReportButton from "../../../components/ReportButton";
 
 const LoggedIn = () => {
