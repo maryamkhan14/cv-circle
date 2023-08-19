@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAuthStatus } from "../services";
+import { getCurrentUser } from "../services";
 
 export default function useUser() {
   return useQuery({
     queryKey: ["user"],
-    queryFn: getAuthStatus,
-    staleTime: 60 * 1000 * 30, // 30 minutes
+    queryFn: getCurrentUser,
+    staleTime: 60 * 1000 * 60 * 24, // 24 hours,
+    refetchOnWindowFocus: false,
     retry: 0,
   });
 }

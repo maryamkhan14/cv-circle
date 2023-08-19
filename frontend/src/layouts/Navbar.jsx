@@ -1,27 +1,8 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../features/authentication/context/UserContext";
-import { useSessionStorage } from "../hooks";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-const Navbar = () => {
+const Navbar = ({ user }) => {
   const [hidden, setHidden] = useState(true);
-  const { user, dispatch } = useContext(UserContext);
-
-  const [savedUser, setSavedUser] = useSessionStorage("user", "");
-  const updateUser = () => {
-    if (Object.keys(user).length == 0 && savedUser) {
-      dispatch({
-        type: "USER_SIGNED_IN",
-        payload: {
-          user: savedUser,
-        },
-      });
-    }
-  };
-  useEffect(() => {
-    updateUser();
-  }, []);
-
   return (
     <div className="bg-slate-50/80 flex p-7 flex-col md:flex-row justify-between items-center gap-5 shadow-md w-full ">
       <Link to="/">
@@ -88,7 +69,7 @@ const Navbar = () => {
           hidden ? "hidden" : "flex"
         } md:flex flex-col md:flex-row items-center gap-5 md: gap-10`}
       >
-        {Object.keys(user).length > 0 ? (
+        {user ? (
           <>
             <Link to="/" className="text-amber-800 font-semibold">
               All posts

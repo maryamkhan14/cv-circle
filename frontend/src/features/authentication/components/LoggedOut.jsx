@@ -2,23 +2,26 @@ import React from "react";
 import { useEffect } from "react";
 import { useMutation, QueryClient } from "@tanstack/react-query";
 import ReportButton from "../../../components/ReportButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { postLogout } from "../services";
 
 const LoggedOut = () => {
+  const [, setUser] = useOutletContext();
   const navigate = useNavigate();
   const queryClient = new QueryClient();
   const { isLoading, isError, error, mutateAsync } = useMutation({
     mutationFn: postLogout,
     cacheTime: 0,
   });
+  const existingUser = queryClient.getQueriesData(["user"]);
   useEffect(() => {
     mutateAsync(
       {},
       {
         onSuccess: () => {
-          sessionStorage.clear();
           queryClient.invalidateQueries("user");
+          queryClient.removeQueries("user");
+          setUser(null);
           navigate("/");
         },
       }

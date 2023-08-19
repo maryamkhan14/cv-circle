@@ -1,23 +1,17 @@
 import React from "react";
 import useUser from "../hooks/useUser";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSessionStorage, useVotedPosts } from "../../../hooks";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { useVotedPosts } from "../../../hooks";
 import ReportButton from "../../../components/ReportButton";
 
 const LoggedIn = () => {
   const navigate = useNavigate();
   const { isLoading, isError, data: user, error } = useUser();
-  const [, setUser] = useSessionStorage("user", "");
-
-  const [, setUpvoted] = useVotedPosts("upvoted", []);
-  const [, setDownvoted] = useVotedPosts("downvoted", []);
+  const [, setUser] = useOutletContext();
   useEffect(() => {
     if (user) {
-      let { voteHistory, ...profile } = user;
-      setUser(profile);
-      setUpvoted(voteHistory.upvoted);
-      setDownvoted(voteHistory.downvoted);
+      setUser(user);
 
       navigate("/");
     }

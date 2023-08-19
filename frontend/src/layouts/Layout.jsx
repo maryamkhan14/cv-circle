@@ -1,14 +1,24 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
+import useUser from "../features/authentication/hooks/useUser";
+
 const Layout = () => {
+  let { data } = useUser();
+  let [user, setUser] = useState(null);
+  useEffect(() => {
+    if (data) {
+      setUser({ ...data });
+    }
+  }, [data]);
   return (
     <div className="flex min-w-0 min-h-screen h-fit flex-col w-screen items-center">
       <div className="flex w-full h-full">
-        <Navbar />
+        <Navbar user={user} />
       </div>
       <div className="flex flex-1 justify-center items-stretch  w-full bg-gradient-to-r from-blue-200 to-purple-200">
-        <Outlet />
+        <Outlet context={[user, setUser]} />
       </div>
     </div>
   );

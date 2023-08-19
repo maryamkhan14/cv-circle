@@ -4,9 +4,9 @@ const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
 
-const getAuthStatus = async () => {
+const getCurrentUser = async () => {
   try {
-    let { data: authStatus } = await axios.get(`${DOMAIN}/api/auth/success`, {
+    let { data } = await axios.get(`${DOMAIN}/api/auth/success`, {
       withCredentials: true,
       headers: {
         Accept: "application/json",
@@ -14,7 +14,15 @@ const getAuthStatus = async () => {
         "Access-Control-Allow-Credentials": true,
       },
     });
-    return authStatus.user;
+    let { user } = data;
+
+    return {
+      ...user,
+      voteHistory: {
+        upvoted: new Set(user?.voteHistory?.upvoted),
+        downvoted: new Set(user?.voteHistory?.downvoted),
+      },
+    };
   } catch (e) {
     let errorMsg = e.response?.data?.error;
     let status = e.response?.status;
@@ -44,4 +52,4 @@ const postLogout = async () => {
 
 const AUTH_URL_GITHUB = `${DOMAIN}/api/auth/github`;
 const AUTH_URL_GOOGLE = `${DOMAIN}/api/auth/google`;
-export { getAuthStatus, postLogout, AUTH_URL_GITHUB, AUTH_URL_GOOGLE };
+export { getCurrentUser, postLogout, AUTH_URL_GITHUB, AUTH_URL_GOOGLE };
