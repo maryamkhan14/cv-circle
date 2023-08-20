@@ -3,16 +3,27 @@ axios.defaults.withCredentials = true;
 const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
-const getPost = async (postId) => {
+
+const withErrorHandling = async (fn) => {
   try {
-    return await axios.get(`${DOMAIN}/api/posts/${postId}`, {
-      withCredentials: true,
-    });
+    return await fn();
   } catch (e) {
+    console.log(e);
     let { data, status } = e.response;
     let errorMsg = data.error;
-    return { error: errorMsg, status };
+    throw {
+      message: errorMsg || "An unknown error has happened!",
+      status: status || e.code,
+    };
   }
+};
+const getPost = async (postId) => {
+  return await withErrorHandling(async () => {
+    let { data } = await axios.get(`${DOMAIN}/api/posts/${postId}`, {
+      withCredentials: true,
+    });
+    return data?.post;
+  });
 };
 const getAllPosts = async () => {
   try {
@@ -27,48 +38,35 @@ const getAllPosts = async () => {
 };
 
 const updatePost = async (post, id) => {
-  try {
+  return await withErrorHandling(async () => {
     let { data: updatedPost } = await axios.patch(
       `${DOMAIN}/api/posts/${id}`,
       post,
       { headers: { "Content-Type": "multipart/form-data" } }
     );
     return updatedPost;
-  } catch (e) {
-    console.log(e);
-    let { data, status, statusText } = e.response;
-    let errorMsg = data.error;
-    return { error: errorMsg || statusText, status };
-  }
+  });
 };
 
 const createPost = async (post) => {
-  try {
+  return await withErrorHandling(async () => {
     let { data: newPost } = await axios.post(`${DOMAIN}/api/posts/`, post, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
     return newPost;
-  } catch (e) {
-    let { data, status } = e.response;
-    let errorMsg = data.error;
-    return { error: errorMsg, status };
-  }
+  });
 };
 const votePost = async (vote) => {
-  try {
+  return await withErrorHandling(async () => {
     let { data: voted } = await axios.post(`${DOMAIN}/api/posts/vote`, vote, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
     return voted;
-  } catch (e) {
-    let { data, status } = e.response;
-    let errorMsg = data.error;
-    return { error: errorMsg, status };
-  }
+  });
 };
 const deletePost = async (postId) => {
   try {
