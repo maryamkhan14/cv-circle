@@ -15,9 +15,11 @@ import Logout from "./pages/Logout";
 import NotPermitted from "./pages/NotPermitted";
 import NetworkError from "./pages/NetworkError";
 import Profile from "./pages/Profile";
+import CreatePost from "./pages/CreatePost";
+import EditPost from "./pages/EditPost";
 const App = () => {
   let { data } = useUser();
-  const [user, setUser] = useState(data);
+  const [user, setUser] = useState(null);
   const [voteHistory] = useSessionStorage("voteHistory", {});
   useEffect(() => {
     if (data) {
