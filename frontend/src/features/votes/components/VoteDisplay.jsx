@@ -2,13 +2,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useSessionStorage } from "../../../hooks";
 import votePost from "../services/votePost";
-import { useMutation, QueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useOutletContext } from "react-router-dom";
 
 const VoteDisplay = ({ existingUpvoteCount }) => {
   const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
   const [user] = useOutletContext();
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const { id: postId } = useParams();
   const [upvoteCount, setUpvoteCount] = useState(existingUpvoteCount);
   const [currentVote, setCurrentVote] = useState(0);
@@ -39,9 +39,6 @@ const VoteDisplay = ({ existingUpvoteCount }) => {
           return { ...next, [key]: Array.from(newVotes[key]) };
         }, {})
       );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
   const adjustVote = (voteAdjustment) => {
