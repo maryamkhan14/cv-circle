@@ -1,142 +1,75 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../../authentication/context/UserContext";
-import { useParams, useNavigate } from "react-router-dom";
-import { getPost, createPost, updatePost } from "../services";
+import { useEffect, useContext } from "react";
+import { usePostMutation } from "../hooks";
+import { PostFormContext } from "../context/PostFormContext";
+import StatusNotification from "../../../components/status-update/StatusNotification";
+import AttachmentInput from "./AttachmentInput";
 
-const PostForm = () => {
-  const { user } = useContext(UserContext);
-  const { id: toEditId } = useParams(); //postId->toEditId
-  const navigate = useNavigate();
-  const [status, setStatus] = useState({});
-  const [post, setPost] = useState({
-    createdAt: "",
-    id: "",
-    imgCdn: "",
-    postContent: "",
-    title: "",
-    userId: "",
-    file: null,
-  });
-
-  const uploadEditedPost = async (e) => {
-    e.preventDefault();
-    setStatus({
-      ...status,
-      success: 1,
-    });
-    let { file } = post;
-    if (!file) {
-      let { error } = await updatePost({ ...post, id: toEditId }, toEditId);
-      if (error) {
-        setStatus({
-          error: true,
-          msg: error,
-          success: 0,
-        });
-      } else {
-        navigate(`/post/${toEditId}`);
-      }
-    } else if (checkFileConstraints(file)) {
-      let { error } = await updatePost({ ...post, id: toEditId }, toEditId);
-      if (error) {
-        setStatus({
-          error: true,
-          msg: error,
-          success: 0,
-        });
-      } else {
-        navigate(`/post/${toEditId}/updated`);
-      }
-    } else {
-      setStatus({
-        error: true,
-        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
-        success: 0,
-      });
-    }
-  };
-
-  const uploadNewPost = async (e) => {
-    e.preventDefault();
-    setStatus({
-      ...status,
-      success: 1,
-      msg: "Preparing your post...",
-    });
-    let { file } = post;
-    if (!file) {
-      setStatus({
-        error: true,
-        msg: "Error: Please attach a resume.",
-        success: 0,
-      });
-    } else if (checkFileConstraints(file)) {
-      let { data, error } = await createPost({ ...post });
-      if (error) {
-        setStatus({
-          error: true,
-          msg: error,
-          success: 0,
-        });
-      } else {
-        let { posted } = data;
-        navigate(`/post/${posted.id}`);
-      }
-    } else {
-      setStatus({
-        error: true,
-        msg: "Error: Please only attach .pdf, .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
-        success: 0,
-      });
-    }
-  };
-
-  const clear = () => {
-    setPost({
-      createdAt: "",
-      id: "",
-      imgCdn: "",
-      postContent: "",
-      title: "",
-      userId: "",
-      file: null,
-    });
-    setStatus({});
-  };
-
-  const checkFileConstraints = (file) => {
-    return (
-      file.size < 1000000 &&
-      (file.type == "image/png" ||
-        file.type == "image/jpg" ||
-        file.type == "image/jpeg" ||
-        file.type == "application/pdf")
-      //TODO: change to constants
-    );
-  };
-
-  // automatically populate fields if editing existing post
+const PostForm = ({ toEditId, user, postToEdit }) => {
+  const { post, status, statusMsg, dispatch } = useContext(PostFormContext);
+  const {
+    data,
+    isError,
+    isLoading,
+    error,
+    status: serverStatus,
+    mutateAsync: submit,
+  } = usePostMutation(toEditId);
   useEffect(() => {
-    clear();
-    if (toEditId) {
-      setStatus({
-        ...status,
-        success: 1,
-      });
-      getPost(toEditId).then(({ data, error }) => {
-        if (data.post) {
-          setPost({ ...data.post });
-          setStatus({});
-        }
-        if (error) {
-          setStatus({ success: 0, msg: "Post not found.", error: true });
-        }
+    if (user) {
+      dispatch({
+        type: "UPDATE_POST",
+        payload: { ...post, userId: user.userId },
       });
     }
+  }, [user]);
 
-    setPost({ ...post, userId: user.userId });
-  }, []);
+  useEffect(() => {
+    if (postToEdit) {
+      dispatch({
+        type: "UPDATE_POST",
+        payload: postToEdit,
+      });
+    }
+  }, [postToEdit]);
+
+  useEffect(() => {
+    if (serverStatus !== "idle") {
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: serverStatus,
+          msg: isLoading
+            ? "Preparing your post."
+            : isError
+            ? error
+            : `Post ${toEditId ? "updated" : "created"} successfully.`,
+        },
+      });
+    }
+  }, [serverStatus]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (toEditId || post.file) {
+      submit({ ...post, id: toEditId });
+    } else {
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "error",
+          msg: "Please attach a file.",
+        },
+      });
+    }
+  };
+  const handleChange = (e) => {
+    dispatch({
+      type: "UPDATE_POST",
+      payload: { ...post, [e.target.name]: e.target.value },
+    });
+  };
 
   return (
     <div className="flex items-stretch min-w-[80%] min-h-[80%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
@@ -144,82 +77,53 @@ const PostForm = () => {
         <h1 className="text-4xl font-semibold text-slate-900">
           {toEditId ? "Edit your post" : "Create a post"}
         </h1>
-        {status &&
-          (status.success ? (
-            <p className="font-semibold self-center text-blue-800 text-2xl">
-              {status.msg}
-            </p>
-          ) : (
-            <p className="font-semibold self-center text-amber-800 text-2xl">
-              {status.msg}
-            </p>
-          ))}
+        <p>
+          All fields are required. We support .png, .jpg, .jpeg, and .pdf
+          formats for resumes.
+        </p>
+        <StatusNotification status={status} msg={statusMsg} />
         <div
           className={`${
-            status && status.success === 1 && "animate-pulse"
+            serverStatus && serverStatus?.loading && "animate-pulse"
           } flex w-full h-full flex-col justify-between gap-5 md:gap-4 mr-1`}
         >
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
             <label htmlFor="title" className="font-medium">
-              Title
+              Title*
             </label>
             <input
               className="border border-slate-800 w-full p-2 rounded"
               type="text"
+              name="title"
               value={post.title}
-              onChange={(e) => setPost({ ...post, title: e.target.value })}
+              onChange={handleChange}
               required="required"
-              disabled={status && status.success === 1}
+              disabled={serverStatus?.loading}
             />
           </span>
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
             <label htmlFor="post-content" className="font-medium">
-              Post
+              Post*
             </label>
             <textarea
               id="post-content"
-              name="post-content"
+              name="postContent"
               rows="10"
               cols="50"
               value={post.postContent}
-              onChange={(e) =>
-                setPost({ ...post, postContent: e.target.value })
-              }
+              onChange={handleChange}
               className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
-              disabled={status && status.success === 1}
+              disabled={serverStatus?.loading}
             ></textarea>
           </span>
-          <span className="flex flex-col md:flex-row justify-center items-center">
-            <label
-              htmlFor="file"
-              className={`font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center ${
-                status && status.success === 1 && "bg-amber-800/50"
-              }`}
-            >
-              Attach Your Resume (only .png, .jpg, .jpeg allowed)
-            </label>
 
-            <input
-              className="hidden"
-              type="file"
-              name="file"
-              id="file"
-              accept="image/png,image/jpg,image/jpeg,application/pdf"
-              onInput={(e) => setPost({ ...post, file: e.target.files[0] })}
-              disabled={status && status.success === 1}
-            />
-            {post && post.file && post.file.name ? (
-              <p className="self-center m-2 italic">{post.file.name}</p>
-            ) : (
-              toEditId && <img src={post.imgCdn} width={100} className="m-2" />
-            )}
-          </span>
+          <AttachmentInput serverStatus={serverStatus} imgCdn={post.imgCdn} />
           <span className="flex self-center">
             <button
               type="submit"
               className="text-slate-50 bg-amber-800 disabled:bg-amber-800/50 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
-              onClick={toEditId ? uploadEditedPost : uploadNewPost}
-              disabled={status && status.success === 1}
+              onClick={handleSubmit}
+              disabled={serverStatus?.loading}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
