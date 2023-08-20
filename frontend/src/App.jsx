@@ -6,7 +6,6 @@ import useUser from "./features/authentication/hooks/useUser";
 import { useSessionStorage } from "./hooks/index";
 import Layout from "./layouts/Layout";
 import LoggedIn from "./features/authentication/components/LoggedIn";
-import PostForm from "./features/posts/components/PostForm";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AllPosts from "./pages/AllPosts";
@@ -44,9 +43,9 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/logged-in" element={<LoggedIn />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/create-post" element={<PostForm />} />
+          <Route path="/create-post" element={<CreatePost />} />
           <Route path="/post/:id/:updated?" element={<SinglePost />} />
-          <Route path="/edit-post/:id" element={<PostForm />} />
+          <Route path="/edit-post/:id" element={<EditPost />} />
           <Route path="/not-permitted" element={<NotPermitted />} />
           <Route path="/network-error" element={<NetworkError />} />
           <Route path="/edit-profile" element={<Profile />} />
