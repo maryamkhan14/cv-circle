@@ -1,3 +1,8 @@
+import axios from "axios";
+axios.defaults.withCredentials = true;
+const DOMAIN = import.meta.env.DEV
+  ? "http://localhost"
+  : "https://cv-circle.com";
 export default async function votePost(vote) {
   try {
     let { data: voted } = await axios.post(`${DOMAIN}/api/posts/vote`, vote, {
@@ -9,6 +14,9 @@ export default async function votePost(vote) {
   } catch (e) {
     let { data, status } = e.response;
     let errorMsg = data.error;
-    return { error: errorMsg, status };
+    throw {
+      message: errorMsg || "An unknown error has happened!",
+      status: status || e.code,
+    };
   }
 }
