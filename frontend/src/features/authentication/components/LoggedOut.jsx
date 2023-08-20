@@ -19,6 +19,7 @@ const LoggedOut = () => {
         {},
         {
           onSuccess: () => {
+            sessionStorage.clear();
             queryClient.invalidateQueries("user");
             queryClient.removeQueries("user");
             setUser(null);

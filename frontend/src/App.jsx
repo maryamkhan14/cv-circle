@@ -17,21 +17,17 @@ import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 const App = () => {
-  let { data } = useUser();
+  const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
+  let { data } = useUser({ voteHistory } || {});
   const [user, setUser] = useState(null);
-  const [voteHistory] = useSessionStorage("voteHistory", {});
   useEffect(() => {
+    if (data && !voteHistory) {
+      // load existing vote history if no changes during session
+      console.log("no vote history found");
+      setVoteHistory(data.voteHistory);
+    }
     if (data) {
-      let combinedVoteHistory = {
-        ...data.voteHistory,
-        ...voteHistory,
-      };
-      setUser({
-        ...data,
-        voteHistory: Object.keys(combinedVoteHistory).reduce((next, key) => {
-          return { ...next, [key]: new Set(combinedVoteHistory[key]) };
-        }, {}),
-      });
+      setUser(data);
     }
   }, [data]);
   return (

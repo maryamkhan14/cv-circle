@@ -15,14 +15,7 @@ const getCurrentUser = async () => {
       },
     });
     let { user } = data;
-
-    return {
-      ...user,
-      voteHistory: {
-        upvoted: new Set(user?.voteHistory?.upvoted),
-        downvoted: new Set(user?.voteHistory?.downvoted),
-      },
-    };
+    return user;
   } catch (e) {
     let errorMsg = e.response?.data?.error;
     let status = e.response?.status;
