@@ -9,8 +9,8 @@ const withErrorHandling = async (fn) => {
     return await fn();
   } catch (e) {
     console.log(e);
-    let { data, status } = e.response;
-    let errorMsg = data.error;
+    let { data, status } = e.response || {};
+    let errorMsg = data?.error;
     throw {
       message: errorMsg || "An unknown error has happened!",
       status: status || e.code,
@@ -26,15 +26,12 @@ const getPost = async (postId) => {
   });
 };
 const getAllPosts = async () => {
-  try {
-    return await axios.get(`${DOMAIN}/api/posts/`, {
+  return await withErrorHandling(async () => {
+    let { data } = await axios.get(`${DOMAIN}/api/posts/`, {
       withCredentials: true,
     });
-  } catch (e) {
-    let { data, status } = e.response;
-    let errorMsg = data.error;
-    return { error: errorMsg, status };
-  }
+    return data.posts;
+  });
 };
 
 const updatePost = async (post, id) => {
