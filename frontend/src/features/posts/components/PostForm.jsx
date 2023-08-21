@@ -42,7 +42,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
           msg: isLoading
             ? "Preparing your post."
             : isError
-            ? error
+            ? error.message
             : `Post ${toEditId ? "updated" : "created"} successfully.`,
         },
       });

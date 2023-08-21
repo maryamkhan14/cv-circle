@@ -1,38 +1,30 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { getAllPosts } from "../features/posts/services";
+import useAllPosts from "../features/posts/hooks/useAllPosts";
 import SearchBar from "../features/posts/components/SearchBar";
 import PostsList from "../features/posts/components/PostsList";
+import StatusNotification from "../components/status-update/StatusNotification";
 import PostsSkeleton from "../features/posts/components/PostsSkeleton";
 const AllPosts = () => {
-  const [posts, setPosts] = useState([]);
-  const [allPosts, setAllPosts] = useState([]);
+  const { isLoading, isError, data: allPosts, error } = useAllPosts();
+  const [posts, setPosts] = useState(allPosts);
   const [sortSelect, setSortSelect] = useState("createdAt");
   const onSearchSubmit = (term) => {
-    setPosts([
-      ...allPosts.filter((post) =>
-        post.title.toLowerCase().includes(term.toLowerCase())
-      ),
-    ]);
+    if (allPosts) {
+      setPosts([
+        ...allPosts.filter((post) =>
+          post.title.toLowerCase().includes(term.toLowerCase())
+        ),
+      ]);
+    }
   };
   const clearResults = () => {
-    if (allPosts.length) {
+    if (allPosts?.length) {
       setPosts([...allPosts]);
     }
   };
-  const loadPosts = async () => {
-    const { data, error } = await getAllPosts();
-    if (data) {
-      setAllPosts(sortPosts(data.posts));
-    } else {
-      console.log(error);
-    }
-  };
   useEffect(() => {
-    loadPosts();
-  }, []);
-  useEffect(() => {
-    if (allPosts.length > 0) {
+    if (allPosts?.length > 0) {
       clearResults();
     }
   }, [allPosts]);
@@ -52,7 +44,9 @@ const AllPosts = () => {
     }
   };
   useEffect(() => {
-    setPosts(sortPosts(posts));
+    if (posts) {
+      setPosts(sortPosts(posts));
+    }
   }, [sortSelect]);
   return (
     <div className="rounded flex shadow-md border m-3 w-11/12 gap-2 bg-slate-100/50 flex-col px-3 py-5 font-[700] text-center">
@@ -88,10 +82,12 @@ const AllPosts = () => {
           </select>
         </span>
       </span>
-      {allPosts && allPosts.length > 0 ? (
-        <PostsList posts={posts} />
-      ) : (
+      {isLoading ? (
         <PostsSkeleton />
+      ) : isError ? (
+        <StatusNotification status={"error"} msg={error.message} />
+      ) : (
+        <PostsList posts={posts} />
       )}
     </div>
   );

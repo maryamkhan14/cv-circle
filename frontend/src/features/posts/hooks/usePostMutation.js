@@ -15,6 +15,7 @@ export default function usePostMutation(toEditId) {
           (oldData) => data.posted
         );
       }
+      queryClient.invalidateQueries(["posts"]);
     },
     retry: 0,
   });
