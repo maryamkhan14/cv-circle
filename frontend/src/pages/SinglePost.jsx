@@ -1,20 +1,23 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../features/authentication/context/UserContext";
+import { useEffect, useState } from "react";
+import { usePost } from "../features/posts/hooks";
 import { getPost, deletePost } from "../features/posts/services";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import VoteDisplay from "../features/votes/components/VoteDisplay";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
 import ReplyList from "../features/replies/components/ReplyList";
 import ReplyForm from "../features/replies/components/ReplyForm";
 
 const SinglePost = () => {
-  const { user } = useContext(UserContext);
+  const [user] = useOutletContext();
   const { id: postId, updated } = useParams();
+  const { isLoading, isError, data: post, error } = usePost(postId);
   const navigate = useNavigate();
-  const [postLoaded, setPostLoaded] = useState(false);
-  const [post, setPost] = useState({});
-  const [error, setError] = useState(null);
   const [replyFormActive, setReplyFormActive] = useState(false);
   const handleDeleteClick = async () => {
     // TODO: add confirmation dialog
@@ -24,25 +27,14 @@ const SinglePost = () => {
     } else {
       console.log(error);
     }
-    navigate("/");
   };
-
-  useEffect(() => {
-    getPost(postId).then(({ data, error }) => {
-      if (data) {
-        let { post } = data;
-        setPost(post);
-        setPostLoaded(true);
-      } else {
-        // TODO: navigate to 404 page
-      }
-    });
-  }, []);
 
   return (
     <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
-        {postLoaded ? (
+        {isLoading ? (
+          <PostSkeleton />
+        ) : (
           <>
             <span className="flex flex-col md:gap-10 ">
               <span className="flex flex-col md:flex-row gap-5 pb-3 border-b border-slate-300 items-center">
@@ -89,7 +81,7 @@ const SinglePost = () => {
             </span>
 
             <div className="w-full flex gap-2 items-stretch">
-              {Object.keys(user).length > 0 && (
+              {user && (
                 <>
                   <button
                     className={`text-slate-50 disabled:opacity-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center `}
@@ -126,8 +118,6 @@ const SinglePost = () => {
             )}
             <ReplyList replies={post?.replies} />
           </>
-        ) : (
-          <PostSkeleton />
         )}
       </div>
     </div>
