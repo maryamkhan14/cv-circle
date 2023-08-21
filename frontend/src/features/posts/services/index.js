@@ -66,16 +66,11 @@ const votePost = async (vote) => {
   });
 };
 const deletePost = async (postId) => {
-  try {
+  return await withErrorHandling(async () => {
     let { data: deletedPost } = await axios.delete(
       `${DOMAIN}/api/posts/${postId}`
     );
     return deletedPost;
-  } catch (e) {
-    console.log(e);
-    let { data, status, statusText } = e.response;
-    let errorMsg = data.error;
-    return { error: errorMsg || statusText, status };
-  }
+  });
 };
 export { createPost, updatePost, getPost, getAllPosts, deletePost, votePost };
