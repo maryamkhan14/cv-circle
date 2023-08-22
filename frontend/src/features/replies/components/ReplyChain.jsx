@@ -20,6 +20,7 @@ const ReplyChain = ({ reply, user }) => {
   };
   return (
     <>
+      {/**Display the top-level reply of this chain */}
       <div
         className={`flex flex-col w-full justify-between items-start pl-5 pt-3 ${
           !user && "mb-4"
@@ -29,6 +30,7 @@ const ReplyChain = ({ reply, user }) => {
           <Reply reply={reply} user={user} />
         </ReplyFormContextProvider>
       </div>
+      {/**Display all other replies that are nested under this top-level reply. */}
       {reply?.replies &&
         Object.keys(reply?.replies).map((chainId) => {
           return (
