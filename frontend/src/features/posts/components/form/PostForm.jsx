@@ -1,8 +1,8 @@
 import React from "react";
 import { useEffect, useContext } from "react";
-import { usePostMutation } from "../hooks";
-import { PostFormContext } from "../context/PostFormContext";
-import StatusNotification from "../../../components/status-update/StatusNotification";
+import { usePostMutation } from "../../hooks";
+import { PostFormContext } from "../../context/PostFormContext";
+import StatusNotification from "../../../../components/status-update/StatusNotification";
 import AttachmentInput from "./AttachmentInput";
 
 const PostForm = ({ toEditId, user, postToEdit }) => {
