@@ -137,7 +137,7 @@ const SinglePost = () => {
                   setReplyFormActive={setReplyFormActive}
                 />
               )}
-              <ReplyList replies={post?.replies} />
+              <ReplyList replies={post?.replies} user={user} />
             </>
           )
         )}
