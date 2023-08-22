@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { usePost, useDeletePost } from "../features/posts/hooks";
-import { getPost, deletePost } from "../features/posts/services";
+import { usePost, usePostDeletion } from "../features/posts/hooks";
 import {
   Link,
   useParams,
@@ -11,7 +10,7 @@ import {
 import VoteDisplay from "../features/votes/components/VoteDisplay";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
 import ReplyList from "../features/replies/components/ReplyList";
-import ReplyForm from "../features/replies/components/ReplyForm";
+import ReplyForm from "../features/replies/components/form/ReplyForm";
 import StatusNotification from "../components/status-update/StatusNotification";
 
 const SinglePost = () => {
@@ -27,7 +26,7 @@ const SinglePost = () => {
     status: deleteStatus,
     error,
     mutateAsync: remove,
-  } = useDeletePost(postId));
+  } = usePostDeletion(postId));
   const handleDeleteClick = () => {
     // TODO: add confirmation dialog
     setStatusMsg("Deleting post.");

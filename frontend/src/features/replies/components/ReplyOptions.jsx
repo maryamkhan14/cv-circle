@@ -20,6 +20,7 @@ const ReplyOptions = ({ user, reply }) => {
       setStatusMsg("Reply is being deleted.");
     } else if (status === "success") {
       setStatusMsg("Reply has been deleted!");
+      navigate(".", { relative: "path" }); // force re-render
     } else if (status === "error") {
       setStatusMsg(error.message);
     }
@@ -29,6 +30,7 @@ const ReplyOptions = ({ user, reply }) => {
     dispatch({ type: "SWITCH_REPLY_FORM_ACTIVE" });
     dispatch({ type: "SET_MODE", payload: e.target.getAttribute("name") });
   };
+
   return user ? (
     <>
       <span
