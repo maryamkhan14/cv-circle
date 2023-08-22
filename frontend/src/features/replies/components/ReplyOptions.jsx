@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { deletePost } from "../../posts/services";
-import { usePostDeletion } from "../../posts/hooks";
+import { useReplyDeletion } from "../hooks";
 import { ReplyFormContext } from "../context/ReplyFormContext";
 import StatusNotification from "../../../components/status-update/StatusNotification";
 
@@ -11,7 +10,7 @@ const ReplyOptions = ({ user, reply }) => {
   const { replyForm, dispatch } = useContext(ReplyFormContext);
   const navigate = useNavigate();
   const [statusMsg, setStatusMsg] = useState("");
-  const { status, error, mutateAsync: remove } = usePostDeletion(reply.id);
+  const { status, error, mutateAsync: remove } = useReplyDeletion(reply.id);
   const handleDeleteClick = async () => {
     remove(reply.id);
   };

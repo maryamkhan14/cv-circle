@@ -1,6 +1,6 @@
 import { ReplyFormContext } from "../../context/ReplyFormContext";
 import { useContext, useEffect, useState } from "react";
-import { usePostMutation } from "../../../posts/hooks";
+import { useReplyMutation } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import StatusNotification from "../../../../components/status-update/StatusNotification";
 const ReplyFormOptions = ({ clear, post }) => {
@@ -13,7 +13,7 @@ const ReplyFormOptions = ({ clear, post }) => {
     error,
     status,
     mutateAsync: submit,
-  } = usePostMutation(post.id);
+  } = useReplyMutation(post.id);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(replyForm.mode);
