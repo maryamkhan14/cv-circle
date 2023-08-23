@@ -8,8 +8,6 @@ export const profileEditContextReducer = (state, action) => {
         ...state,
         profile: { ...state.profile, ...action.payload },
       };
-    case "UPDATE_STATUS":
-      return { ...state, status: { ...state.status, ...action.payload } };
     default:
       return state;
   }
@@ -25,11 +23,6 @@ export const ProfileEditContextProvider = ({ children }) => {
       twitter: "",
       bio: "",
       file: null,
-    },
-    status: {
-      error: 0,
-      msg: "",
-      success: 0,
     },
   });
   const contextValue = useMemo(() => ({ ...state, dispatch }), [state]);

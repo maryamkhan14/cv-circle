@@ -6,6 +6,7 @@ import useUser from "./features/authentication/hooks/useUser";
 import { useSessionStorage } from "./hooks/index";
 import Layout from "./layouts/Layout";
 import LoggedIn from "./features/authentication/components/LoggedIn";
+import { StatusContextProvider } from "./features/notifications/context/StatusContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import AllPosts from "./pages/AllPosts";
@@ -44,7 +45,15 @@ const App = () => {
           <Route path="/edit-post/:id" element={<EditPost />} />
           <Route path="/not-permitted" element={<NotPermitted />} />
           <Route path="/network-error" element={<NetworkError />} />
-          <Route path="/edit-profile" element={<Profile />} />
+
+          <Route
+            path="/edit-profile"
+            element={
+              <StatusContextProvider>
+                <Profile />
+              </StatusContextProvider>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

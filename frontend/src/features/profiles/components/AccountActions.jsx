@@ -1,48 +1,43 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { ProfileEditContext } from "../context/ProfileEditContext";
-import { updateUser } from "../services";
-import StatusNotification from "../../../components/status-update/StatusNotification";
+import { StatusContext } from "../../notifications/context/StatusContext";
+import { useUserUpdate } from "../hooks";
+import StatusNotification from "../../notifications/components/StatusNotification";
 const AccountActions = () => {
   const [deletePromptActive, setDeletePromptActive] = useState(false);
-  const { profile, status, dispatch } = useContext(ProfileEditContext);
-
+  const { profile } = useContext(ProfileEditContext);
+  const { dispatch } = useContext(StatusContext);
+  const { status, mutateAsync: update, error } = useUserUpdate();
   const updateProfile = async (e) => {
     e.preventDefault();
-    dispatch({
-      type: "UPDATE_STATUS",
-      payload: {
-        error: false,
-        msg: "Updating your profile...",
-        success: 1,
-      },
-    });
-    let { updated, error } = await updateUser({ ...profile });
-    if (error) {
+    update(profile);
+  };
+  useEffect(() => {
+    if (status === "success") {
       dispatch({
         type: "UPDATE_STATUS",
         payload: {
-          error: true,
-          msg: error.message,
-          success: 0,
+          status: "success",
+          statusMsg:
+            "Profile updated successfully. Feel free to log in again to see your changes!",
         },
       });
-    } else {
+    } else if (status === "loading") {
       dispatch({
         type: "UPDATE_STATUS",
         payload: {
-          error: false,
-          msg: "Successfully updated profile! Feel free to log out and log back in to see your changes.",
-          success: 2,
+          status: "loading",
+          statusMsg: "Updating profile...",
         },
       });
     }
-  };
+  }, [status]);
   return (
     <div className="flex flex-col md:flex-row w-full md:items-center m-2 ">
       <button
         className="whitespace-nowrap text-slate-50 disabled:bg-amber-800/50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-10"
         onClick={updateProfile}
-        disabled={status && status.success === 1}
+        disabled={status === "loading"}
         type="Submit"
       >
         Save Changes
@@ -50,7 +45,7 @@ const AccountActions = () => {
       <button
         className="whitespace-nowrap disabled:bg-red-500/50 text-slate-50 bg-red-500 hover:bg-red-500/90  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-5"
         onClick={(e) => setDeletePromptActive(!deletePromptActive)}
-        disabled={status && status.success === 1}
+        disabled={status === "loading"}
       >
         {deletePromptActive ? "Cancel" : "Delete Account"}
       </button>
@@ -74,7 +69,7 @@ const AccountActions = () => {
           <button
             className="whitespace-nowrap text-slate-50 bg-red-500 hover:bg-red-500/90 disabled:bg-red-500/50  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center m-2 md:mr-5"
             onClick={(e) => setDeletePromptActive(!deletePromptActive)}
-            disabled={status && status.success === 1}
+            disabled={status === "loading"}
           >
             Delete Anyway
           </button>

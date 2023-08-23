@@ -1,8 +1,10 @@
 import { useContext, useEffect } from "react";
 import { ProfileEditContext } from "../context/ProfileEditContext";
+import { StatusContext } from "../../notifications/context/StatusContext";
 import ProfileSection from "./ProfileSection";
 const Socials = () => {
-  const { profile, status, dispatch } = useContext(ProfileEditContext);
+  const { profile, dispatch } = useContext(ProfileEditContext);
+  const { status } = useContext(StatusContext);
   const handleChange = (e) =>
     dispatch({
       type: "UPDATE_PROFILE",
@@ -26,7 +28,7 @@ const Socials = () => {
           required="required"
           placeholder="What is your LinkedIn profile?"
           onChange={handleChange}
-          disabled={status && status.success === 1}
+          disabled={status === "success"}
         />
       </div>
       <div
@@ -44,7 +46,7 @@ const Socials = () => {
           required="required"
           placeholder="What is your Twitter profile?"
           onChange={handleChange}
-          disabled={status && status.success === 1}
+          disabled={status === "success"}
         />
       </div>
     </ProfileSection>
