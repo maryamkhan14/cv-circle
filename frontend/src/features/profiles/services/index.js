@@ -6,17 +6,20 @@ const DOMAIN = import.meta.env.DEV
 
 const updateUser = async (user) => {
   try {
-    let updatedUser = await axios.patch(`${DOMAIN}/api/auth/user`, user, {
+    let { data } = await axios.patch(`${DOMAIN}/api/auth/user`, user, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(updatedUser);
-    return updatedUser;
+    return data?.updated;
   } catch (e) {
-    let errorMsg = e.response?.data?.error;
-    let status = e.response?.status;
-    return { error: { message: errorMsg, status } };
+    console.log(e);
+    let { data, status } = e.response || {};
+    let errorMsg = data?.error;
+    throw {
+      message: errorMsg || "An unknown error has happened!",
+      status: status || e.code,
+    };
   }
 };
 export { updateUser };
