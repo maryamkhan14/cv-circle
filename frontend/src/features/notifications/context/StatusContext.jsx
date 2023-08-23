@@ -6,8 +6,8 @@ export const statusContextReducer = (state, action) => {
     case "UPDATE_STATUS":
       return {
         ...state,
-        ...action.payload,
         show: true,
+        ...action.payload,
       };
     case "RESET_STATUS":
       return {
