@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { usePost, usePostDeletion } from "../features/posts/hooks";
 import {
   Link,
@@ -12,10 +12,10 @@ import PostSkeleton from "../features/posts/components/PostSkeleton";
 import ReplyList from "../features/replies/components/ReplyList";
 import ReplyForm from "../features/replies/components/form/ReplyForm";
 import StatusNotification from "../features/notifications/components/StatusNotification";
-
+import { StatusContext } from "../features/notifications/context/StatusContext";
 const SinglePost = () => {
   const [user] = useOutletContext();
-  const [statusMsg, setStatusMsg] = useState("");
+  const { dispatch } = useContext(StatusContext);
   const { id: postId, updated } = useParams();
   let postStatus, post, error;
   let deleteStatus, remove;
@@ -29,25 +29,50 @@ const SinglePost = () => {
   } = usePostDeletion(postId));
   const handleDeleteClick = () => {
     // TODO: add confirmation dialog
-    setStatusMsg("Deleting post.");
+    dispatch({
+      type: "UPDATE_STATUS",
+      payload: {
+        status: "loading",
+        statusMsg: "Starting post deletion process.",
+      },
+    });
     remove(postId);
   };
   useEffect(() => {
     if (deleteStatus === "loading") {
-      setStatusMsg("Post is being deleted.");
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "loading",
+          statusMsg: "Post is being deleted.",
+        },
+      });
     } else if (deleteStatus === "success") {
-      setStatusMsg("Post has been deleted!");
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "success",
+          statusMsg: "Post has been deleted. Feel free to navigate away.",
+        },
+      });
     }
   }, [deleteStatus]);
+  useEffect(() => {
+    if (error) {
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "error",
+          statusMsg: error.message,
+        },
+      });
+    }
+  }, [error]);
 
   return (
     <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
-        {error ? (
-          <StatusNotification status={"error"} msg={error.message} />
-        ) : (
-          <StatusNotification status={deleteStatus} msg={statusMsg} />
-        )}
+        <StatusNotification popup={"true"} />
 
         {postStatus === "loading" || deleteStatus === "loading" ? (
           <PostSkeleton />

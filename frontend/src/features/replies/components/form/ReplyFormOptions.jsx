@@ -1,17 +1,18 @@
 import { ReplyFormContext } from "../../context/ReplyFormContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useReplyMutation } from "../../hooks";
 import { useNavigate } from "react-router-dom";
-import StatusNotification from "../../../notifications/components/StatusNotification";
+import { StatusContext } from "../../../notifications/context/StatusContext";
 const ReplyFormOptions = ({ clear, post }) => {
-  const { replyForm, dispatch } = useContext(ReplyFormContext);
+  const { replyForm, dispatch: replyFormDispatch } =
+    useContext(ReplyFormContext);
+  const { status, dispatch: statusDispatch } = useContext(StatusContext);
   const navigate = useNavigate();
-  const [statusMsg, setStatusMsg] = useState("");
   const {
     data,
     isLoading,
     error,
-    status,
+    status: replyStatus,
     mutateAsync: submit,
   } = useReplyMutation(post.id);
   const handleSubmit = (e) => {
@@ -21,23 +22,41 @@ const ReplyFormOptions = ({ clear, post }) => {
   };
   const close = () => {
     clear();
-    dispatch({ type: "SWITCH_REPLY_FORM_ACTIVE" });
+    replyFormDispatch({ type: "SWITCH_REPLY_FORM_ACTIVE" });
   };
   useEffect(() => {
     console.log(post.path);
-    dispatch({ type: "SWITCH_REPLY_FORM_LOADING", payload: isLoading });
+    replyFormDispatch({
+      type: "SWITCH_REPLY_FORM_LOADING",
+      payload: isLoading,
+    });
   }, [isLoading]);
 
   useEffect(() => {
-    if (status === "loading") {
-      setStatusMsg((prev) => "Preparing your reply.");
-    } else if (status === "error") {
-      setStatusMsg((prev) => error.message);
-    } else if (status === "success") {
+    if (replyStatus === "loading") {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "loading",
+          statusMsg: "Preparing your reply.",
+        },
+      });
+    } else if (replyStatus === "error") {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "error",
+          statusMsg: error.message,
+        },
+      });
+    } else if (replyStatus === "success") {
+      statusDispatch({
+        type: "RESET_STATUS",
+      });
       navigate(".", { relative: "path" }); // force re-render
       close();
     }
-  }, [status]);
+  }, [replyStatus]);
   return (
     <>
       <span className="flex flex-row md:flex-col justify-center gap-3 m-3">
@@ -46,6 +65,7 @@ const ReplyFormOptions = ({ clear, post }) => {
           aria-label="Submit"
           className="text-slate-50 text-xs bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
           onClick={handleSubmit}
+          disabled={status === "loading"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -68,6 +88,7 @@ const ReplyFormOptions = ({ clear, post }) => {
           aria-label="Cancel edit"
           className="text-slate-50 text-xs bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
           onClick={close}
+          disabled={status === "loading"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +106,6 @@ const ReplyFormOptions = ({ clear, post }) => {
           </svg>
         </button>
       </span>
-      <StatusNotification status={status} msg={statusMsg} popup="true" />
     </>
   );
 };

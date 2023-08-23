@@ -1,33 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReplyDeletion } from "../hooks";
 import { ReplyFormContext } from "../context/ReplyFormContext";
-import StatusNotification from "../../notifications/components/StatusNotification";
+import { StatusContext } from "../../notifications/context/StatusContext";
 
 const ReplyOptions = ({ user, reply }) => {
   // hide when reply form is active
-  const { replyForm, dispatch } = useContext(ReplyFormContext);
+  const { replyForm, dispatch: replyFormDispatch } =
+    useContext(ReplyFormContext);
+  const { status, dispatch: statusDispatch } = useContext(StatusContext);
   const navigate = useNavigate();
-  const [statusMsg, setStatusMsg] = useState("");
-  const { status, error, mutateAsync: remove } = useReplyDeletion(reply.id);
+  const {
+    status: deleteStatus,
+    error,
+    mutateAsync: remove,
+  } = useReplyDeletion(reply.id);
   const handleDeleteClick = async () => {
     remove(reply.id);
   };
   useEffect(() => {
-    if (status === "loading") {
-      setStatusMsg("Reply is being deleted.");
-    } else if (status === "success") {
-      setStatusMsg("Reply has been deleted!");
+    if (deleteStatus === "loading") {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "loading",
+          statusMsg: "Reply is being deleted.",
+        },
+      });
+    } else if (deleteStatus === "success") {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "success",
+          statusMsg: "Reply has been deleted.",
+        },
+      });
       navigate(".", { relative: "path" }); // force re-render
-    } else if (status === "error") {
-      setStatusMsg(error.message);
+    } else if (deleteStatus === "error") {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "error",
+          statusMsg: error.message,
+        },
+      });
     }
-  }, [status]);
+  }, [deleteStatus]);
   const handleReplyFormChange = (e) => {
     e.preventDefault();
-    dispatch({ type: "SWITCH_REPLY_FORM_ACTIVE" });
-    dispatch({ type: "SET_MODE", payload: e.target.getAttribute("name") });
+    replyFormDispatch({ type: "SWITCH_REPLY_FORM_ACTIVE" });
+    replyFormDispatch({
+      type: "SET_MODE",
+      payload: e.target.getAttribute("name"),
+    });
   };
 
   return user ? (
@@ -43,6 +69,7 @@ const ReplyOptions = ({ user, reply }) => {
           aria-label="Create reply"
           className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
           onClick={handleReplyFormChange}
+          disabled={status === "loading"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +96,7 @@ const ReplyOptions = ({ user, reply }) => {
               aria-label="Edit reply"
               className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
               onClick={handleReplyFormChange}
+              disabled={status === "loading"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +121,7 @@ const ReplyOptions = ({ user, reply }) => {
               aria-label="Delete reply"
               className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
               onClick={handleDeleteClick}
+              disabled={status === "loading"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +143,6 @@ const ReplyOptions = ({ user, reply }) => {
           </>
         )}
       </span>
-      <StatusNotification status={status} msg={statusMsg} popup="true" />
     </>
   ) : (
     <></>

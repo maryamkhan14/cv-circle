@@ -35,14 +35,42 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout user={user} setUser={setUser} />}>
-          <Route index={true} element={<AllPosts />} />
+          <Route
+            index={true}
+            element={
+              <StatusContextProvider>
+                <AllPosts />
+              </StatusContextProvider>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/logged-in" element={<LoggedIn />} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/create-post" element={<CreatePost />} />
-          <Route path="/post/:id/:updated?" element={<SinglePost />} />
-          <Route path="/edit-post/:id" element={<EditPost />} />
+          <Route
+            path="/create-post"
+            element={
+              <StatusContextProvider>
+                <CreatePost />
+              </StatusContextProvider>
+            }
+          />
+          <Route
+            path="/post/:id/:updated?"
+            element={
+              <StatusContextProvider>
+                <SinglePost />
+              </StatusContextProvider>
+            }
+          />
+          <Route
+            path="/edit-post/:id"
+            element={
+              <StatusContextProvider>
+                <EditPost />
+              </StatusContextProvider>
+            }
+          />
           <Route path="/not-permitted" element={<NotPermitted />} />
           <Route path="/network-error" element={<NetworkError />} />
 
