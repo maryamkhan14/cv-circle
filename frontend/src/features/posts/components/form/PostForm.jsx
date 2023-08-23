@@ -2,22 +2,25 @@ import React from "react";
 import { useEffect, useContext } from "react";
 import { usePostMutation } from "../../hooks";
 import { PostFormContext } from "../../context/PostFormContext";
+
 import StatusNotification from "../../../notifications/components/StatusNotification";
 import AttachmentInput from "./AttachmentInput";
+import { StatusContext } from "../../../notifications/context/StatusContext";
 
 const PostForm = ({ toEditId, user, postToEdit }) => {
-  const { post, status, statusMsg, dispatch } = useContext(PostFormContext);
+  const { post, dispatch: postFormDispatch } = useContext(PostFormContext);
+  const { status, dispatch: statusDispatch } = useContext(StatusContext);
   const {
     data,
     isError,
     isLoading,
     error,
-    status: serverStatus,
+    status: postStatus,
     mutateAsync: submit,
   } = usePostMutation(toEditId);
   useEffect(() => {
     if (user) {
-      dispatch({
+      postFormDispatch({
         type: "UPDATE_POST",
         payload: { ...post, userId: user.userId },
       });
@@ -26,7 +29,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
 
   useEffect(() => {
     if (postToEdit) {
-      dispatch({
+      postFormDispatch({
         type: "UPDATE_POST",
         payload: postToEdit,
       });
@@ -34,12 +37,12 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
   }, [postToEdit]);
 
   useEffect(() => {
-    if (serverStatus !== "idle") {
-      dispatch({
+    if (postStatus !== "idle") {
+      statusDispatch({
         type: "UPDATE_STATUS",
         payload: {
-          status: serverStatus,
-          msg: isLoading
+          status: postStatus,
+          statusMsg: isLoading
             ? "Preparing your post."
             : isError
             ? error.message
@@ -47,7 +50,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
         },
       });
     }
-  }, [serverStatus]);
+  }, [postStatus]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,17 +58,17 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
     if (toEditId || post.file) {
       submit({ ...post, id: toEditId });
     } else {
-      dispatch({
+      statusDispatch({
         type: "UPDATE_STATUS",
         payload: {
           status: "error",
-          msg: "Please attach a file.",
+          statusMsg: "Please attach a file.",
         },
       });
     }
   };
   const handleChange = (e) => {
-    dispatch({
+    postFormDispatch({
       type: "UPDATE_POST",
       payload: { ...post, [e.target.name]: e.target.value },
     });
@@ -81,10 +84,9 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
           All fields are required. We support .png, .jpg, .jpeg, and .pdf
           formats for resumes.
         </p>
-        <StatusNotification status={status} msg={statusMsg} />
         <div
           className={`${
-            serverStatus && serverStatus?.loading && "animate-pulse"
+            status === "loading" && "animate-pulse"
           } flex w-full h-full flex-col justify-between gap-5 md:gap-4 mr-1`}
         >
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
@@ -98,7 +100,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
               value={post.title}
               onChange={handleChange}
               required="required"
-              disabled={serverStatus?.loading}
+              disabled={status === "loading"}
             />
           </span>
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
@@ -113,17 +115,17 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
               value={post.postContent}
               onChange={handleChange}
               className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
-              disabled={serverStatus?.loading}
+              disabled={status === "loading"}
             ></textarea>
           </span>
 
-          <AttachmentInput serverStatus={serverStatus} imgCdn={post.imgCdn} />
+          <AttachmentInput imgCdn={post.imgCdn} />
           <span className="flex self-center">
             <button
               type="submit"
               className="text-slate-50 bg-amber-800 disabled:bg-amber-800/50 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
               onClick={handleSubmit}
-              disabled={serverStatus?.loading}
+              disabled={status === "loading"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -142,6 +144,8 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
               {toEditId ? "Update post" : "Create post"}
             </button>
           </span>
+
+          <StatusNotification popup="true" />
         </div>
       </form>
     </div>

@@ -3,11 +3,12 @@ import { PostFormContextProvider } from "../features/posts/context/PostFormConte
 import { useOutletContext } from "react-router-dom";
 const CreatePost = () => {
   const [user] = useOutletContext();
-
   return (
-    <PostFormContextProvider>
-      <PostForm user={user} />
-    </PostFormContextProvider>
+    <>
+      <PostFormContextProvider>
+        <PostForm user={user} />
+      </PostFormContextProvider>
+    </>
   );
 };
 

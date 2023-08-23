@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { PostFormContext } from "../../context/PostFormContext";
-import StatusNotification from "../../../notifications/components/StatusNotification";
-const AttachmentInput = ({ imgCdn, serverStatus }) => {
-  const { post, dispatch } = useContext(PostFormContext);
+import { StatusContext } from "../../../notifications/context/StatusContext";
+const AttachmentInput = ({ imgCdn }) => {
+  const { post, dispatch: postDispatch } = useContext(PostFormContext);
+  const { status, dispatch: statusDispatch } = useContext(StatusContext);
   const [preview, setPreview] = useState(imgCdn);
   useEffect(() => {
     setPreview(imgCdn);
@@ -25,25 +26,28 @@ const AttachmentInput = ({ imgCdn, serverStatus }) => {
     );
   };
   const handleSubmit = (e) => {
-    dispatch({ type: "RESET_STATUS", payload: null });
+    statusDispatch({
+      type: "RESET_STATUS",
+    });
     let file = e.target.files[0];
     if (file && checkFileConstraints(file)) {
       URL.revokeObjectURL(preview);
       setPreview((prev) => bufferToImage(file));
-      dispatch({ type: "UPDATE_POST", payload: { ...post, file: file } });
-      dispatch({
+      postDispatch({ type: "UPDATE_POST", payload: { ...post, file: file } });
+      statusDispatch({
         type: "UPDATE_STATUS",
         payload: {
           status: "success",
-          msg: "File has been attached.",
+          statusMsg: "File has been attached.",
         },
       });
-    } else {
-      dispatch({
+    } else if (file) {
+      statusDispatch({
         type: "UPDATE_STATUS",
         payload: {
           status: "error",
-          msg: "File could not be attached. Please only attach .png, .jpg, .jpeg, or .pdf files, and ensure your file is smaller than 1MB.",
+          statusMsg:
+            "File could not be attached. .Please only attach .png, .jpg, .jpeg, or .pdf files, and ensure your file is smaller than 1MB.",
         },
       });
     }
@@ -55,7 +59,7 @@ const AttachmentInput = ({ imgCdn, serverStatus }) => {
         <label
           htmlFor="file"
           className={`font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center ${
-            serverStatus?.isLoading && "bg-amber-800/50"
+            status === "loading" && "bg-amber-800/50"
           }`}
         >
           Attach your resume
@@ -68,7 +72,7 @@ const AttachmentInput = ({ imgCdn, serverStatus }) => {
           id="file"
           accept="image/png,image/jpg,image/jpeg,application/pdf"
           onInput={handleSubmit}
-          disabled={serverStatus?.isLoading}
+          disabled={status === "loading"}
         />
         <img
           src={preview}
