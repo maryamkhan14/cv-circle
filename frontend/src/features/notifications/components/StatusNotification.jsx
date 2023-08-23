@@ -1,15 +1,8 @@
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import NotificationButtons from "./NotificationButtons";
 import { StatusContext } from "../context/StatusContext";
 const StatusNotification = ({ popup }) => {
-  const { status, statusMsg } = useContext(StatusContext);
-
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    if (statusMsg) {
-      setShow(true);
-    }
-  }, [statusMsg]);
+  const { status, show, statusMsg } = useContext(StatusContext);
   return (
     show &&
     (status === "error" ? (
@@ -33,7 +26,7 @@ const StatusNotification = ({ popup }) => {
           <span className="font-medium">Status: </span> {statusMsg}
         </div>
 
-        <NotificationButtons setShow={setShow} />
+        <NotificationButtons />
       </div>
     ) : status === "loading" ? (
       <div
@@ -61,7 +54,7 @@ const StatusNotification = ({ popup }) => {
           <span className="font-medium">Status: </span> {statusMsg}
         </div>
 
-        <NotificationButtons setShow={setShow} />
+        <NotificationButtons />
       </div>
     ) : (
       status === "success" && (
@@ -83,7 +76,7 @@ const StatusNotification = ({ popup }) => {
             <span className="font-medium">Status: </span> {statusMsg}
           </div>
 
-          <NotificationButtons setShow={setShow} />
+          <NotificationButtons />
         </div>
       )
     ))

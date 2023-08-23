@@ -1,4 +1,10 @@
-const NotificationButtons = ({ setShow }) => {
+import { useContext } from "react";
+import { StatusContext } from "../context/StatusContext";
+const NotificationButtons = () => {
+  const { dispatch: statusDispatch } = useContext(StatusContext);
+  const switchShow = () => {
+    statusDispatch({ type: "SWITCH_SHOW" });
+  };
   return (
     <>
       <button
@@ -25,7 +31,7 @@ const NotificationButtons = ({ setShow }) => {
       <button
         type="button"
         className="ml-5 rounded-full bg-amber-800 p-2 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-amber-800/80 hover:shadow-lg focus:bg-amber-800/80 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-amber-800 active:shadow-lg"
-        onClick={() => setShow((show) => false)}
+        onClick={switchShow}
         aria-label="Close notification"
       >
         <svg
