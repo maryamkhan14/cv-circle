@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import NotificationButtons from "./NotificationButtons";
-const StatusNotification = ({ status, msg, popup }) => {
+import { StatusContext } from "../context/StatusContext";
+const StatusNotification = ({ popup }) => {
+  const { status, statusMsg } = useContext(StatusContext);
+
   const [show, setShow] = useState(false);
   useEffect(() => {
-    if (msg) {
+    if (statusMsg) {
       setShow(true);
     }
-  }, [msg]);
+  }, [statusMsg]);
   return (
     show &&
     (status === "error" ? (
@@ -27,7 +30,7 @@ const StatusNotification = ({ status, msg, popup }) => {
         </svg>
         <span className="sr-only">Info</span>
         <div>
-          <span className="font-medium">Status: </span> {msg}
+          <span className="font-medium">Status: </span> {statusMsg}
         </div>
 
         <NotificationButtons setShow={setShow} />
@@ -55,7 +58,7 @@ const StatusNotification = ({ status, msg, popup }) => {
         </svg>
         <span className="sr-only">Info</span>
         <div>
-          <span className="font-medium">Status: </span> {msg}
+          <span className="font-medium">Status: </span> {statusMsg}
         </div>
 
         <NotificationButtons setShow={setShow} />
@@ -77,7 +80,7 @@ const StatusNotification = ({ status, msg, popup }) => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium">Status: </span> {msg}
+            <span className="font-medium">Status: </span> {statusMsg}
           </div>
 
           <NotificationButtons setShow={setShow} />
