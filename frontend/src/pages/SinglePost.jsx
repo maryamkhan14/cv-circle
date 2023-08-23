@@ -11,7 +11,7 @@ import VoteDisplay from "../features/votes/components/VoteDisplay";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
 import ReplyList from "../features/replies/components/ReplyList";
 import ReplyForm from "../features/replies/components/form/ReplyForm";
-import StatusNotification from "../components/status-update/StatusNotification";
+import StatusNotification from "../features/notifications/components/StatusNotification";
 
 const SinglePost = () => {
   const [user] = useOutletContext();

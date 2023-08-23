@@ -2,7 +2,7 @@ import { ReplyFormContext } from "../../context/ReplyFormContext";
 import { useContext, useEffect, useState } from "react";
 import { useReplyMutation } from "../../hooks";
 import { useNavigate } from "react-router-dom";
-import StatusNotification from "../../../../components/status-update/StatusNotification";
+import StatusNotification from "../../../notifications/components/StatusNotification";
 const ReplyFormOptions = ({ clear, post }) => {
   const { replyForm, dispatch } = useContext(ReplyFormContext);
   const navigate = useNavigate();

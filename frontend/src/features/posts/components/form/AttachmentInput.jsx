@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { PostFormContext } from "../../context/PostFormContext";
-import StatusNotification from "../../../../components/status-update/StatusNotification";
-
+import StatusNotification from "../../../notifications/components/StatusNotification";
 const AttachmentInput = ({ imgCdn, serverStatus }) => {
   const { post, dispatch } = useContext(PostFormContext);
   const [preview, setPreview] = useState(imgCdn);

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReplyDeletion } from "../hooks";
 import { ReplyFormContext } from "../context/ReplyFormContext";
-import StatusNotification from "../../../components/status-update/StatusNotification";
+import StatusNotification from "../../notifications/components/StatusNotification";
 
 const ReplyOptions = ({ user, reply }) => {
   // hide when reply form is active

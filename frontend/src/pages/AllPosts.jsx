@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import useAllPosts from "../features/posts/hooks/useAllPosts";
 import SearchBar from "../features/posts/components/SearchBar";
 import PostsList from "../features/posts/components/PostsList";
-import StatusNotification from "../components/status-update/StatusNotification";
+import StatusNotification from "../features/notifications/components/StatusNotification";
 import PostsSkeleton from "../features/posts/components/PostsSkeleton";
 const AllPosts = () => {
   const { isLoading, isError, data: allPosts, error } = useAllPosts();
