@@ -1,3 +1,5 @@
 export default function cdnGenerator(extension) {
-  return process.env.DB_BASE_CDN_URL + extension;
+  let currentImageURL = new URL(process.env.DB_BASE_CDN_URL + extension);
+  currentImageURL.searchParams.set("t", Date.now());
+  return currentImageURL.toString();
 }
