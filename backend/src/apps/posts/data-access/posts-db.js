@@ -1,15 +1,16 @@
 import _ from "lodash";
 export default function makePostsDb({ dbClient }) {
-  const dbColumnsToNormalizedProfile = {
+  const dbColumnsToNormalizedPost = {
     fk_uid: "userId",
     post_content: "postContent",
     img_cdn: "imgCdn",
     created_at: "createdAt",
     upvote_count: "upvoteCount",
+    is_reply: "isReply",
     parent_id: "parentId",
   };
 
-  const normalizedProfileToDbColumns = {
+  const normalizedPostToDbColumns = {
     userId: "fk_uid",
     postContent: "post_content",
     imgCdn: "img_cdn",
@@ -52,7 +53,7 @@ export default function makePostsDb({ dbClient }) {
     let result = await dbClient.from("posts_view").select();
     return {
       ...result,
-      data: format(result.data, dbColumnsToNormalizedProfile),
+      data: format(result.data, dbColumnsToNormalizedPost),
     };
   }
 
@@ -83,14 +84,14 @@ export default function makePostsDb({ dbClient }) {
     let result = await dbClient.from("replies_view").select().eq("id", postId);
     return {
       ...result,
-      data: format(result.data, dbColumnsToNormalizedProfile),
+      data: format(result.data, dbColumnsToNormalizedPost),
     };
   }
 
   async function update(updateDetails) {
     let result = await dbClient
       .from("posts")
-      .update({ ...renameKeys(updateDetails, normalizedProfileToDbColumns) })
+      .update({ ...renameKeys(updateDetails, normalizedPostToDbColumns) })
       .eq("id", updateDetails.id);
     return { ...result };
   }
@@ -103,17 +104,17 @@ export default function makePostsDb({ dbClient }) {
       .select();
     return {
       ...result,
-      data: format(result.data, dbColumnsToNormalizedProfile),
+      data: format(result.data, dbColumnsToNormalizedPost),
     };
   }
   async function insert(insertDetails) {
     let result = await dbClient
       .from("posts") // TODO: Add .env for "posts"
-      .insert({ ...renameKeys(insertDetails, normalizedProfileToDbColumns) })
+      .insert({ ...renameKeys(insertDetails, normalizedPostToDbColumns) })
       .select();
     return {
       ...result,
-      data: format(result.data, dbColumnsToNormalizedProfile),
+      data: format(result.data, dbColumnsToNormalizedPost),
     };
   }
 
