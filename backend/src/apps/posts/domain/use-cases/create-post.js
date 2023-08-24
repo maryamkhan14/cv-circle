@@ -15,9 +15,7 @@ export default function makeCreatePost({ postsDb }) {
         `Error saving post to database: ${error.message}. Post creation failed.`
       );
     }
-    post.setCreatedAt(newPostRecord.createdAt);
-    post.setId(newPostRecord.id);
-    return post.getDTO();
-    //idea: only return createdAt, and postId, of database record created?
+    let newPost = makePost(...newPostRecord);
+    return newPost.getDTO();
   };
 }
