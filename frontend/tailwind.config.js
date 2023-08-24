@@ -16,6 +16,9 @@ export default {
       plainText: ["Barlow", "sans-serif"],
     },
     extend: {
+      backgroundImage: {
+        "hero-pattern": "url('./assets/Oreti.png')",
+      },
       padding: {
         "lvl-1": "0.5em",
         "lvl-2": "1.5em",
