@@ -1,10 +1,15 @@
 export default function makePatchPost({ updatePost, handleAttachmentPreview }) {
   return async function patchPost(httpRequest) {
     try {
-      const post = httpRequest.body;
+      let post = httpRequest.body;
       let extension = post.imgCdn.split(process.env.DB_BASE_CDN_URL).pop();
       if (post.file) {
-        await handleAttachmentPreview({ ...post, ...{ extension } });
+        let image = await handleAttachmentPreview({
+          ...post,
+          ...{ extension },
+        });
+        // bust cache
+        post = { ...post, imgCdn: image.getCdn() };
       }
       const toUpdate = post;
       const updated = await updatePost(toUpdate);
