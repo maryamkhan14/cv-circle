@@ -1,17 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { DateTime } from "luxon";
 import { Link } from "react-router-dom";
+import { usePostsListContext } from "../../context/PostsListContext";
 
-const PostsList = ({ posts }) => {
+const PostsList = ({ allPosts }) => {
+  const { dispatch, displayed } = usePostsListContext();
+  const formatTimestamp = (timestamp) => {
+    const luxonDateTime = DateTime.fromISO(timestamp);
+    return luxonDateTime.toLocaleString(DateTime.DATETIME_MED);
+  };
+  useEffect(() => {
+    if (allPosts) {
+      dispatch({ type: "UPDATE_ALL_POSTS", payload: allPosts });
+    }
+  }, [allPosts]);
   return (
     <>
-      {posts && posts.length > 0 ? (
-        posts.map((post) => (
+      {displayed?.length ? (
+        displayed.map((post) => (
           <div
             className="flex flex-row w-full border-2 bg-slate-50/80 p-3"
-            key={post && post.id}
+            key={post?.id}
           >
             <Link
-              to={`/post/${post && post.id}`}
+              to={`/post/${post?.id}`}
               className="flex flex-col md:flex-row w-full items-center justify-between"
             >
               <span className="flex flex-col border p-3 rounded-full bg-amber-800/70 justify-center items-center">
@@ -29,12 +41,14 @@ const PostsList = ({ posts }) => {
                   />
                 </svg>
 
-                <p className="text-slate-50">{post && post.upvoteCount}</p>
+                <p className="text-slate-50">{post?.upvoteCount}</p>
               </span>
               <h2 className="text-4xl truncate text-ellipsis max-w-[45%]">
-                {post && post.title}
+                {post?.title}
               </h2>
-              <p className="font-light italic">{post && post.createdAt}</p>
+              <p className="font-light italic">
+                {formatTimestamp(post?.createdAt)}
+              </p>
             </Link>
           </div>
         ))
