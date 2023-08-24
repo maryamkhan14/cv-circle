@@ -20,12 +20,12 @@ const AllPosts = () => {
     }
   };
   const clearResults = () => {
-    if (allPosts?.length) {
-      setPosts([...allPosts]);
+    if (allPosts) {
+      setPosts(sortPosts([...allPosts]));
     }
   };
   useEffect(() => {
-    if (allPosts?.length > 0) {
+    if (allPosts) {
       clearResults();
     }
   }, [allPosts]);
@@ -33,14 +33,13 @@ const AllPosts = () => {
   const sortPosts = (displayed) => {
     switch (sortSelect) {
       case "createdAt":
+        console.log("sort by date");
         return [
           ...displayed.sort(
             (a, b) => new Date(b[sortSelect]) - new Date(a[sortSelect])
           ),
         ];
       case "upvoteCount":
-        return [...displayed.sort((a, b) => b[sortSelect] - a[sortSelect])];
-      default:
         return [...displayed.sort((a, b) => b[sortSelect] - a[sortSelect])];
     }
   };
