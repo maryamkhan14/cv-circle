@@ -15,6 +15,7 @@
     "eslint": "^8.44.0",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
+    "luxon": "^3.4.1",
     "pdf-img-convert": "^1.2.1",
     "pdf2pic": "^2.1.4",
     "prettier": "^2.8.8",
