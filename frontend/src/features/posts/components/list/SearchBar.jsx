@@ -1,7 +1,9 @@
 // credit: https://javascript.plainenglish.io/how-to-create-an-optimized-real-time-search-with-react-6dd4026f4fa9
 import React, { useEffect, useState } from "react";
+import { usePostsListContext } from "../../context/PostsListContext";
 
-const SearchBar = ({ onSearchSubmit, clearResults }) => {
+const SearchBar = () => {
+  const { dispatch } = usePostsListContext();
   const [term, setTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState(term);
 
@@ -13,12 +15,10 @@ const SearchBar = ({ onSearchSubmit, clearResults }) => {
 
   // submit a new search
   useEffect(() => {
-    console.log(term);
     if (term !== "") {
-      onSearchSubmit(term);
+      dispatch({ type: "UPDATE_SEARCH_TERM", payload: term });
     } else {
-      console.log("clearing");
-      clearResults();
+      dispatch({ type: "RESET_DISPLAYED" });
     }
   }, [term]);
 
