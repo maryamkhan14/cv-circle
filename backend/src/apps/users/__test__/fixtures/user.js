@@ -1,6 +1,6 @@
 const { faker } = require("@faker-js/faker");
 
-const FAKE_USER_ID = faker.number.bigInt(100000000000000000000n);
+const FAKE_USER_ID = faker.string.numeric(21);
 const FAKE_USER_NAME = faker.person.fullName();
 const FAKE_USER_EMAIL = faker.internet.email();
 const FAKE_USER_PROFILE_PIC = faker.image.avatar();

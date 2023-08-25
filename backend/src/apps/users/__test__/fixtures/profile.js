@@ -10,7 +10,7 @@ const FAKE_USER_EMAIL = faker.internet.email({
   firstName: FAKE_USER_GIVEN_NAME,
   lastName: FAKE_USER_FAMILY_NAME,
 });
-const FAKE_USER_ID = faker.number.bigInt(100000000000000000000n);
+const FAKE_USER_ID = faker.string.numeric(21);
 const FAKE_USER_PROFILE_PIC = faker.image.avatar();
 
 export default {
