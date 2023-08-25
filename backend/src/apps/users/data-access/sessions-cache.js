@@ -25,6 +25,6 @@ export default function makeSessionsCache({ cacheClient }) {
     return keyDeletionStatus;
   }
   async function checkPreviouslyStreamed(sessionId) {
-    return await cacheClient.hGet("session_keys", sessionId);
+    return await cacheClient.hExists("session_keys", sessionId);
   }
 }
