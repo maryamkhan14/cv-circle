@@ -95,15 +95,15 @@ const BasicInformation = () => {
       </div>
       <div
         id="edit-pic"
-        className="flex flex-col md:flex-row w-full md:items-center md:gap-3 "
+        className="flex flex-col md:flex-row w-full md:items-center md:gap-3 justify-between"
       >
-        <p className="font-medium">Profile picture: </p>
+        <p className="font-medium text-start">Profile picture: </p>
         <div
           id="edit-pic-input"
-          className="flex justify-center self-center gap-5 flex-wrap"
+          className="flex justify-center mt-2 md:mt-0 md:justify-between  w-full  gap-5 flex-wrap md:flex-nowrap"
         >
           <img
-            className="self-center rounded-full w-20 h-20 border-2 border-blue-800"
+            className="self-center rounded-lg w-20 h-20 border border-slate-800"
             src={profilePic}
             alt="profile"
           />
@@ -153,7 +153,7 @@ const BasicInformation = () => {
                 d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
               />
             </svg>
-            <p className="font-medium text-amber-800">
+            <p className="font-medium text-amber-800 md:text-start">
               Only .png, .jpg, .jpeg files allowed. Changes to your profile
               picture may take up to an hour to show up.
             </p>

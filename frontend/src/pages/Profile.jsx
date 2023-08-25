@@ -11,7 +11,7 @@ const Profile = () => {
   return (
     <StatusContextProvider>
       <ProfileEditContextProvider>
-        <form className="rounded flex shadow-md border m-3 w-5/6 bg-slate-100/50 flex-col items-center px-3 py-5 font-[700] text-center">
+        <form className="rounded flex shadow-md border m-3 w-11/12 md:w-11/12 bg-slate-100/50 flex-col items-center px-3 py-5 font-[700] text-center">
           <MainDetails user={user} />
           <BasicInformation user={user} />
           <Socials user={user} />

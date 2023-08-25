@@ -3,7 +3,7 @@
 @tailwind utilities;
 @layer base {
   html {
-    @apply text-slate-600;
+    @apply text-slate-800;
     @apply font-plainText;
     @apply scroll-smooth;
   }

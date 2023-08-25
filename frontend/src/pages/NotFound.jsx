@@ -1,6 +1,6 @@
 import React from "react";
 import ReportButton from "../components/ReportButton";
-const NotPermitted = () => {
+const NotFound = () => {
   return (
     <div className="rounded flex shadow-md border bg-cover bg-hero-pattern w-full">
       <div className="bg-slate-50/70 flex flex-col justify-center px-3 py-5 font-[700] text-center gap-5 w-full">
@@ -16,4 +16,4 @@ const NotPermitted = () => {
   );
 };
 
-export default NotPermitted;
+export default NotFound;
