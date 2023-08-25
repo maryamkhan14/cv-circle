@@ -1,7 +1,7 @@
-export default function makePostLogout({ updateCache }) {
+export default function makePostLogout({ uncacheUser }) {
   return function (httpRequest) {
     if (httpRequest.sessionStore) {
-      updateCache({ sessionId: httpRequest.sessionId });
+      uncacheUser(httpRequest.sessionId);
       httpRequest.logOut((err) => {
         if (err) {
           return {

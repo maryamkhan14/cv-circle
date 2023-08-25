@@ -1,8 +1,8 @@
-export default function makeGetAuthSuccess({ updateCache }) {
+export default function makeGetAuthSuccess({ cacheUser }) {
   return function (httpRequest) {
     if (httpRequest.user) {
       console.log(httpRequest.session.cookie);
-      updateCache({
+      cacheUser({
         sessionId: httpRequest.sessionId,
         cookie: httpRequest.session.cookie,
         user: httpRequest.user,
