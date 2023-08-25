@@ -1,8 +1,6 @@
 import { useContext, useEffect } from "react";
-import { StatusContext } from "../../notifications/context/StatusContext";
 import { ProfileEditContext } from "../context/ProfileEditContext";
 const MainDetails = ({ user }) => {
-  const { status, statusMsg } = useContext(StatusContext);
   const { dispatch: profileDispatch } = useContext(ProfileEditContext);
   useEffect(() => {
     if (user) {
@@ -16,7 +14,7 @@ const MainDetails = ({ user }) => {
       className="flex flex-wrap flex-col md:flex-row items-center border-b-2 border-slate-50 py-5 w-full gap-5 wrap justify-center"
     >
       <img
-        className="self-center rounded-full w-40 h-40 border-2 border-blue-800"
+        className="self-center rounded-lg w-40 h-40 border"
         src={user?.profilePic}
         alt="profile"
       />
@@ -26,7 +24,7 @@ const MainDetails = ({ user }) => {
       >
         <h1 className="text-5xl">{user?.displayName || user?.name}</h1>{" "}
         {/* TODO: change to displayName */}
-        <h2 className="text-3xl italic">{user?.email}</h2>
+        <h2 className="text-2xl italic">{user?.email}</h2>
       </div>
     </div>
   );

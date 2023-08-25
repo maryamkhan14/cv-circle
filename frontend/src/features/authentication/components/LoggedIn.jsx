@@ -16,7 +16,7 @@ const LoggedIn = () => {
     }
   }, [user]);
   return (
-    <div className="rounded flex shadow-md border m-3 w-5/6 gap-5 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
+    <div className="rounded flex shadow-md border m-3 w-11/12 gap-5 bg-slate-100/50 flex-col justify-center px-3 py-5 font-[700] text-center">
       {isLoading ? (
         <>
           <h1 className="text-5xl">Verifying your details...</h1>
