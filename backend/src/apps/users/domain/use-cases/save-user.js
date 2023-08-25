@@ -12,9 +12,8 @@ export default function makeSaveUser({ usersDb, makeUser }) {
         ...user.getDTO(),
       }));
     }
-
     if (error) {
-      throw new Error("User could not be saved: ", error.message);
+      throw new Error(`User could not be saved: ${error.message}`);
     }
     if (!data) {
       throw new Error("User details could not be retrieved");
