@@ -52,14 +52,11 @@ const App = () => {
             {!user && <Route path="/login" element={<Login />} />}
             {!user && <Route path="/signup" element={<Signup />} />}
             <Route path="/logged-in" element={<LoggedIn />} />
-            {user && <Route path="/logout" element={<Logout />} />}
+            <Route path="/logout" element={<Logout />} />
             {user && <Route path="/create-post" element={<CreatePost />} />}
-            {user && (
-              <Route path="/post/:id/:updated?" element={<SinglePost />} />
-            )}
+            <Route path="/post/:id/:updated?" element={<SinglePost />} />
             <Route path="/edit-post/:id" element={<EditPost />} />
             <Route path="/edit-profile" element={<Profile />} />
-
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
