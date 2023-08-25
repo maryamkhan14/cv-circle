@@ -8,10 +8,32 @@ let upsertSpy = vi.fn((user) => {
   };
 });
 
+let updateSpy = vi.fn((user) => {
+  return {
+    eq: vi.fn(() => {
+      return {
+        select: vi.fn(() => {
+          return { data: [user], error: null };
+        }),
+      };
+    }),
+  };
+});
+
+let uploadBucketSpy = vi.fn(async () => {});
+
 const mockTestDbClient = {
+  updateSpy: updateSpy,
   upsertSpy: upsertSpy,
+  uploadBucketSpy: uploadBucketSpy,
+  storage: {
+    from: vi.fn(() => {
+      return { upload: uploadBucketSpy };
+    }),
+  },
   from: vi.fn(() => {
     return {
+      update: updateSpy,
       upsert: upsertSpy,
     };
   }),
