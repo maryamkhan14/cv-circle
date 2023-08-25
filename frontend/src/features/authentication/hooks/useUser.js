@@ -6,7 +6,11 @@ export default function useUser(overrides = {}) {
     queryKey: ["user"],
     queryFn: async () => {
       const user = await getCurrentUser();
-      return { ...user, ...overrides };
+      return {
+        ...user,
+        displayName: user?.displayName || user?.name,
+        ...overrides,
+      };
     },
     staleTime: 60 * 1000 * 60 * 24, // 24 hours,
     refetchOnWindowFocus: false,
