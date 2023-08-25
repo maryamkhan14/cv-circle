@@ -2,7 +2,8 @@
 const colors = require("tailwindcss/colors");
 
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,css}"],
+  variants: { extend: { display: ["group-hover"] } },
   theme: {
     screens: {
       sm: "480px",
