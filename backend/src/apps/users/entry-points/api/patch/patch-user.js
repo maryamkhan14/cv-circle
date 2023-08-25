@@ -1,5 +1,5 @@
 export default function makePatchUser({ saveUser, handlePicture }) {
-  return async function patchPost(httpRequest) {
+  return async function patchUser(httpRequest) {
     try {
       let updateRequest = httpRequest.body;
       console.log(updateRequest);
