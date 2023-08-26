@@ -11,39 +11,15 @@ const FAKE_USER_TWITTER = faker.internet.url();
 const FAKE_USER_BIO = faker.lorem.paragraph();
 
 export function makeFakeUser(overrides) {
-  let userId =
-    overrides && overrides.hasOwnProperty("userId")
-      ? overrides.userId
-      : FAKE_USER_ID;
-  let name =
-    overrides && overrides.hasOwnProperty("name")
-      ? overrides.name
-      : FAKE_USER_NAME;
-  let email =
-    overrides && overrides.hasOwnProperty("email")
-      ? overrides.email
-      : FAKE_USER_EMAIL;
-  let profilePic =
-    overrides && overrides.hasOwnProperty("profilePic")
-      ? overrides.profilePic
-      : FAKE_USER_PROFILE_PIC;
-  let voteHistory =
-    overrides && overrides.hasOwnProperty("voteHistory")
-      ? overrides.voteHistory
-      : FAKE_USER_VOTE_HISTORY;
-  let displayName =
-    overrides && overrides.hasOwnProperty("displayName")
-      ? overrides.displayName
-      : FAKE_USER_DISPLAY_NAME;
-  let linkedin =
-    overrides && overrides.hasOwnProperty("linkedin")
-      ? overrides.linkedin
-      : FAKE_USER_LINKEDIN;
-  let twitter =
-    overrides && overrides.hasOwnProperty("twitter")
-      ? overrides.twitter
-      : FAKE_USER_TWITTER;
-  let bio = overrides && overrides.hasOwnProperty("bio") ? overrides.bio : bio;
+  let userId = overrides?.userId || FAKE_USER_ID;
+  let name = overrides?.name || FAKE_USER_NAME;
+  let email = overrides?.email || FAKE_USER_EMAIL;
+  let profilePic = overrides?.profilePic || FAKE_USER_PROFILE_PIC;
+  let voteHistory = overrides?.voteHistory || FAKE_USER_VOTE_HISTORY;
+  let displayName = overrides?.displayName || FAKE_USER_DISPLAY_NAME;
+  let linkedin = overrides?.linkedin || FAKE_USER_LINKEDIN;
+  let twitter = overrides?.twitter || FAKE_USER_TWITTER;
+  let bio = overrides?.bio || FAKE_USER_BIO;
   const user = {
     getUserId: () => userId,
     getName: () => name,
@@ -75,10 +51,14 @@ export function makeFakeUser(overrides) {
 export function makeFakeRawUser(overrides) {
   const user = {
     userId: FAKE_USER_ID,
-    email: FAKE_USER_EMAIL,
     name: FAKE_USER_NAME,
+    email: FAKE_USER_EMAIL,
     profilePic: FAKE_USER_PROFILE_PIC,
     voteHistory: FAKE_USER_VOTE_HISTORY,
+    displayName: FAKE_USER_DISPLAY_NAME,
+    linkedin: FAKE_USER_LINKEDIN,
+    twitter: FAKE_USER_TWITTER,
+    bio: FAKE_USER_BIO,
   };
   return { ...user, ...overrides };
 }

@@ -1,5 +1,5 @@
 import { describe, expect, beforeEach, test, vi } from "vitest";
-import { mockTestDbClient as dbClient } from "../__test__/fixtures/db-client.js";
+import { mockTestDbClient as dbClient } from "../__test__/fixtures/db.js";
 import makeImagesDb from "./images-db.js";
 import { makeFakeImageEntity as makeFakeImage } from "../__test__/fixtures/image.js";
 

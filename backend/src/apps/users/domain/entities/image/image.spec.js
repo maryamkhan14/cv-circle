@@ -4,15 +4,16 @@ import {
   makeFakeRawImage,
 } from "../../../__test__/fixtures/image";
 import buildMakeImage from "./image";
-import makeImage from ".";
 
 describe("Image entity", () => {
+  const cdnGenerator = vi.fn(() => "Arbitrary CDN");
+  const extensionGenerator = vi.fn(() => "Arbitrary extension");
+
+  const makeImage = buildMakeImage({ cdnGenerator, extensionGenerator });
   test("successfully generates image entity when no extension provided", () => {
     const image = makeFakeRawImage({ extension: null });
-    const cdnGenerator = vi.fn(() => "Arbitrary CDN");
-    const extensionGenerator = vi.fn(() => "Arbitrary extension");
-    makeImage = buildMakeImage({ cdnGenerator, extensionGenerator });
     const actual = makeImage(image);
+    expect(extensionGenerator).toHaveBeenCalledTimes(1);
     expect(actual.getExtension()).toEqual("Arbitrary extension");
   });
   test("must have image data", () => {
@@ -20,13 +21,13 @@ describe("Image entity", () => {
     expect(() => makeImage(image)).toThrow("Image must have image data.");
   });
   test("can set extension", () => {
-    const image = makeFakeImage();
+    const image = makeImage(makeFakeRawImage());
     image.setExtension("Arbitrary extension");
     expect(image.getExtension()).toEqual("Arbitrary extension");
   });
   test("can set CDN", () => {
-    const image = makeFakeImage();
-    image.setExtension("Arbitrary CDN");
-    expect(image.getExtension()).toEqual("Arbitrary CDN");
+    const image = makeImage(makeFakeRawImage());
+    image.setCdn("Arbitrary CDN");
+    expect(image.getCdn()).toEqual("Arbitrary CDN");
   });
 });
