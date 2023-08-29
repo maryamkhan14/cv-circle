@@ -12,18 +12,7 @@ export function makeFakeRawVote(overrides) {
 
 // Make the object that will be returned by the vote entity factory function -TODO: rename for clarity
 export function makeFakeVoteEntity(overrides) {
-  let postId =
-    overrides && overrides.hasOwnProperty("postId")
-      ? overrides.postId
-      : FAKE_POST_ID;
-  let userId =
-    overrides && overrides.hasOwnProperty("userId")
-      ? overrides.userId
-      : FAKE_USER_ID;
-  let voteCount =
-    overrides && overrides.hasOwnProperty("voteCount")
-      ? overrides.voteCount
-      : FAKE_VOTE_COUNT;
+  let { postId, userId, voteCount } = makeFakeRawVote(overrides);
   const vote = {
     getPostId: () => postId,
     getUserId: () => userId,
