@@ -1,26 +1,27 @@
-import { describe, expect, vi, test, beforeEach } from "vitest";
-import makeCreatePost from "./create-post";
+import { describe, expect, vi, it, afterEach } from "vitest";
+import { postsDb } from "../../data-access";
+import { createPost } from ".";
 import { makeFakeRawPost } from "../../__test__/fixtures/post.js";
-describe("Create post use case", () => {
-  let postsDb;
-  let createPost;
-  beforeEach(() => {
-    let insert = vi.fn(async () => {
-      return { data: makeFakeRawPost(), error: null };
-    });
-    postsDb = { insert };
-    createPost = makeCreatePost({ postsDb });
+vi.mock("../../data-access");
+
+describe("Create post use case tests", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
-  test("Creates post successfully", async () => {
+  it("creates post successfully", async () => {
     let post = makeFakeRawPost({ id: null, createdAt: null, upvoteCount: 0 });
     let expected = makeFakeRawPost({ upvoteCount: 0 });
+    postsDb.insert.mockReturnValue({
+      data: [expected],
+      error: null,
+    });
     let actual = await createPost(post);
     let postsDbInsertArgs = postsDb.insert.mock.calls[0][0];
     expect(actual).toEqual(expected);
     expect(postsDb.insert).toBeCalledTimes(1);
     expect(post).toContain(postsDbInsertArgs);
   });
-  test("Throws error when database save fails", async () => {
+  it("throws error when database save fails", async () => {
     let post = makeFakeRawPost({ id: null, createdAt: null });
     let error = { message: "Post save error message" };
     postsDb.insert.mockImplementation(async () => {

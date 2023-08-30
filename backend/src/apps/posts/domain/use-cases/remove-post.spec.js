@@ -1,33 +1,38 @@
-import { describe, expect, vi, test, beforeEach } from "vitest";
-import makeRemovePost from "./remove-post";
+import { describe, expect, vi, it, afterEach } from "vitest";
+import { removePost } from ".";
 import { makeFakeRawPost } from "../../__test__/fixtures/post.js";
-describe("Remove post use case", () => {
-  let postsDb;
-  let removePost;
-  beforeEach(() => {
-    let remove = vi.fn(async (id) => {
-      return { data: null, error: null };
-    });
-    postsDb = { remove };
-    removePost = makeRemovePost({ postsDb });
+import { postsDb } from "../../data-access";
+vi.mock("../../data-access");
+
+describe("Remove post use case tests", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
-  test("Removes post successfully", async () => {
+  it("removes post successfully", async () => {
     let post = makeFakeRawPost();
     let expected = post;
-    let actual = await removePost(post);
-    let postsDbRemoveArgs = postsDb.remove.mock.calls[0][0];
+    postsDb.remove.mockResolvedValue({ data: [post], error: null });
+    let actual = await removePost(post.id, post.userId);
+    let [removedPostId, removedPostAuthor] = postsDb.remove.mock.calls[0];
     expect(actual).toEqual(expected);
     expect(postsDb.remove).toBeCalledTimes(1);
-    expect(postsDbRemoveArgs).toEqual(post.id);
+    expect(removedPostId).toEqual(post.id);
+    expect(removedPostAuthor).toEqual(post.userId);
   });
-  test("Throws error when database deletion fails", async () => {
-    let post = makeFakeRawPost({ id: null, createdAt: null });
+  it("throws error when database returns error", async () => {
+    let post = makeFakeRawPost();
     let error = { message: "Post deletion error message" };
-    postsDb.remove.mockImplementation(async () => {
-      return { data: null, error };
-    });
-    expect(removePost(post)).rejects.toThrow(
+    postsDb.remove.mockResolvedValueOnce({ data: null, error });
+    expect(removePost(post.id, post.userId)).rejects.toThrow(
       `Error deleting post from database: ${error.message}. Post deletion failed.`
+    );
+  });
+  it("throws error when database deletion fails", async () => {
+    let post = makeFakeRawPost();
+    postsDb.remove.mockResolvedValueOnce({ data: null, error: null });
+
+    expect(removePost(post.id, post.userId)).rejects.toThrow(
+      `Error deleting post from database: either the post does not exist, or it does not belong to the user.`
     );
   });
 });

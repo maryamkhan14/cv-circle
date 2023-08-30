@@ -1,53 +1,96 @@
-import { describe, expect, test } from "vitest";
-import { makeFakeRawPost } from "../../../__test__/fixtures/post";
+import { describe, expect, it, vi, afterEach } from "vitest";
+import {
+  makeFakeRawPost,
+  makeFakePostEntity,
+} from "../../../__test__/fixtures/post";
 import makePost from "./";
 
-describe("post", () => {
-  test("must have an author", () => {
-    const post = makeFakeRawPost({ userId: null });
-    expect(() => makePost(post)).toThrow("Post must have an author.");
+describe("Post entity tests", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+  it("sets isReply to boolean result of regex match test if isReply exists", () => {
+    const inputDetails = makeFakeRawPost({ isReply: "true" });
+    const post = makePost(inputDetails);
+    expect(post.isReply()).toEqual(true);
   });
 
-  test("must have a title", () => {
-    const post = makeFakeRawPost({ title: null });
-    expect(() => makePost(post)).toThrow("Post must have a title.");
+  it("throws error without an author", () => {
+    const inputDetails = makeFakeRawPost({ userId: null });
+    expect(() => makePost(inputDetails)).toThrow("Post must have an author.");
   });
 
-  test("must have content", () => {
-    const post = makeFakeRawPost({ postContent: null });
-    expect(() => makePost(post)).toThrow("Post must have content.");
+  it("throws error without title if post is not a reply", () => {
+    const inputDetails = makeFakeRawPost({ title: null, isReply: false });
+    expect(() => makePost(inputDetails)).toThrow("Post must have a title.");
   });
 
-  test("must have image CDN", () => {
-    const post = makeFakeRawPost({ imgCdn: null });
-    expect(() => makePost(post)).toThrow("Post must have image.");
+  it("does not throw error for title if post is a reply", () => {
+    const overrides = { title: null, isReply: true };
+    const expectedPost = makeFakePostEntity(overrides);
+    const inputDetails = makeFakeRawPost({ ...overrides });
+    expect(inputDetails).toEqual(expectedPost.getDTO());
   });
 
-  test("can set image", () => {
-    const post = makeFakeRawPost();
-    const fakePost = makePost(post);
-    fakePost.setImage(null);
-    expect(fakePost.getImage()).toBe(null);
+  it("throws error without post content", () => {
+    const inputDetails = makeFakeRawPost({ postContent: null });
+    expect(() => makePost(inputDetails)).toThrow("Post must have content.");
   });
 
-  test("can set creation timestamp", () => {
-    const post = makeFakeRawPost();
-    const fakePost = makePost(post);
-    fakePost.setCreatedAt(null);
-    expect(fakePost.getCreatedAt()).toBe(null);
+  it("throws error without image CDN if post is not a reply", () => {
+    const inputDetails = makeFakeRawPost({ imgCdn: null });
+    expect(() => makePost(inputDetails)).toThrow("Post must have image.");
   });
 
-  test("can set post ID", () => {
-    const post = makeFakeRawPost();
-    const fakePost = makePost(post);
-    fakePost.setId(null);
-    expect(fakePost.getId()).toBe(null);
+  it("does not throw error for image CDN if post is a reply", () => {
+    const overrides = { imgCdn: null, isReply: true };
+    const expectedPost = makeFakePostEntity(overrides);
+    const inputDetails = makeFakeRawPost(overrides);
+    expect(inputDetails).toEqual(expectedPost.getDTO());
   });
 
-  test("can get DTO", () => {
-    const post = makeFakeRawPost();
-    const fakePost = makePost(post);
-    console.log(post);
-    expect(fakePost.getDTO()).toEqual(post);
+  it("sets image", () => {
+    const inputDetails = makeFakeRawPost();
+    const post = makePost(inputDetails);
+    post.setImage(null);
+    expect(post.getImage()).toBe(null);
+  });
+
+  it("sets creation timestamp", () => {
+    const inputDetails = makeFakeRawPost();
+    const post = makePost(inputDetails);
+    post.setCreatedAt(null);
+    expect(post.getCreatedAt()).toBe(null);
+  });
+
+  it("sets post ID", () => {
+    const inputDetails = makeFakeRawPost();
+    const post = makePost(inputDetails);
+    post.setId(null);
+    expect(post.getId()).toBe(null);
+  });
+
+  it("sets path", () => {
+    const inputDetails = makeFakeRawPost();
+    const post = makePost(inputDetails);
+    post.setPath("1.2");
+    expect(post.getPath()).toEqual("1.2");
+  });
+
+  it("sets upvoteCount to 0 by default", () => {
+    const inputDetails = makeFakeRawPost({ upvoteCount: null });
+    const post = makePost(inputDetails);
+    expect(post.getUpvoteCount()).toEqual(0);
+  });
+  it("successfully retrieves post replies", () => {
+    const replies = { 2: makeFakeRawPost() };
+    const inputDetails = makeFakeRawPost({ replies });
+    const post = makePost(inputDetails);
+    expect(post.getReplies()).toEqual(replies);
+  });
+  it("successfully retrieves DTO", () => {
+    const inputDetails = makeFakeRawPost();
+    const post = makePost(inputDetails);
+    expect(post.getDTO()).toEqual(inputDetails);
   });
 });

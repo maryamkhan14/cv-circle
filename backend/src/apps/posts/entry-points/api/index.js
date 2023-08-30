@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import {
   postPost,
   getAllPosts,
