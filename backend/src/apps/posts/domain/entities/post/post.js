@@ -23,13 +23,13 @@ export default function buildMakePost() {
     if (!userId) {
       throw new Error("Post must have an author.");
     }
-    if (!title && !isReply) {
+    if (!title?.trim() && !isReply) {
       throw new Error("Post must have a title.");
     }
-    if (!postContent) {
+    if (!postContent?.trim()) {
       throw new Error("Post must have content.");
     }
-    if (!imgCdn && !isReply) {
+    if (!imgCdn?.trim() && !isReply) {
       throw new Error("Post must have image.");
     }
     let replies = {};
