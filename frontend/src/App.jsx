@@ -57,8 +57,8 @@ const App = () => {
             <Route path="/logout" element={<Logout />} />
             {user && <Route path="/create-post" element={<CreatePost />} />}
             <Route path="/post/:id/:updated?" element={<SinglePost />} />
-            <Route path="/edit-post/:id" element={<EditPost />} />
-            <Route path="/edit-profile" element={<Profile />} />
+            {user && <Route path="/edit-post/:id" element={<EditPost />} />}
+            {user && <Route path="/edit-profile" element={<Profile />} />}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
