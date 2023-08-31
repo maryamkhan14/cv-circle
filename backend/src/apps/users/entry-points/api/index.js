@@ -7,6 +7,7 @@ import {
   getAuthSuccess,
   postLogout,
   patchUser,
+  deleteUser,
 } from "./users-controller.js";
 import makeExpressCallback from "../../express-callback/index.js";
 import authMiddleware from "../../auth-middleware/index.js";
@@ -19,4 +20,5 @@ router.get(process.env.GITHUB_CALLBACK_URL, getGithubAuthCallback);
 router.get("/success", makeExpressCallback(getAuthSuccess));
 router.post("/logout", makeExpressCallback(postLogout));
 router.patch("/user", authMiddleware(true), makeExpressCallback(patchUser));
+router.delete("/user", authMiddleware(), makeExpressCallback(deleteUser));
 export default router;
