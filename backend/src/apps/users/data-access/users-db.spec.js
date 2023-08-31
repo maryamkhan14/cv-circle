@@ -22,15 +22,22 @@ describe("Users database tests", () => {
     expect(upserted.profile_pic).toEqual(toInsert.profilePic);
   });
   test("successfully updates a user", async () => {
-    const toInsert = makeFakeRawUser();
-    await usersDb.update(toInsert);
+    const toUpdate = makeFakeRawUser();
+    await usersDb.update(toUpdate);
     const updated = dbClient.updateSpy.mock.calls[0][0];
     expect(dbClient.updateSpy).toHaveBeenCalledTimes(1);
-    expect(updated.email).toEqual(toInsert.email);
-    expect(updated.avatar).toEqual(toInsert.profilePic);
-    expect(updated.display_name).toEqual(toInsert.displayName);
-    expect(updated.linkedin).toEqual(toInsert.linkedin);
-    expect(updated.twitter).toEqual(toInsert.twitter);
-    expect(updated.bio).toEqual(toInsert.bio);
+    expect(updated.email).toEqual(toUpdate.email);
+    expect(updated.avatar).toEqual(toUpdate.profilePic);
+    expect(updated.display_name).toEqual(toUpdate.displayName);
+    expect(updated.linkedin).toEqual(toUpdate.linkedin);
+    expect(updated.twitter).toEqual(toUpdate.twitter);
+    expect(updated.bio).toEqual(toUpdate.bio);
+  });
+  test("successfully removes a user", async () => {
+    const toDelete = makeFakeRawUser();
+    const { userId } = toDelete;
+    const expected = { data: [toDelete], error: null };
+    const actual = await usersDb.remove(userId);
+    expect(actual).toEqual(expected);
   });
 });

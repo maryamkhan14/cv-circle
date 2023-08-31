@@ -4,6 +4,7 @@ import {
   handlePicture,
   cacheUser,
   uncacheUser,
+  removeUser,
 } from "../../domain/use-cases/index.js";
 import authenticator from "../../domain/services/authenticator/index.js";
 import makeGetGoogleAuth from "./get/get-google-auth.js";
@@ -13,6 +14,7 @@ import makeGetGoogleAuthCallback from "./get/get-google-auth-callback.js";
 import makeGetAuthSuccess from "./get/get-auth-success.js";
 import makePostLogout from "./post/post-logout.js";
 import makePatchUser from "./patch/patch-user.js";
+import makeDeleteUser from "./delete/delete-user.js";
 
 const { authGoogle, authGoogleCallback, authGithub, authGithubCallback } =
   authenticator;
@@ -29,6 +31,7 @@ const getGithubAuthCallback = makeGetGithubAuthCallback({
 const getAuthSuccess = makeGetAuthSuccess({ cacheUser });
 const postLogout = makePostLogout({ uncacheUser });
 const patchUser = makePatchUser({ saveUser, handlePicture });
+const deleteUser = makeDeleteUser({ removeUser });
 const userController = Object.freeze({
   getGoogleAuth,
   getGoogleAuthCallback,
@@ -37,6 +40,7 @@ const userController = Object.freeze({
   getAuthSuccess,
   postLogout,
   patchUser,
+  deleteUser,
 });
 
 export default { userController };
@@ -49,4 +53,5 @@ export {
   getAuthSuccess,
   postLogout,
   patchUser,
+  deleteUser,
 };
