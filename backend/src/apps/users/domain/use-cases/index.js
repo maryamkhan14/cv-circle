@@ -11,6 +11,7 @@ const saveUser = makeSaveUser({
 });
 const cacheUser = makeCacheUser({ sessionsCache });
 const uncacheUser = makeUncacheUser({ sessionsCache });
+const removeUser = makeRemoveUser({ usersDb });
 const authenticationService = Object.freeze({
   saveUser,
   cacheUser,
@@ -18,7 +19,6 @@ const authenticationService = Object.freeze({
   removeUser,
 });
 const handlePicture = makeHandlePicture({ imagesDb });
-const removeUser = makeRemoveUser({ usersDb });
 
 export default authenticationService;
 export { saveUser, cacheUser, uncacheUser, handlePicture, removeUser };
