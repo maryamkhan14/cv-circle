@@ -22,4 +22,18 @@ const updateUser = async (user) => {
     };
   }
 };
-export { updateUser };
+const deleteUser = async () => {
+  try {
+    let { data } = await axios.delete(`${DOMAIN}/api/auth/user`);
+    return data?.deleted;
+  } catch (e) {
+    console.log(e);
+    let { data, status } = e.response || {};
+    let errorMsg = data?.error;
+    throw {
+      message: errorMsg || "An unknown error has happened!",
+      status: status || e.code,
+    };
+  }
+};
+export { updateUser, deleteUser };
