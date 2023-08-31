@@ -1,2 +1,3 @@
 import useUserUpdate from "./useUserUpdate";
-export { useUserUpdate };
+import useUserDelete from "./useUserDelete";
+export { useUserUpdate, useUserDelete };
