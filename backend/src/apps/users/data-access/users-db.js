@@ -1,5 +1,5 @@
 export default function buildUsersDb({ dbClient }) {
-  return Object.freeze({ upsert, update });
+  return Object.freeze({ upsert, update, remove });
 
   async function update({
     userId,
@@ -24,15 +24,7 @@ export default function buildUsersDb({ dbClient }) {
       .select(
         "userId:uid, name, email, profilePic:avatar, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, linkedin, twitter, bio"
       );
-    return {
-      ...result,
-      data: [
-        {
-          ...result.data[0],
-          voteHistory: formatVoteHistory(result.data[0]?.voteHistory || []),
-        },
-      ],
-    };
+    return { ...result, data: formatProfile(result.data) };
   }
   async function upsert({ userId, name, email, profilePic }) {
     let result = await dbClient
@@ -46,23 +38,34 @@ export default function buildUsersDb({ dbClient }) {
       .select(
         "userId:uid, name, email, profilePic:profile_pic, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, avatar, linkedin, twitter, bio"
       );
-    return {
-      ...result,
-      data: [
-        {
-          ...result.data[0],
-          voteHistory: formatVoteHistory(result.data[0]?.voteHistory || []),
-          profilePic: result.data[0].avatar
-            ? result.data[0].avatar
-            : result.data[0].profilePic,
-        },
-      ],
-    };
+    return { ...result, data: formatProfile(result.data) };
+  }
+  async function remove(userId) {
+    let result = await dbClient
+      .from("users")
+      .delete()
+      .eq("uid", userId)
+      .select(
+        "userId:uid, name, email, profilePic:profile_pic, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, avatar, linkedin, twitter, bio"
+      );
+    return { ...result, data: formatProfile(result.data) };
   }
   function formatVoteHistory(voteHistory) {
     return {
       upvoted: voteHistory[0]?.upvoted || [],
       downvoted: voteHistory[0]?.downvoted || [],
     };
+  }
+  function formatProfile(data) {
+    if (data && data?.length) {
+      const [profile] = data;
+      return [
+        {
+          ...profile,
+          voteHistory: formatVoteHistory(profile?.voteHistory || []),
+          profilePic: profile.avatar ? profile.avatar : profile.profilePic,
+        },
+      ];
+    }
   }
 }
