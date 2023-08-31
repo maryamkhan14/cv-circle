@@ -17,7 +17,16 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    command: npm run dev
+    command:
+      - bash
+      - -c
+      - |
+        while [ $(curl -s -o /dev/null -w %{http_code} -X POST -d '{"ksql": "DESCRIBE keyed_session_details;"}' -H "Content-Type: application/vnd.ksql.v1+json" http://ksqldb:8088/ksql) -ne 200 ];
+        do echo "Waiting for keyed_session_details stream to be up..."
+        sleep 5; 
+        done; 
+        echo "Keyed_session_details stream is ready!"
+        npm run dev
   users:
     image: cvcircle/users:dev
     build:

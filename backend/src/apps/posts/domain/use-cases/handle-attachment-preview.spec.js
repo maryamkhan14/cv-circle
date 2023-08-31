@@ -1,35 +1,30 @@
-import { describe, expect, beforeEach, test, vi } from "vitest";
+import { describe, expect, beforeEach, afterEach, it, vi } from "vitest";
 import { FAKE_USER_ID } from "../../__test__/fixtures/constants";
-import { makeFakeImageEntity as makeFakeImage } from "../../__test__/fixtures/image";
-import makeHandleAttachmentPreview from "./handle-attachment-preview";
+import { makeFakeImageEntity } from "../../__test__/fixtures/image";
+import { imagesDb } from "../../data-access";
+import { handleAttachmentPreview } from ".";
+import makeImage from "../entities/image";
+import makePdfPreview from "../services/pdf-preview/index.js";
 
-describe("Create attachment preview use case", () => {
-  let imagesDb;
-  let makePdfPreview;
-  let makeImage;
-  let handleAttachmentPreview;
-  let previewImage = makeFakeImage();
+vi.mock("../../data-access");
+vi.mock("../entities/image");
+vi.mock("../services/pdf-preview/index.js");
 
+describe("Create attachment preview use case tests", () => {
+  let previewImage = makeFakeImageEntity();
   beforeEach(() => {
-    imagesDb = {
-      insert: vi.fn(async () => {
-        return await previewImage;
-      }),
-    };
-    makePdfPreview = vi.fn(() => {
-      return { get: () => previewImage.getImageData() };
+    imagesDb.insert.mockReturnValue(previewImage);
+    makePdfPreview.mockResolvedValue({
+      get: () => previewImage.getImageData(),
     });
-    makeImage = vi.fn(() => {
-      return previewImage;
-    });
-    handleAttachmentPreview = makeHandleAttachmentPreview({
-      imagesDb,
-      makePdfPreview,
-      makeImage,
-    });
+    makeImage.mockReturnValue(previewImage);
   });
 
-  test("Successfully creates attachment preview for PDF files", async () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("successfully creates attachment preview for PDF files", async () => {
     let file = { mimetype: "application/pdf" };
     let result = await handleAttachmentPreview({ file, userId: FAKE_USER_ID });
     let makePdfPreviewArgs = makePdfPreview.mock.calls[0][0];
@@ -51,7 +46,7 @@ describe("Create attachment preview use case", () => {
     expect(result).toEqual(previewImage);
   });
 
-  test("Successfully creates attachment preview for non-pdf files", async () => {
+  it("successfully creates attachment preview for non-pdf files", async () => {
     let file = { type: "image/png", data: previewImage.getImageData() };
     let result = await handleAttachmentPreview({ file, userId: FAKE_USER_ID });
 
@@ -71,12 +66,10 @@ describe("Create attachment preview use case", () => {
     expect(result).toEqual(previewImage);
   });
 
-  test("Throws error when database save fails", async () => {
+  it("throws error when database save fails", async () => {
     let file = { mimetype: "application/pdf" };
     let error = { message: "Database save error" };
-    imagesDb.insert.mockImplementation(async () => {
-      return { error, data: null };
-    });
+    imagesDb.insert.mockResolvedValue({ error, data: null });
     expect(
       handleAttachmentPreview({ file, userId: FAKE_USER_ID })
     ).rejects.toThrow(

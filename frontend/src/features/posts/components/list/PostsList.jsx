@@ -1,20 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { DateTime } from "luxon";
 import { Link } from "react-router-dom";
 import { usePostsListContext } from "../../context/PostsListContext";
-
-const PostsList = ({ allPosts }) => {
-  const { dispatch, displayed } = usePostsListContext();
+import { useAllPosts } from "../../hooks";
+import PostsSkeleton from "../PostsSkeleton";
+import { StatusContext } from "../../../notifications/context/StatusContext";
+const PostsList = () => {
+  const { status: allPostsStatus, error, data: allPosts } = useAllPosts();
+  const { dispatch: statusDispatch } = useContext(StatusContext);
+  const { dispatch: postsListDispatch, displayed } = usePostsListContext();
   const formatTimestamp = (timestamp) => {
     const luxonDateTime = DateTime.fromISO(timestamp);
     return luxonDateTime.toLocaleString(DateTime.DATETIME_MED);
   };
   useEffect(() => {
     if (allPosts) {
-      dispatch({ type: "UPDATE_ALL_POSTS", payload: allPosts });
+      postsListDispatch({ type: "UPDATE_ALL_POSTS", payload: allPosts });
     }
   }, [allPosts]);
-  return (
+  useEffect(() => {
+    if (allPostsStatus !== "error") {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: { status: allPostsStatus, show: false },
+      });
+    } else {
+      statusDispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "error",
+          statusMsg: error.message,
+        },
+      });
+    }
+  }, [allPostsStatus]);
+  return allPostsStatus === "loading" ? (
+    <PostsSkeleton />
+  ) : (
     <>
       {displayed?.length ? (
         displayed.map((post) => (

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import "dotenv/config";
 import userRoutes from "./api/index.js";
 import expressFileUpload from "express-fileupload";

@@ -1,14 +1,14 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
-import makeGetAllPosts from "./get-all-posts";
+import { describe, expect, afterEach, vi, it } from "vitest";
+import { getAllPosts } from "../post-controller";
+import { retrievePosts } from "../../../domain/use-cases/";
+vi.mock("../../../domain/use-cases/");
+
 describe("Controller for GET to /posts endpoint", () => {
-  let retrievePosts = vi.fn(async () => {
-    return [];
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
-  let getAllPosts;
-  beforeEach(() => {
-    getAllPosts = makeGetAllPosts({ retrievePosts });
-  });
-  test("Successfully makes a call to retrievePosts and formats response as expected", async () => {
+  it("Successfully makes a call to retrievePosts and formats response as expected", async () => {
+    retrievePosts.mockResolvedValue([]);
     const expected = {
       headers: {
         "Content-Type": "application/json",
@@ -19,5 +19,22 @@ describe("Controller for GET to /posts endpoint", () => {
     const actual = await getAllPosts();
     expect(actual).toEqual(expected);
     expect(retrievePosts).toBeCalledTimes(1);
+  });
+  it("returns expected response error when exception is thrown", async () => {
+    const error = {
+      message: "Error thrown by GET /api/posts/ controller",
+    };
+    retrievePosts.mockImplementation(async () => {
+      throw new Error(error.message);
+    });
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 400,
+      body: { error: error.message },
+    };
+    const actual = await getAllPosts();
+    expect(actual).toEqual(expected);
   });
 });

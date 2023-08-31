@@ -100,7 +100,7 @@ const BasicInformation = () => {
         <p className="font-medium text-start">Profile picture: </p>
         <div
           id="edit-pic-input"
-          className="flex justify-center mt-2 md:mt-0 md:justify-between  w-full  gap-5 flex-wrap md:flex-nowrap"
+          className="flex justify-center mt-2 md:mt-0 md:justify-start  md:w-[90%]  gap-5 flex-wrap md:flex-nowrap"
         >
           <img
             className="self-center rounded-lg w-20 h-20 border border-slate-800"

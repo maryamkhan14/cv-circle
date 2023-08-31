@@ -1,7 +1,10 @@
 export default function makePdfToImageConverter({ convert }) {
-  return function pdfToImageConverter(options) {
+  // convert = fromBuffer
+  return function pdfToImageConverter({ imageOptions, configuration }) {
     return Object.freeze({
-      convert: (file) => convert(file, options),
+      convert: async (file) =>
+        await convert(file?.data, imageOptions)(...configuration),
+
       isBase64: () => options.base64,
     });
   };

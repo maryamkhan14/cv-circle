@@ -1,4 +1,5 @@
-export default function makeSaveUser({ usersDb, makeUser }) {
+import makeUser from "../entities/user/index.js";
+export default function makeSaveUser({ usersDb }) {
   return async function saveUser({ ...profileDetails }, onlyUpdate = false) {
     const user = makeUser({ ...profileDetails });
     let data;
@@ -12,15 +13,13 @@ export default function makeSaveUser({ usersDb, makeUser }) {
         ...user.getDTO(),
       }));
     }
-
     if (error) {
-      throw new Error("User could not be saved: ", error.message);
+      throw new Error(`User could not be saved: ${error.message}`);
     }
     if (!data) {
       throw new Error("User details could not be retrieved");
     }
     const savedUser = makeUser({ ...data[0] });
-
     return savedUser;
   };
 }

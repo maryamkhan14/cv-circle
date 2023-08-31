@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import "dotenv/config";
 import postRoutes from "./api/index.js";
 import express from "express";

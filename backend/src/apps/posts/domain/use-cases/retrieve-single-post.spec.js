@@ -1,57 +1,27 @@
-import { test, describe, expect, vi, beforeEach } from "vitest";
-import { makeFakePostEntity } from "../../__test__/fixtures/post";
-import { makeFakeSingleRawPostRecord } from "../../__test__/fixtures/mock-db-client-responses";
-import makeRetrieveSinglePost from "./retrieve-single-post";
+import { it, describe, expect, vi, afterEach } from "vitest";
+import {
+  makeFakePostEntity,
+  makeFakeRawPost,
+} from "../../__test__/fixtures/post";
+import { retrieveSinglePost } from ".";
+import { postsDb } from "../../data-access";
+vi.mock("../../data-access");
 
-describe("Retrieve single post use case", () => {
-  let postsDb;
-  let retrieveSinglePost;
-  let postRecord = makeFakeSingleRawPostRecord();
-  beforeEach(() => {
-    let getById = vi.fn(async () => {
-      return {
-        data: postRecord.map(
-          ({
-            id,
-            created_at: createdAt,
-            fk_uid: userId,
-            title,
-            post_content: postContent,
-            img_cdn: imgCdn,
-            upvote_count: upvoteCount,
-            upvoters: upvoters,
-            downvoters: downvoters,
-            parent_id: parentId,
-            replies: replies,
-          }) => {
-            return {
-              id,
-              createdAt,
-              userId,
-              title,
-              postContent,
-              imgCdn,
-              upvoteCount,
-              upvoters,
-              downvoters,
-              parentId,
-              replies,
-            };
-          }
-        ),
-        error: null,
-      };
-    });
-    postsDb = { getById };
-    retrieveSinglePost = makeRetrieveSinglePost({ postsDb });
+describe("Retrieve single post use case tests", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
-  test("Retrieves a single post successfully", async () => {
+  it("retrieves a single post successfully", async () => {
+    postsDb.getById.mockReturnValue({
+      data: [makeFakeRawPost()],
+      error: null,
+    });
     let postId = 1;
-    let expected = makeFakePostEntity(...postRecord).getDTO();
+    let expected = makeFakePostEntity().getDTO();
     let actual = await retrieveSinglePost(postId);
     expect(actual).toEqual(expected);
   });
-  test("Throws an error when post retrieval from DB fails", async () => {
+  it("throws an error when post retrieval from DB fails", async () => {
     let postId = 1;
     let error = { message: "Post retrieval error message" };
     postsDb.getById.mockImplementation(async () => {

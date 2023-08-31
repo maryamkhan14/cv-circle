@@ -3,29 +3,29 @@ import { makeFakeRawPost } from "./post.js";
 export function makeFakeSingleRawPostRecord(overrides) {
   let {
     id,
-    createdAt,
-    userId,
+    createdAt: created_at,
+    userId: fk_uid,
     title,
-    postContent,
-    imgCdn,
-    upvoteCount,
-    upvoters,
-    downvoters,
+    postContent: post_content,
+    imgCdn: img_cdn,
+    upvoteCount: upvote_count,
+    isReply: is_reply,
+    path,
+    level,
     replies,
-    parentId,
   } = makeFakeRawPost();
   let post = {
     id,
-    created_at: createdAt,
-    fk_uid: userId,
+    created_at,
+    fk_uid,
     title,
-    post_content: postContent,
-    img_cdn: imgCdn,
-    upvote_count: upvoteCount,
-    upvoters,
-    downvoters,
+    post_content,
+    img_cdn,
+    upvote_count,
+    is_reply,
+    path,
+    level,
     replies,
-    parent_id: parentId,
   };
   return [{ ...post, ...overrides }];
 }
@@ -40,10 +40,10 @@ export function makeFakeListOfRawPostRecords(overrides) {
       post_content: post.postContent,
       img_cdn: post.imgCdn,
       upvote_count: post.upvoteCount,
-      upvoters: post.upvoters,
-      downvoters: post.downvoters,
       replies: post.replies,
-      parent_id: post.parentId,
+      is_reply: post.isReply,
+      path: post.path,
+      level: post.level,
     };
     return { ...newPost, ...overrides };
   });

@@ -24,18 +24,20 @@ import EditPost from "./pages/EditPost";
 import RegularLayout from "./layouts/RegularLayout";
 const App = () => {
   const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
-  let { data } = useUser({ voteHistory } || {});
+  let { data, error } = useUser({ voteHistory } || {});
   const [user, setUser] = useState(null);
   useEffect(() => {
     if (data && !voteHistory) {
       // load existing vote history if no changes during session
-      console.log("no vote history found");
       setVoteHistory(data.voteHistory);
     }
     if (data) {
       setUser(data);
     }
-  }, [data]);
+    if (error && user) {
+      setUser(null);
+    }
+  }, [data, error]);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
@@ -55,8 +57,8 @@ const App = () => {
             <Route path="/logout" element={<Logout />} />
             {user && <Route path="/create-post" element={<CreatePost />} />}
             <Route path="/post/:id/:updated?" element={<SinglePost />} />
-            <Route path="/edit-post/:id" element={<EditPost />} />
-            <Route path="/edit-profile" element={<Profile />} />
+            {user && <Route path="/edit-post/:id" element={<EditPost />} />}
+            {user && <Route path="/edit-profile" element={<Profile />} />}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

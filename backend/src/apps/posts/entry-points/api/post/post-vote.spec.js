@@ -1,16 +1,17 @@
-import { describe, expect, beforeEach, vi, test } from "vitest";
+import { describe, expect, afterEach, vi, test, it } from "vitest";
 import { makeFakeRawVote } from "../../../__test__/fixtures/vote";
-import makePostVote from "./post-vote";
+import { postVote } from "../post-controller";
+import { votePost } from "../../../domain/use-cases/";
+vi.mock("../../../domain/use-cases/");
 
 describe("Controller for POST to /vote endpoint", () => {
-  let votePost = vi.fn(async (post) => post);
-  let postVote;
-  beforeEach(() => {
-    postVote = makePostVote({ votePost });
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
+  const vote = makeFakeRawVote();
   test("Successfully votes on post", async () => {
-    const vote = makeFakeRawVote();
+    votePost.mockResolvedValue(vote);
     const request = {
       headers: {
         "Content-Type": "application/json",
@@ -23,6 +24,29 @@ describe("Controller for POST to /vote endpoint", () => {
       },
       statusCode: 200,
       body: { voted: vote },
+    };
+    const actual = await postVote(request);
+    expect(actual).toEqual(expected);
+  });
+  it("returns expected response error when exception is thrown", async () => {
+    const error = {
+      message: "Error thrown by POST /api/vote/ controller",
+    };
+    votePost.mockImplementation(async () => {
+      throw new Error(error.message);
+    });
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: vote,
+    };
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 400,
+      body: { error: error.message },
     };
     const actual = await postVote(request);
     expect(actual).toEqual(expected);
