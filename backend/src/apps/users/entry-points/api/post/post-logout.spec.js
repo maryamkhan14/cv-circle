@@ -10,7 +10,7 @@ describe("Controller for POST to /logout endpoint", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
-  test("Successfully logs out user", () => {
+  test("Successfully logs out user", async () => {
     const request = {
       sessionStore: {},
       logOut: () => {},
@@ -30,10 +30,10 @@ describe("Controller for POST to /logout endpoint", () => {
         message: "Logout successful.",
       },
     };
-    const actual = postLogout(request);
+    const actual = await postLogout(request);
     expect(actual).toEqual(expected);
   });
-  test("Returns error if no session found", () => {
+  test("Returns error if no session found", async () => {
     const request = {};
     const expected = {
       headers: {
@@ -44,7 +44,26 @@ describe("Controller for POST to /logout endpoint", () => {
         error: "Logout unsuccessful: no session found.",
       },
     };
-    const actual = postLogout(request);
+    const actual = await postLogout(request);
+    expect(actual).toEqual(expected);
+  });
+
+  test("Returns error response when error is thrown", async () => {
+    let error = { message: "Error" };
+    uncacheUser.mockImplementation(() => {
+      throw new Error(error.message);
+    });
+    const request = {
+      sessionStore: {},
+      logOut: () => {},
+      session: { destroy: () => {} },
+    };
+    const expected = {
+      headers: { "Content-Type": "application/json" },
+      statusCode: 400,
+      body: { error: error.message },
+    };
+    const actual = await postLogout(request);
     expect(actual).toEqual(expected);
   });
 });
