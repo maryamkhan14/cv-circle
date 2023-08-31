@@ -5,7 +5,7 @@ import AccountActions from "../features/profiles/components/AccountActions";
 import Socials from "../features/profiles/components/Socials";
 import { useOutletContext } from "react-router-dom";
 import { StatusContextProvider } from "../features/notifications/context/StatusContext";
-
+import StatusNotification from "../features/notifications/components/StatusNotification";
 const Profile = () => {
   const [user] = useOutletContext();
   return (
@@ -16,6 +16,7 @@ const Profile = () => {
           <BasicInformation user={user} />
           <Socials user={user} />
           <AccountActions user={user} />
+          <StatusNotification popup={"true"} />
         </form>
       </ProfileEditContextProvider>
     </StatusContextProvider>

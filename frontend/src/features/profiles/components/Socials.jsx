@@ -25,7 +25,6 @@ const Socials = () => {
           type="text"
           value={profile.linkedin}
           name="linkedin"
-          required="required"
           placeholder="What is your LinkedIn profile?"
           onChange={handleChange}
           disabled={status === "success"}
@@ -43,7 +42,6 @@ const Socials = () => {
           type="text"
           value={profile.twitter}
           name="twitter"
-          required="required"
           placeholder="What is your Twitter profile?"
           onChange={handleChange}
           disabled={status === "success"}
