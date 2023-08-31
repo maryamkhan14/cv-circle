@@ -104,6 +104,7 @@ services:
         /etc/confluent/docker/run &
         /home/appuser/connectors-config 8083
         sleep infinity
+
   ksqldb:
     # *-----------------------------*
     # To connect to ksqlDB CLI
