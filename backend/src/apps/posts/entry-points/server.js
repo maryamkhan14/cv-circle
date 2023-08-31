@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import "dotenv/config";
 import postRoutes from "./api/index.js";
 import express from "express";
@@ -16,14 +18,30 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     proxy: true,
+    cookie: {
+      maxAge: 86400000,
+      secure: process.env.DEV ? false : true,
+      sameSite: process.env.DEV ? true : "none",
+      httpOnly: true,
+    },
     saveUninitialized: false,
   })
 );
 
 app.use(expressFileUpload());
+const whitelist = [
+  "https://cv-circle.onrender.com",
+  process.env.DEV_FRONTEND_URL,
+];
 app.use(
   cors({
-    origin: "https://cv-circle.onrender.com",
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: "GET,POST,PUT,DELETE,PATCH",
     credentials: true,
   })

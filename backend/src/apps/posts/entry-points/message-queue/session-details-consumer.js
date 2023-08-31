@@ -1,3 +1,4 @@
+/* istanbul ignore file*/
 export default function makeSessionDetailsConsumer({
   consumer,
   sessionsCache,

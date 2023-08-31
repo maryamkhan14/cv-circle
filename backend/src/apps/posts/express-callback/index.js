@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // credit: https://github.com/dev-mastery/comments-api.git
 // purpose: this is an adapter that provides extra layer of indirection (separation) to deal with req and res variables, instead of having the controllers doing so.
 export default function makeExpressCallback(controller, requiresAuth = false) {

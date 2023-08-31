@@ -6,6 +6,9 @@ import {
   FAKE_POST_TITLE,
   FAKE_USER_ID,
   FAKE_UPVOTE_COUNT,
+  FAKE_POST_IS_REPLY,
+  FAKE_POST_LEVEL,
+  FAKE_POST_PATH,
 } from "./constants";
 
 // Make the object that will be passed into post entity factory function
@@ -18,67 +21,41 @@ export function makeFakeRawPost(overrides) {
     postContent: FAKE_POST_CONTENT,
     imgCdn: FAKE_IMAGE_CDN,
     upvoteCount: FAKE_UPVOTE_COUNT,
-    replies: [],
-    parentId: null,
-    upvoters: [],
-    downvoters: [],
+    isReply: FAKE_POST_IS_REPLY,
+    path: FAKE_POST_PATH,
+    level: FAKE_POST_LEVEL,
+    replies: {},
   };
   return { ...post, ...overrides };
 }
 
 // Make the object that will be returned by the post entity factory function -TODO: rename for clarity
 export function makeFakePostEntity(overrides) {
-  let id =
-    overrides && overrides.hasOwnProperty("id") ? overrides.id : FAKE_POST_ID;
-  let imgCdn =
-    overrides && overrides.hasOwnProperty("imgCdn")
-      ? overrides.imgCdn
-      : FAKE_IMAGE_CDN;
-  let userId =
-    overrides && overrides.hasOwnProperty("userId")
-      ? overrides.userId
-      : FAKE_USER_ID;
-  let title =
-    overrides && overrides.hasOwnProperty("title")
-      ? overrides.title
-      : FAKE_POST_TITLE;
-  let postContent =
-    overrides && overrides.hasOwnProperty("postContent")
-      ? overrides.postContent
-      : FAKE_POST_CONTENT;
-  let createdAt =
-    overrides && overrides.hasOwnProperty("createdAt")
-      ? overrides.createdAt
-      : FAKE_POST_CREATED_AT;
-  let upvoteCount =
-    overrides && overrides.hasOwnProperty("upvoteCount")
-      ? overrides.upvoteCount
-      : FAKE_UPVOTE_COUNT;
-  let upvoters =
-    overrides && overrides.hasOwnProperty("upvoters") ? overrides.upvoters : [];
-  let downvoters =
-    overrides && overrides.hasOwnProperty("downvoters")
-      ? overrides.downvoters
-      : [];
-  let parentId =
-    overrides && overrides.hasOwnProperty("parentId")
-      ? overrides.parentId
-      : null;
-  let replies =
-    overrides && overrides.hasOwnProperty("replies") ? overrides.replies : [];
+  let {
+    id,
+    createdAt,
+    userId,
+    title,
+    postContent,
+    imgCdn,
+    upvoteCount,
+    isReply,
+    path,
+    level,
+    replies,
+  } = makeFakeRawPost(overrides);
   const post = {
     getId: () => id,
-    getCreatedAt: () => createdAt,
+    getCreatedAt: () => createdAt, // TODO: Add lastModified
     getUserId: () => userId,
     getTitle: () => title,
     getPostContent: () => postContent,
-    getUpvoteCount: () => upvoteCount,
+    getUpvoteCount: () => upvoteCount || 0,
     getImage: () => imgCdn,
-    getUpvoters: () => upvoters,
-
-    getReplies: () => replies,
-    getParentId: () => parseInt(parentId),
-    getDownvoters: () => downvoters,
+    getPath: () => path,
+    setPath: (newPath) => {
+      path = newPath;
+    },
     setImage: (cdn) => {
       imgCdn = cdn;
     },
@@ -88,6 +65,8 @@ export function makeFakePostEntity(overrides) {
     setCreatedAt: (newCreatedAt) => {
       createdAt = newCreatedAt;
     },
+    getReplies: () => replies,
+    isReply: () => isReply,
     getDTO: () => {
       return {
         id,
@@ -96,11 +75,11 @@ export function makeFakePostEntity(overrides) {
         title,
         postContent,
         imgCdn,
-        upvoteCount,
-        upvoters,
-        downvoters,
+        upvoteCount: upvoteCount || 0,
         replies,
-        parentId,
+        isReply,
+        level,
+        path,
       };
     },
   };

@@ -9,6 +9,11 @@ describe("User entity tests", () => {
     expect(createdUser.getName()).toEqual(user.name);
     expect(createdUser.getEmail()).toEqual(user.email);
     expect(createdUser.getProfilePic()).toEqual(user.profilePic);
+    expect(createdUser.getVoteHistory()).toEqual(user.voteHistory);
+    expect(createdUser.getDisplayName()).toEqual(user.displayName);
+    expect(createdUser.getLinkedin()).toEqual(user.linkedin);
+    expect(createdUser.getTwitter()).toEqual(user.twitter);
+    expect(createdUser.getBio()).toEqual(user.bio);
   });
   test("must have an ID", () => {
     const user = makeFakeRawUser({ userId: null });

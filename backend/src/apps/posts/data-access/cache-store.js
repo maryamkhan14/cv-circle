@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { createClient } from "redis";
 import RedisStore from "connect-redis";
 

@@ -1,37 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import Layout from "./components/Layout";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import { UserContextProvider } from "./context/UserContext";
-import "./main.css";
-import LoggedIn from "./components/LoggedIn";
-import LoggedOut from "./components/LoggedOut";
-import PostForm from "./components/PostForm";
-import AllPosts from "./components/AllPosts";
-import SinglePost from "./components/SinglePost";
-import NotPermitted from "./components/NotPermitted";
-import PostSkeleton from "./components/PostSkeleton";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { UserContextProvider } from "./features/authentication/context/UserContext";
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <UserContextProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index={true} element={<AllPosts />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/logged-in" element={<LoggedIn />} />
-          <Route path="/logged-out" element={<LoggedOut />} />
-          <Route path="/create-post" element={<PostForm />} />
-          <Route path="/post/:id/:updated?" element={<SinglePost />} />
-          <Route path="/edit-post/:id" element={<PostForm />} />
-          <Route path="/not-permitted" element={<NotPermitted />} />
-          <Route path="/post-skeleton" element={<PostSkeleton />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </UserContextProvider>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <UserContextProvider>
+        <App />
+      </UserContextProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );

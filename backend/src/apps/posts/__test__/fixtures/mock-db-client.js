@@ -15,7 +15,15 @@ let updateSpy = vi.fn(() => {
 let deleteSpy = vi.fn(() => {
   return {
     eq: vi.fn(() => {
-      return { data: null, error: null };
+      return {
+        eq: vi.fn(() => {
+          return {
+            select: vi.fn(() => {
+              return { data: makeFakeSingleRawPostRecord(), error: null };
+            }),
+          };
+        }),
+      };
     }),
   };
 });
@@ -34,9 +42,14 @@ let selectSpy = vi.fn(() => {
     order: vi.fn(() => {
       return { data: makeFakeListOfRawPostRecords(), error: null };
     }),
+    containedBy: vi.fn(() => {
+      return { data: makeFakeSingleRawPostRecord(), error: null };
+    }),
     eq: vi.fn(() => {
       return { data: makeFakeSingleRawPostRecord(), error: null };
     }),
+    data: makeFakeListOfRawPostRecords(),
+    error: null,
   };
 });
 let uploadBucketSpy = vi.fn(async () => {});

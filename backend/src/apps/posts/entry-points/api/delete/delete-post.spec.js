@@ -1,39 +1,14 @@
-import { describe, expect, beforeEach, vi, test } from "vitest";
+import { describe, expect, vi, it, afterEach } from "vitest";
+import { removePost } from "../../../domain/use-cases/";
 import { makeFakeRawPost } from "../../../__test__/fixtures/post";
-import makeDeletePost from "./delete-post";
-
+import { deletePost } from "../post-controller";
+vi.mock("../../../domain/use-cases/");
 describe("Controller for DELETE to /api/posts/:id endpoint", () => {
-  let removePost = vi.fn(async (post) => {
-    return post;
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
-  let retrieveSinglePost = vi.fn(async (postId) => {
-    return makeFakeRawPost({ id: postId });
-  });
-  let deletePost;
-
-  beforeEach(() => {
-    deletePost = makeDeletePost({ removePost, retrieveSinglePost });
-  });
-  test("Refuses to update a post without valid user credentials", async () => {
-    const post = makeFakeRawPost();
-    const request = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      params: { id: post.id },
-      body: { ...post },
-    };
-    const expected = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      statusCode: 400,
-      body: { error: "Not authorized to perform this action." },
-    };
-    const actual = await deletePost(request);
-    expect(actual).toEqual(expected);
-  });
-  test("Successfully deletes a post", async () => {
+  it("successfully deletes a post", async () => {
+    removePost.mockResolvedValue(makeFakeRawPost());
     const post = makeFakeRawPost();
     const user = { userId: post.userId };
     const request = {
@@ -55,7 +30,7 @@ describe("Controller for DELETE to /api/posts/:id endpoint", () => {
     expect(actual).toEqual(expected);
   });
 
-  test("Returns expected response error when exception is thrown", async () => {
+  it("returns expected response error when exception is thrown", async () => {
     const error = {
       message: "Error thrown by DELETE /api/posts/:id controller",
     };

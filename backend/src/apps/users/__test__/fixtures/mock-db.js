@@ -1,18 +1,55 @@
 import { vi } from "vitest";
-import realTestDbClient from "./db";
+import { makeFakeRawUser } from "./user";
 
-let upsertSpy = vi.fn(() => {
+let upsertSpy = vi.fn((user) => {
   return {
-    select: vi.fn(() => {}),
+    select: vi.fn(() => {
+      return { data: [user], error: null };
+    }),
   };
 });
 
+let updateSpy = vi.fn((user) => {
+  return {
+    eq: vi.fn(() => {
+      return {
+        select: vi.fn(() => {
+          return { data: [user], error: null };
+        }),
+      };
+    }),
+  };
+});
+
+let deleteSpy = vi.fn((user) => {
+  return {
+    eq: vi.fn((_, userId) => {
+      return {
+        select: vi.fn(() => {
+          return { data: [makeFakeRawUser({ userId })], error: null };
+        }),
+      };
+    }),
+  };
+});
+
+let uploadBucketSpy = vi.fn(async () => {});
+
 const mockTestDbClient = {
-  ...realTestDbClient,
+  updateSpy: updateSpy,
   upsertSpy: upsertSpy,
+  deleteSpy: deleteSpy,
+  uploadBucketSpy: uploadBucketSpy,
+  storage: {
+    from: vi.fn(() => {
+      return { upload: uploadBucketSpy };
+    }),
+  },
   from: vi.fn(() => {
     return {
+      update: updateSpy,
       upsert: upsertSpy,
+      delete: deleteSpy,
     };
   }),
 };

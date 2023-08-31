@@ -1,5 +1,5 @@
 export default function makeVotesDb({ dbClient }) {
-  const normalizedProfileToDbColumns = {
+  const normalizedVoteToDbColumns = {
     voteCount: "delta_votes",
     userId: "uid",
     postId: "pid",
@@ -17,7 +17,7 @@ export default function makeVotesDb({ dbClient }) {
 
   async function vote(voteDetails) {
     let result = await dbClient.rpc("vote", {
-      ...renameKeys(voteDetails, normalizedProfileToDbColumns),
+      ...renameKeys(voteDetails, normalizedVoteToDbColumns),
     });
     return { ...result };
   }
