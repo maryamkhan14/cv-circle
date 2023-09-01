@@ -3,7 +3,10 @@ export default function makeDeletePost({ removePost }) {
     try {
       const user = httpRequest.user;
       const { id: postId } = httpRequest.params;
-      const deleted = await removePost(postId, user.userId || -1);
+      const deleted = await removePost(
+        postId,
+        user.userId || /* istanbul ignore next */ -1
+      );
       return {
         headers: {
           "Content-Type": "application/json",
