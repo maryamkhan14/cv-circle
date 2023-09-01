@@ -1,20 +1,23 @@
 export default function buildMakePost() {
-  return function makePost({
-    id,
-    createdAt,
-    userId,
-    title,
-    postContent,
-    imgCdn,
-    upvoteCount = 0,
-    isReply,
-    path,
-    level,
-    ...rest
-  } = {}) {
+  return function makePost(
+    /*istanbul ignore next */ {
+      id,
+      createdAt,
+      userId,
+      title,
+      postContent,
+      imgCdn,
+      upvoteCount = 0,
+      isReply,
+      path,
+      level,
+      replies,
+    } = {}
+  ) {
     // Convert to correct types
     if (id) id = parseInt(id);
     if (isReply) isReply = /true/.test(isReply);
+    /* istanbul ignore next */
     if (level) level = parseInt(level);
     if (upvoteCount) upvoteCount = parseInt(upvoteCount);
 

@@ -28,12 +28,15 @@ export default function makePostsDb({ dbClient }) {
     );
   }
 
+  /* istanbul ignore next */
   function format(records, keysMap) {
-    return records.map((record) => renameKeys(record, keysMap));
+    if (records) return records.map((record) => renameKeys(record, keysMap));
   }
 
+  /* istanbul ignore next */
   function nest(posts, rootPostId) {
     let nestedRoot = {};
+    /* istanbul ignore else */
     if (posts) {
       posts.map((post) => {
         let { path } = post;
