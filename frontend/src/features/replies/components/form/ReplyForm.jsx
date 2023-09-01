@@ -13,6 +13,7 @@ const ReplyForm = ({ original, user }) => {
     userId: user?.userId || "",
     file: null,
     path: original.path || "",
+    replies: original.replies,
     isReply: true,
   };
   const [post, setPost] = useState({
