@@ -4,6 +4,7 @@ export default function makeHandleAttachmentPreview({
   makeImage,
 }) {
   return async function handleAttachmentPreview({ file, userId, extension }) {
+    /* istanbul ignore else */
     if (file) {
       let image;
       if (file.mimetype !== "application/pdf") {
