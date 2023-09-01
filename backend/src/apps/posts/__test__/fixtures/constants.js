@@ -5,7 +5,7 @@ const uniqueId = Object.freeze({
 });
 //TODO: Add constants for table names & rows
 const FAKE_POST_ID = 1;
-const FAKE_POST_CREATED_AT = faker.date.anytime();
+const FAKE_POST_CREATED_AT = faker.date.anytime().toString();
 const FAKE_USER_ID = faker.string.numeric(21);
 const FAKE_POST_TITLE = faker.lorem.sentence();
 const FAKE_POST_CONTENT = faker.lorem.paragraph(3);

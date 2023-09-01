@@ -32,9 +32,13 @@ export default function buildMakePost() {
     if (!imgCdn?.trim() && !isReply) {
       throw new Error("Post must have image.");
     }
-    let replies = {};
-    if (rest?.replies) {
-      replies = rest.replies;
+    if (replies?.constructor === String) {
+      // frontend sends replies property as JSON string since the form is sent as multipart/form-data
+      try {
+        replies = JSON.parse(replies);
+      } catch (e) {}
+    } else if (replies?.constructor !== Object) {
+      replies = {};
     }
     return Object.freeze({
       getId: () => id,
