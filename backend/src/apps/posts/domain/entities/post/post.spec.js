@@ -9,6 +9,7 @@ describe("Post entity tests", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
   it("sets isReply to boolean result of regex match test if isReply exists", () => {
     const inputDetails = makeFakeRawPost({ isReply: "true" });
     const post = makePost(inputDetails);
@@ -29,7 +30,8 @@ describe("Post entity tests", () => {
     const overrides = { title: null, isReply: true };
     const expectedPost = makeFakePostEntity(overrides);
     const inputDetails = makeFakeRawPost({ ...overrides });
-    expect(inputDetails).toEqual(expectedPost.getDTO());
+    const actual = makePost(inputDetails);
+    expect(actual.getDTO()).toEqual(expectedPost.getDTO());
   });
 
   it("throws error without post content", () => {
@@ -46,7 +48,25 @@ describe("Post entity tests", () => {
     const overrides = { imgCdn: null, isReply: true };
     const expectedPost = makeFakePostEntity(overrides);
     const inputDetails = makeFakeRawPost(overrides);
-    expect(inputDetails).toEqual(expectedPost.getDTO());
+    const actual = makePost(inputDetails);
+    expect(actual.getDTO()).toEqual(expectedPost.getDTO());
+  });
+
+  it("correctly sets replies JSON property if replies argument is JSON string", () => {
+    const replies = { 2: makeFakeRawPost({ id: 2 }) };
+    const overrides = { replies: JSON.stringify(replies) };
+    const expectedPost = makeFakePostEntity({ replies });
+    const inputDetails = makeFakeRawPost(overrides);
+    const actual = makePost(inputDetails);
+    expect(actual.getDTO()).toEqual(expectedPost.getDTO());
+  });
+
+  it("sets replies to an empty object if replies argument is not an object", () => {
+    const overrides = { replies: null };
+    const expectedPost = makeFakePostEntity();
+    const inputDetails = makeFakeRawPost(overrides);
+    const actual = makePost(inputDetails);
+    expect(actual.getDTO()).toEqual(expectedPost.getDTO());
   });
 
   it("sets image", () => {
