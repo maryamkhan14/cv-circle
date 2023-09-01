@@ -36,6 +36,7 @@ const App = () => {
     }
     if (error && user) {
       setUser(null);
+      setVoteHistory({});
     }
   }, [data, error]);
   const router = createBrowserRouter(

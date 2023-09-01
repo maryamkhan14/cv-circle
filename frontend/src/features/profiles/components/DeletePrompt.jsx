@@ -36,7 +36,7 @@ const DeletePrompt = ({ activeContext, disabled }) => {
           statusMsg: "Account has been deleted. Feel free to log out.",
         },
       });
-      navigate(".", { relative: "path" });
+      navigate("/logout");
     } else if (deleteStatus === "error") {
       statusDispatch({
         type: "UPDATE_STATUS",

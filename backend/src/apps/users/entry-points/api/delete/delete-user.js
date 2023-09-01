@@ -4,10 +4,6 @@ export default function makeDeleteUser({ removeUser }) {
     try {
       let { userId } = httpRequest.user;
       const deleted = await removeUser(userId);
-      withErrorHandling(
-        () => httpRequest.logOut,
-        () => httpRequest.session.destroy
-      )("Logout unsuccessful: could not clear session.");
       return {
         headers: {
           "Content-Type": "application/json",

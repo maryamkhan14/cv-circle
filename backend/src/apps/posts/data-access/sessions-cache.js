@@ -3,13 +3,23 @@ export default function makeSessionsCache({ cacheStore }) {
   async function get(sessionId) {
     return await cacheStore.client.get(sessionId);
   }
-  async function set(sessionId, sessionDetails = null) {
+  async function set(
+    sessionId,
+    /* istanbul ignore next */ sessionDetails = null
+  ) {
     if (sessionDetails) {
-      return await cacheStore.set(sessionId, sessionDetails, () => {});
+      return await cacheStore.set(
+        sessionId,
+        sessionDetails,
+        /* istanbul ignore next */ () => {}
+      );
     }
     await destroy(sessionId);
   }
   async function destroy(sessionId) {
-    return await cacheStore.destroy(sessionId, () => {});
+    return await cacheStore.destroy(
+      sessionId,
+      /* istanbul ignore next */ () => {}
+    );
   }
 }

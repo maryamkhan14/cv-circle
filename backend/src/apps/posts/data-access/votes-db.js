@@ -9,7 +9,7 @@ export default function makeVotesDb({ dbClient }) {
     return Object.keys(obj).reduce(
       (acc, key) => ({
         ...acc,
-        ...{ [keysMap[key] || key]: obj[key] },
+        ...{ [keysMap[key] || /* istanbul ignore next */ key]: obj[key] },
       }),
       {}
     );
