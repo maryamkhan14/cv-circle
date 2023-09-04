@@ -24,7 +24,7 @@ import EditPost from "./pages/EditPost";
 import RegularLayout from "./layouts/RegularLayout";
 const App = () => {
   const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
-  let { data, error } = useCurrentUser({ voteHistory } || {});
+  let { data, isFetching, error } = useCurrentUser({ voteHistory } || {});
   const [user, setUser] = useState(null);
   useEffect(() => {
     if (data && !voteHistory) {
@@ -52,15 +52,19 @@ const App = () => {
             element={<RegularLayout user={user} setUser={setUser} />}
           >
             <Route index={true} element={<AllPosts />} />
-            {!user && <Route path="/login" element={<Login />} />}
-            {!user && <Route path="/signup" element={<Signup />} />}
             <Route path="/logged-in" element={<LoggedIn />} />
             <Route path="/logout" element={<Logout />} />
-            {user && <Route path="/create-post" element={<CreatePost />} />}
             <Route path="/post/:id/:updated?" element={<SinglePost />} />
-            {user && <Route path="/edit-post/:id" element={<EditPost />} />}
-            {user && <Route path="/edit-profile" element={<Profile />} />}
+            <Route path="/post/:id/:updated?" element={<SinglePost />} />
             <Route path="*" element={<NotFound />} />
+            <Route
+              path={user || isFetching ? "/profile/:id?" : "/profile/:id"}
+              element={<Profile />}
+            />
+            {!user && <Route path="/login" element={<Login />} />}
+            {!user && <Route path="/signup" element={<Signup />} />}
+            {user && <Route path="/create-post" element={<CreatePost />} />}
+            {user && <Route path="/edit-post/:id" element={<EditPost />} />}
           </Route>
         </Route>
       </Route>
