@@ -25,7 +25,11 @@ const Socials = () => {
           type="text"
           value={profile.linkedin}
           name="linkedin"
-          placeholder="What is your LinkedIn profile?"
+          placeholder={
+            profile?.self
+              ? "What is your LinkedIn profile?"
+              : "This user has not added their LinkedIn profile."
+          }
           onChange={handleChange}
           disabled={status === "success"}
         />
@@ -42,7 +46,11 @@ const Socials = () => {
           type="text"
           value={profile.twitter}
           name="twitter"
-          placeholder="What is your Twitter profile?"
+          placeholder={
+            profile?.self
+              ? "What is your Twitter profile?"
+              : "This user has not added their Twitter profile."
+          }
           onChange={handleChange}
           disabled={status === "success"}
         />
