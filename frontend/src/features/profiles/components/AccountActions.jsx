@@ -34,6 +34,14 @@ const AccountActions = ({ enabled }) => {
           statusMsg: "Updating profile...",
         },
       });
+    } else if (updateStatus === "error") {
+      dispatch({
+        type: "UPDATE_STATUS",
+        payload: {
+          status: "error",
+          statusMsg: error.message,
+        },
+      });
     }
   }, [updateStatus]);
   return (
