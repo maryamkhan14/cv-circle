@@ -23,6 +23,7 @@ export const ProfileEditContextProvider = ({ children }) => {
       twitter: "",
       bio: "",
       file: null,
+      self: false,
     },
   });
   const contextValue = useMemo(() => ({ ...state, dispatch }), [state]);

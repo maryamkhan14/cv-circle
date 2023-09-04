@@ -1,24 +1,41 @@
 import { ProfileEditContextProvider } from "../features/profiles/context/ProfileEditContext";
-import MainDetails from "../features/profiles/components/MainDetails";
-import BasicInformation from "../features/profiles/components/BasicInformation";
-import AccountActions from "../features/profiles/components/AccountActions";
-import Socials from "../features/profiles/components/Socials";
 import { useOutletContext } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { StatusContextProvider } from "../features/notifications/context/StatusContext";
-import StatusNotification from "../features/notifications/components/StatusNotification";
+import useUserProfile from "../features/profiles/hooks/useUserProfile";
+import ProfileDetails from "../features/profiles/components/ProfileDetails";
+import ProfileSkeleton from "../features/profiles/components/ProfileSkeleton";
 const Profile = () => {
   const [user] = useOutletContext();
+  const { id: toRetrieveId } = useParams();
+
+  // check toRetrieveId exists, is not the same as current user, and is numeric
+  const queryEnabled =
+    !!toRetrieveId && user?.userId !== toRetrieveId && !isNaN(toRetrieveId);
+
+  const {
+    data: profile,
+    status,
+    error,
+  } = useUserProfile(toRetrieveId, queryEnabled);
+  /**
+   * if neither profile nor user exist, or if error fetching user, then
+   * use useEffect to toast error, navigate back home.
+   */
+
   return (
     <StatusContextProvider>
-      <ProfileEditContextProvider>
-        <form className="rounded flex shadow-md border m-3 w-11/12 md:w-11/12 bg-slate-100/50 flex-col items-center px-3 py-5 font-[700] text-center">
-          <MainDetails user={user} />
-          <BasicInformation user={user} />
-          <Socials user={user} />
-          <AccountActions user={user} />
-          <StatusNotification popup={"true"} />
-        </form>
-      </ProfileEditContextProvider>
+      {queryEnabled && status === "loading" ? (
+        <ProfileSkeleton />
+      ) : (
+        <ProfileEditContextProvider>
+          <ProfileDetails
+            user={profile || user}
+            self={!profile && user?.userId}
+          />
+        </ProfileEditContextProvider>
+      )}
     </StatusContextProvider>
   );
 };
