@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ProfileEditContext } from "../context/ProfileEditContext";
 import ProfileSection from "./ProfileSection";
 import { StatusContext } from "../../notifications/context/StatusContext";
-const BasicInformation = () => {
+const BasicInformation = ({ enabled }) => {
   const { profile, dispatch: profileDispatch } = useContext(ProfileEditContext);
   const { status, dispatch: statusDispatch } = useContext(StatusContext);
   const [profilePic, setProfilePic] = useState("");
@@ -66,15 +66,18 @@ const BasicInformation = () => {
         <input
           className="border border-slate-800 md:w-[90%]  p-2 rounded bg-slate-50/50 focus:bg-slate-50"
           type="text"
-          value={profile.displayName}
+          value={
+            profile.self
+              ? profile.displayName
+              : profile.displayName || profile.name
+          }
           name="displayName"
-          disabled={status === "loading"}
+          disabled={!enabled}
           required="required"
           placeholder="By default, your full name is used."
           onChange={handleChange}
         />
       </div>
-
       <div
         id="edit-bio"
         className="flex flex-col md:flex-row w-full  md:items-center justify-between md:gap-3"
