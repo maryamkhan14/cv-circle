@@ -1,10 +1,8 @@
 /* istanbul ignore file */
 import {
   saveUser,
-  handlePicture,
   cacheUser,
   uncacheUser,
-  removeUser,
 } from "../../domain/use-cases/index.js";
 import authenticator from "../../domain/services/authenticator/index.js";
 import makeGetGoogleAuth from "./get/get-google-auth.js";
@@ -13,8 +11,6 @@ import makeGetGithubAuthCallback from "./get/get-github-auth-callback.js";
 import makeGetGoogleAuthCallback from "./get/get-google-auth-callback.js";
 import makeGetAuthSuccess from "./get/get-auth-success.js";
 import makePostLogout from "./post/post-logout.js";
-import makePatchUser from "./patch/patch-user.js";
-import makeDeleteUser from "./delete/delete-user.js";
 
 const { authGoogle, authGoogleCallback, authGithub, authGithubCallback } =
   authenticator;
@@ -30,20 +26,17 @@ const getGithubAuthCallback = makeGetGithubAuthCallback({
 
 const getAuthSuccess = makeGetAuthSuccess({ cacheUser });
 const postLogout = makePostLogout({ uncacheUser });
-const patchUser = makePatchUser({ saveUser, handlePicture });
-const deleteUser = makeDeleteUser({ removeUser });
-const userController = Object.freeze({
+const authController = Object.freeze({
   getGoogleAuth,
   getGoogleAuthCallback,
   getGithubAuth,
   getGithubAuthCallback,
   getAuthSuccess,
   postLogout,
-  patchUser,
-  deleteUser,
+  saveUser,
 });
 
-export default { userController };
+export default { authController };
 
 export {
   getGoogleAuth,
@@ -52,6 +45,5 @@ export {
   getGithubAuthCallback,
   getAuthSuccess,
   postLogout,
-  patchUser,
-  deleteUser,
+  saveUser,
 };
