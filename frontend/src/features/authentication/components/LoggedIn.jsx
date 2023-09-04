@@ -1,12 +1,12 @@
 import React from "react";
-import useCurrentUser from "../hooks/useCurrentUser";
+import useUser from "../hooks/useUser";
 import { useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ReportButton from "../../../components/ReportButton";
 
 const LoggedIn = () => {
   const navigate = useNavigate();
-  const { isLoading, isError, data: user, error } = useCurrentUser();
+  const { isLoading, isError, data: user, error } = useUser();
   const [, setUser] = useOutletContext();
   useEffect(() => {
     if (user) {

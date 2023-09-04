@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserDelete } from "../hooks";
 import { StatusContext } from "../../notifications/context/StatusContext";
-import { ProfileContext } from "../context/ProfileContext";
+import { ProfileEditContext } from "../context/ProfileEditContext";
 
 const DeletePrompt = ({ activeContext, disabled }) => {
   const [active, setActive] = activeContext;
@@ -11,7 +11,7 @@ const DeletePrompt = ({ activeContext, disabled }) => {
   const { status: deleteStatus, mutateAsync: remove, error } = useUserDelete();
 
   const [confirmation, setConfirmation] = useState("");
-  const { profile } = useContext(ProfileContext);
+  const { profile } = useContext(ProfileEditContext);
   const handleConfirmDelete = async (e) => {
     e.preventDefault();
     if (confirmation === profile?.email) {

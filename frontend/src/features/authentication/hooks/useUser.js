@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCurrentUser } from "../services";
 
-export default function useCurrentUser(overrides = {}) {
+export default function useUser(overrides = {}) {
   return useQuery({
     queryKey: ["user"],
     queryFn: async () => {

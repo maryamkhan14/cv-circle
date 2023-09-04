@@ -1,26 +1,32 @@
-import ProfileSection from "./ProfileSection";
-
+import { useContext, useEffect } from "react";
+import { ProfileEditContext } from "../context/ProfileEditContext";
 const MainDetails = ({ user }) => {
+  const { dispatch: profileDispatch } = useContext(ProfileEditContext);
+  useEffect(() => {
+    if (user) {
+      console.log(user, user.profilePic);
+      profileDispatch({ type: "UPDATE_PROFILE", payload: { ...user } });
+    }
+  }, [user]);
   return (
-    <ProfileSection>
+    <div
+      id="main-details"
+      className="flex flex-wrap flex-col md:flex-row items-center border-b-2 border-slate-50 py-5 w-full gap-5 wrap justify-center"
+    >
+      <img
+        className="self-center rounded-lg w-40 h-40 border"
+        src={user?.profilePic}
+        alt="profile"
+      />
       <div
-        id="main-details"
-        className="flex flex-wrap flex-col md:flex-row items-center py-5 w-full gap-5 wrap justify-center"
+        className="flex flex-col justify-center  md:items-start gap-5 md:ml-5 "
+        id="name-and-email"
       >
-        <img
-          className="self-center rounded-lg w-40 h-40 border"
-          src={user?.profilePic}
-          alt="profile"
-        />
-        <div
-          className="flex flex-col justify-center  md:items-start gap-5 md:ml-5 "
-          id="name-and-email"
-        >
-          <h1 className="text-5xl">{user?.displayName || user?.name}</h1>{" "}
-          <h2 className="text-2xl italic">{user?.email}</h2>
-        </div>
+        <h1 className="text-5xl">{user?.displayName || user?.name}</h1>{" "}
+        {/* TODO: change to displayName */}
+        <h2 className="text-2xl italic">{user?.email}</h2>
       </div>
-    </ProfileSection>
+    </div>
   );
 };
 

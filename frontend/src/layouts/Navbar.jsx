@@ -118,7 +118,7 @@ const Navbar = ({ user }) => {
                   <ul className="py-1" aria-labelledby="dropdown">
                     <li>
                       <Link
-                        to="/profile"
+                        to="/edit-profile"
                         className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                       >
                         <h3 className="text-amber-800">Profile</h3>

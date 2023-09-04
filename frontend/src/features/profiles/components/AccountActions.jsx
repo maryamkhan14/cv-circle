@@ -1,11 +1,12 @@
 import { useState, useContext, useEffect } from "react";
-import { ProfileContext } from "../context/ProfileContext";
+import { ProfileEditContext } from "../context/ProfileEditContext";
 import { StatusContext } from "../../notifications/context/StatusContext";
 import { useUserUpdate } from "../hooks";
+import StatusNotification from "../../notifications/components/StatusNotification";
 import DeletePrompt from "./DeletePrompt";
-const AccountActions = ({ enabled }) => {
+const AccountActions = () => {
   const [deletePromptActive, setDeletePromptActive] = useState(false);
-  const { profile } = useContext(ProfileContext);
+  const { profile } = useContext(ProfileEditContext);
   const { dispatch } = useContext(StatusContext);
   const { status: updateStatus, mutateAsync: update, error } = useUserUpdate();
   const updateProfile = async (e) => {
@@ -15,6 +16,7 @@ const AccountActions = ({ enabled }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     setDeletePromptActive(!deletePromptActive);
+    //delete();
   };
   useEffect(() => {
     if (updateStatus === "success") {
@@ -34,14 +36,6 @@ const AccountActions = ({ enabled }) => {
           statusMsg: "Updating profile...",
         },
       });
-    } else if (updateStatus === "error") {
-      dispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: error.message,
-        },
-      });
     }
   }, [updateStatus]);
   return (
@@ -50,14 +44,14 @@ const AccountActions = ({ enabled }) => {
         <button
           className="whitespace-nowrap text-slate-50 disabled:bg-amber-800/50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center mr-10"
           onClick={updateProfile}
-          disabled={!enabled}
+          disabled={updateStatus === "loading"}
         >
           Save Changes
         </button>
         <button
           className="whitespace-nowrap disabled:bg-red-500/50 text-slate-50 bg-red-500 hover:bg-red-500/90  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center mr-5"
           onClick={handleDelete}
-          disabled={!enabled}
+          disabled={updateStatus === "loading"}
           type="submit"
         >
           {deletePromptActive ? "Cancel" : "Delete Account"}
@@ -65,7 +59,7 @@ const AccountActions = ({ enabled }) => {
       </div>
       <DeletePrompt
         activeContext={[deletePromptActive, setDeletePromptActive]}
-        disabled={!enabled}
+        disabled={updateStatus === "loading"}
       />
     </div>
   );

@@ -6,7 +6,7 @@ const DOMAIN = import.meta.env.DEV
 
 const getCurrentUser = async () => {
   try {
-    let { data } = await axios.get(`${DOMAIN}/api/users/auth/success`, {
+    let { data } = await axios.get(`${DOMAIN}/api/auth/success`, {
       withCredentials: true,
       headers: {
         Accept: "application/json",
@@ -28,7 +28,7 @@ const getCurrentUser = async () => {
 const postLogout = async () => {
   try {
     let { data: authStatus } = await axios.post(
-      `${DOMAIN}/api/users/auth/logout`,
+      `${DOMAIN}/api/auth/logout`,
       {},
       { withCredentials: true }
     );
@@ -43,6 +43,6 @@ const postLogout = async () => {
   }
 };
 
-const AUTH_URL_GITHUB = `${DOMAIN}/api/users/auth/github`;
-const AUTH_URL_GOOGLE = `${DOMAIN}/api/users/auth/google`;
+const AUTH_URL_GITHUB = `${DOMAIN}/api/auth/github`;
+const AUTH_URL_GOOGLE = `${DOMAIN}/api/auth/google`;
 export { getCurrentUser, postLogout, AUTH_URL_GITHUB, AUTH_URL_GOOGLE };

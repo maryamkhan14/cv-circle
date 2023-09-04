@@ -7,7 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./main.css";
-import useCurrentUser from "./features/authentication/hooks/useCurrentUser";
+import useUser from "./features/authentication/hooks/useUser";
 import { useSessionStorage } from "./hooks/index";
 import Layout from "./layouts/Layout";
 import LoggedIn from "./features/authentication/components/LoggedIn";
@@ -24,7 +24,7 @@ import EditPost from "./pages/EditPost";
 import RegularLayout from "./layouts/RegularLayout";
 const App = () => {
   const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
-  let { data, isFetching, error } = useCurrentUser({ voteHistory } || {});
+  let { data, error } = useUser({ voteHistory } || {});
   const [user, setUser] = useState(null);
   useEffect(() => {
     if (data && !voteHistory) {
@@ -52,19 +52,15 @@ const App = () => {
             element={<RegularLayout user={user} setUser={setUser} />}
           >
             <Route index={true} element={<AllPosts />} />
-            <Route path="/logged-in" element={<LoggedIn />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/post/:id/:updated?" element={<SinglePost />} />
-            <Route path="/post/:id/:updated?" element={<SinglePost />} />
-            <Route path="*" element={<NotFound />} />
-            <Route
-              path={user || isFetching ? "/profile/:id?" : "/profile/:id"}
-              element={<Profile />}
-            />
             {!user && <Route path="/login" element={<Login />} />}
             {!user && <Route path="/signup" element={<Signup />} />}
+            <Route path="/logged-in" element={<LoggedIn />} />
+            <Route path="/logout" element={<Logout />} />
             {user && <Route path="/create-post" element={<CreatePost />} />}
+            <Route path="/post/:id/:updated?" element={<SinglePost />} />
             {user && <Route path="/edit-post/:id" element={<EditPost />} />}
+            {user && <Route path="/edit-profile" element={<Profile />} />}
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
       </Route>

@@ -5,10 +5,7 @@ import PostsList from "../features/posts/components/list/PostsList";
 import StatusNotification from "../features/notifications/components/StatusNotification";
 import SearchBar from "../features/posts/components/list/SearchBar";
 import SortSelect from "../features/posts/components/list/SortSelect";
-import { useAllPosts } from "../features/posts/hooks";
-import PostsSkeleton from "../features/posts/components/PostsSkeleton";
 const AllPosts = () => {
-  const { status: allPostsStatus, error, data: allPosts } = useAllPosts();
   return (
     <StatusContextProvider>
       <PostsListContextProvider>
@@ -17,12 +14,7 @@ const AllPosts = () => {
             <SearchBar />
             <SortSelect />
           </span>
-          <PostsList
-            status={allPostsStatus}
-            error={error}
-            posts={allPosts}
-            loader={<PostsSkeleton />}
-          />
+          <PostsList />
           <StatusNotification popup={"true"} />
         </div>
       </PostsListContextProvider>
