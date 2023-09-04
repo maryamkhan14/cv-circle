@@ -7,7 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./main.css";
-import useUser from "./features/authentication/hooks/useUser";
+import useCurrentUser from "./features/authentication/hooks/useCurrentUser";
 import { useSessionStorage } from "./hooks/index";
 import Layout from "./layouts/Layout";
 import LoggedIn from "./features/authentication/components/LoggedIn";
@@ -24,7 +24,7 @@ import EditPost from "./pages/EditPost";
 import RegularLayout from "./layouts/RegularLayout";
 const App = () => {
   const [voteHistory, setVoteHistory] = useSessionStorage("voteHistory", {});
-  let { data, error } = useUser({ voteHistory } || {});
+  let { data, error } = useCurrentUser({ voteHistory } || {});
   const [user, setUser] = useState(null);
   useEffect(() => {
     if (data && !voteHistory) {
