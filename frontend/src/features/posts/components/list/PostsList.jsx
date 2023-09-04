@@ -2,11 +2,8 @@ import React, { useContext, useEffect } from "react";
 import { DateTime } from "luxon";
 import { Link } from "react-router-dom";
 import { usePostsListContext } from "../../context/PostsListContext";
-import { useAllPosts } from "../../hooks";
-import PostsSkeleton from "../PostsSkeleton";
 import { StatusContext } from "../../../notifications/context/StatusContext";
-const PostsList = () => {
-  const { status: allPostsStatus, error, data: allPosts } = useAllPosts();
+const PostsList = ({ status, posts, error, loader }) => {
   const { dispatch: statusDispatch } = useContext(StatusContext);
   const { dispatch: postsListDispatch, displayed } = usePostsListContext();
   const formatTimestamp = (timestamp) => {
@@ -14,15 +11,15 @@ const PostsList = () => {
     return luxonDateTime.toLocaleString(DateTime.DATETIME_MED);
   };
   useEffect(() => {
-    if (allPosts) {
-      postsListDispatch({ type: "UPDATE_ALL_POSTS", payload: allPosts });
+    if (posts) {
+      postsListDispatch({ type: "UPDATE_ALL_POSTS", payload: posts });
     }
-  }, [allPosts]);
+  }, [posts]);
   useEffect(() => {
-    if (allPostsStatus !== "error") {
+    if (status !== "error") {
       statusDispatch({
         type: "UPDATE_STATUS",
-        payload: { status: allPostsStatus, show: false },
+        payload: { status: status, show: false },
       });
     } else {
       statusDispatch({
@@ -33,9 +30,9 @@ const PostsList = () => {
         },
       });
     }
-  }, [allPostsStatus]);
-  return allPostsStatus === "loading" ? (
-    <PostsSkeleton />
+  }, [status]);
+  return status === "loading" ? (
+    loader
   ) : (
     <>
       {displayed?.length ? (
@@ -48,13 +45,13 @@ const PostsList = () => {
               to={`/post/${post?.id}`}
               className="flex flex-col md:flex-row w-full items-center justify-between"
             >
-              <span className="flex flex-col border p-3 rounded-full bg-amber-800/70 justify-center items-center">
+              <span className="flex md:flex-col border p-2 md:p-3 rounded-full bg-amber-800/70 justify-center items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
-                  className="w-6 h-6 stroke-slate-50"
+                  className="w-6 h-6 stroke-slate-50 mr-3 md:m-0"
                 >
                   <path
                     strokeLinecap="round"
@@ -65,17 +62,17 @@ const PostsList = () => {
 
                 <p className="text-slate-50">{post?.upvoteCount}</p>
               </span>
-              <h2 className="text-4xl truncate text-ellipsis max-w-[45%]">
+              <h2 className=" md:text-4xl truncate text-ellipsis max-w-[90%] md:max-w-[45%]">
                 {post?.title}
               </h2>
               <p className="font-light italic">
                 {formatTimestamp(post?.createdAt)}
-              </p>
+              </p>{" "}
             </Link>
           </div>
         ))
       ) : (
-        <h2 className="text-2xl m-3">No posts yet!</h2>
+        <h2 className="text-2xl m-3 self-center">No posts yet!</h2>
       )}
     </>
   );

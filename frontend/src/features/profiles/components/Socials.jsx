@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
-import { ProfileEditContext } from "../context/ProfileEditContext";
+import { ProfileContext } from "../context/ProfileContext";
 import { StatusContext } from "../../notifications/context/StatusContext";
 import ProfileSection from "./ProfileSection";
 const Socials = () => {
-  const { profile, dispatch } = useContext(ProfileEditContext);
+  const { profile, dispatch } = useContext(ProfileContext);
   const { status } = useContext(StatusContext);
   const handleChange = (e) =>
     dispatch({
@@ -25,7 +25,11 @@ const Socials = () => {
           type="text"
           value={profile.linkedin}
           name="linkedin"
-          placeholder="What is your LinkedIn profile?"
+          placeholder={
+            profile?.self
+              ? "What is your LinkedIn profile?"
+              : "This user has not added their LinkedIn profile."
+          }
           onChange={handleChange}
           disabled={status === "success"}
         />
@@ -42,7 +46,11 @@ const Socials = () => {
           type="text"
           value={profile.twitter}
           name="twitter"
-          placeholder="What is your Twitter profile?"
+          placeholder={
+            profile?.self
+              ? "What is your Twitter profile?"
+              : "This user has not added their Twitter profile."
+          }
           onChange={handleChange}
           disabled={status === "success"}
         />

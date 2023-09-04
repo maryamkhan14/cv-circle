@@ -1,7 +1,7 @@
 import { createContext, useReducer, useMemo } from "react";
-export const ProfileEditContext = createContext();
+export const ProfileContext = createContext();
 
-export const profileEditContextReducer = (state, action) => {
+export const ProfileContextReducer = (state, action) => {
   switch (action.type) {
     case "UPDATE_PROFILE":
       return {
@@ -12,8 +12,8 @@ export const profileEditContextReducer = (state, action) => {
       return state;
   }
 };
-export const ProfileEditContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(profileEditContextReducer, {
+export const ProfileContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(ProfileContextReducer, {
     profile: {
       name: "",
       email: "",
@@ -29,8 +29,8 @@ export const ProfileEditContextProvider = ({ children }) => {
   const contextValue = useMemo(() => ({ ...state, dispatch }), [state]);
 
   return (
-    <ProfileEditContext.Provider value={contextValue}>
+    <ProfileContext.Provider value={contextValue}>
       {children}
-    </ProfileEditContext.Provider>
+    </ProfileContext.Provider>
   );
 };
