@@ -1,4 +1,4 @@
-import { ProfileEditContextProvider } from "../features/profiles/context/ProfileEditContext";
+import { ProfileContextProvider } from "../features/profiles/context/ProfileContext";
 import { useOutletContext } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -29,12 +29,12 @@ const Profile = () => {
       {queryEnabled && status === "loading" ? (
         <ProfileSkeleton />
       ) : (
-        <ProfileEditContextProvider>
+        <ProfileContextProvider>
           <ProfileDetails
             user={profile || user}
             self={!profile && user?.userId}
           />
-        </ProfileEditContextProvider>
+        </ProfileContextProvider>
       )}
     </StatusContextProvider>
   );
