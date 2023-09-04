@@ -11,6 +11,13 @@ describe("Users database tests", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
+  test("successfully retrieves a user", async () => {
+    const toGet = makeFakeRawUser();
+    const userId = { toGet };
+    const expected = { data: [toGet], error: null };
+    const actual = await usersDb.getById(userId);
+    expect(actual).toEqual(expected);
+  });
   test("successfully upserts a user", async () => {
     const toInsert = makeFakeRawUser();
     await usersDb.upsert(toInsert);

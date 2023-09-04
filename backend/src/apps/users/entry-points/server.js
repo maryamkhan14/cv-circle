@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 import "dotenv/config";
-import userRoutes from "./api/index.js";
+import { authRoutes, userRoutes } from "./api/index.js";
 import expressFileUpload from "express-fileupload";
 import express from "express";
 import { cacheClient as redisClient } from "../data-access/index.js";
@@ -48,7 +48,8 @@ app.use(
 
 app.use(configuredPassportInstance.initialize());
 app.use(configuredPassportInstance.session());
-app.use("/", userRoutes);
+app.use("/identity", userRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening on port ", process.env.PORT);
