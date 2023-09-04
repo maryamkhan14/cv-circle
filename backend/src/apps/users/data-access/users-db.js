@@ -1,6 +1,5 @@
 export default function buildUsersDb({ dbClient }) {
-  return Object.freeze({ upsert, update, remove });
-
+  return Object.freeze({ getById, upsert, update, remove });
   async function update({
     userId,
     email,
@@ -48,6 +47,15 @@ export default function buildUsersDb({ dbClient }) {
       .select(
         "userId:uid, name, email, profilePic:profile_pic, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, avatar, linkedin, twitter, bio"
       );
+    return { ...result, data: formatProfile(result.data) };
+  }
+  async function getById(userId) {
+    let result = await dbClient
+      .from("users")
+      .select(
+        "userId:uid, name, email, profilePic:profile_pic, voteHistory:users_votes_view(upvoted, downvoted), displayName:display_name, avatar, linkedin, twitter, bio"
+      )
+      .eq("uid", userId);
     return { ...result, data: formatProfile(result.data) };
   }
   function formatVoteHistory(voteHistory) {
