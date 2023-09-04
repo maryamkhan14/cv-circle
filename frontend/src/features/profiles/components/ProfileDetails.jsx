@@ -6,10 +6,10 @@ import PostsCreated from "./PostsCreated";
 import AccountActions from "./AccountActions";
 import { StatusContext } from "../../notifications/context/StatusContext";
 import StatusNotification from "../../notifications/components/StatusNotification";
-import { ProfileEditContext } from "../context/ProfileEditContext";
+import { ProfileContext } from "../context/ProfileContext";
 const ProfileDetails = ({ user, self }) => {
   const { status } = useContext(StatusContext);
-  const { dispatch: profileDispatch } = useContext(ProfileEditContext);
+  const { dispatch: profileDispatch } = useContext(ProfileContext);
   useEffect(() => {
     if (user) {
       profileDispatch({ type: "UPDATE_PROFILE", payload: { ...user, self } });

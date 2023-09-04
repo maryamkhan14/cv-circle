@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { ProfileEditContext } from "../context/ProfileEditContext";
+import { ProfileContext } from "../context/ProfileContext";
 import ProfileSection from "./ProfileSection";
 import { StatusContext } from "../../notifications/context/StatusContext";
 const BasicInformation = ({ enabled }) => {
-  const { profile, dispatch: profileDispatch } = useContext(ProfileEditContext);
+  const { profile, dispatch: profileDispatch } = useContext(ProfileContext);
   const { status, dispatch: statusDispatch } = useContext(StatusContext);
   const [profilePic, setProfilePic] = useState("");
 

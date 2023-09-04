@@ -1,11 +1,11 @@
 import { useState, useContext, useEffect } from "react";
-import { ProfileEditContext } from "../context/ProfileEditContext";
+import { ProfileContext } from "../context/ProfileContext";
 import { StatusContext } from "../../notifications/context/StatusContext";
 import { useUserUpdate } from "../hooks";
 import DeletePrompt from "./DeletePrompt";
 const AccountActions = ({ enabled }) => {
   const [deletePromptActive, setDeletePromptActive] = useState(false);
-  const { profile } = useContext(ProfileEditContext);
+  const { profile } = useContext(ProfileContext);
   const { dispatch } = useContext(StatusContext);
   const { status: updateStatus, mutateAsync: update, error } = useUserUpdate();
   const updateProfile = async (e) => {

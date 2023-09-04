@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
-import { ProfileEditContext } from "../context/ProfileEditContext";
+import { ProfileContext } from "../context/ProfileContext";
 import { StatusContext } from "../../notifications/context/StatusContext";
 import ProfileSection from "./ProfileSection";
 const Socials = () => {
-  const { profile, dispatch } = useContext(ProfileEditContext);
+  const { profile, dispatch } = useContext(ProfileContext);
   const { status } = useContext(StatusContext);
   const handleChange = (e) =>
     dispatch({
