@@ -1,9 +1,8 @@
 import { ProfileContextProvider } from "../features/profiles/context/ProfileContext";
 import { useOutletContext } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import { StatusContextProvider } from "../features/notifications/context/StatusContext";
-import useUserProfile from "../features/profiles/hooks/useUserProfile";
+import { useUserProfile } from "../features/profiles/hooks";
 import ProfileDetails from "../features/profiles/components/ProfileDetails";
 import ProfileSkeleton from "../features/profiles/components/ProfileSkeleton";
 const Profile = () => {
