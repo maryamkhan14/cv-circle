@@ -89,7 +89,11 @@ const PostDetails = ({ postId, updated, user }) => {
             </span>
             <PostOptions post={post} user={user} />
             {replyForm.active && <ReplyForm original={post} user={user} />}
-            <ReplyList replies={post?.replies} user={user} />
+            <ReplyList
+              replies={post?.replies}
+              user={user}
+              originalAuthorId={post.userId}
+            />
           </>
         )
       )}

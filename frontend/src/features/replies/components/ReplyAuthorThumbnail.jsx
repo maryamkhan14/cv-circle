@@ -6,7 +6,7 @@ const PostAuthorThumbnail = ({ profile, status }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   return (
     <div
-      className="flex w-full h-full border-2 border-slate-900 bg-slate-100 rounded-full hover:bg-slate-50 relative group"
+      className="flex w-8 h-8 border-2 border-slate-900 bg-slate-100 rounded-full hover:bg-slate-50 relative group"
       onMouseEnter={() => setShowDropdown(true)}
       onMouseLeave={() => setShowDropdown(false)}
     >

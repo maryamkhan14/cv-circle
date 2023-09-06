@@ -3,7 +3,7 @@ import { ReplyFormContextProvider } from "../context/ReplyFormContext";
 import Reply from "./Reply";
 import LoadingSvg from "../../posts/assets/LoadingSvg";
 const ReplyAuthor = lazy(() => import("./ReplyAuthor"));
-const ReplyChain = ({ reply, user }) => {
+const ReplyChain = ({ reply, user, originalAuthorId }) => {
   const calculateIndent = () => {
     let level = reply?.level || 0;
     switch (level - 1) {
@@ -34,7 +34,11 @@ const ReplyChain = ({ reply, user }) => {
             </div>
           }
         >
-          <ReplyAuthor authorId={reply?.userId} currentUser={user} />
+          <ReplyAuthor
+            authorId={reply?.userId}
+            currentUser={user}
+            isOriginalAuthor={reply?.userId === originalAuthorId}
+          />
         </Suspense>
 
         <ReplyFormContextProvider>
@@ -50,6 +54,7 @@ const ReplyChain = ({ reply, user }) => {
                 reply={reply?.replies[chainId]}
                 key={chainId}
                 user={user}
+                originalAuthorId={originalAuthorId}
               />
             </ReplyFormContextProvider>
           );
