@@ -1,5 +1,5 @@
 import ReplyChain from "./ReplyChain";
-const ReplyList = ({ replies, user }) => {
+const ReplyList = ({ replies, user, originalAuthorId }) => {
   return (
     <div className="flex flex-col border-t border-slate-300 py-3">
       {Object.keys(replies).length ? (
@@ -9,7 +9,12 @@ const ReplyList = ({ replies, user }) => {
           </h3>
           {Object.keys(replies).map((chainId) => {
             return (
-              <ReplyChain reply={replies[chainId]} key={chainId} user={user} />
+              <ReplyChain
+                reply={replies[chainId]}
+                key={chainId}
+                user={user}
+                originalAuthorId={originalAuthorId}
+              />
             );
           })}
         </div>
