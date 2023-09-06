@@ -33,6 +33,18 @@ let deleteSpy = vi.fn((user) => {
   };
 });
 
+let selectSpy = vi.fn((user) => {
+  return {
+    eq: vi.fn((_, userId) => {
+      return {
+        select: vi.fn(() => {
+          return { data: [makeFakeRawUser({ userId })], error: null };
+        }),
+      };
+    }),
+  };
+});
+
 let uploadBucketSpy = vi.fn(async () => {});
 
 const mockTestDbClient = {
@@ -50,6 +62,7 @@ const mockTestDbClient = {
       update: updateSpy,
       upsert: upsertSpy,
       delete: deleteSpy,
+      select: selectSpy,
     };
   }),
 };
