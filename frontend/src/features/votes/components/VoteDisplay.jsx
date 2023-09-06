@@ -10,7 +10,7 @@ const VoteDisplay = ({ existingUpvoteCount }) => {
   const [upvoteCount, setUpvoteCount] = useState(existingUpvoteCount);
   const [currentVote, setCurrentVote] = useState(0);
   return (
-    <div className="flex flex-col max-w-auto h-full rounded-lg justify-center items-center">
+    <div className="flex flex-row md:flex-col w-1/5 gap-2 md:w-auto max-w-auto rounded-lg items-center md:gap-0 justify-between md:justify-center">
       <UpvoteButton
         postId={postId}
         setUpvoteCount={setUpvoteCount}

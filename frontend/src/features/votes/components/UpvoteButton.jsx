@@ -19,7 +19,7 @@ const UpvoteButton = ({ voteContext, postId, setUpvoteCount }) => {
     e.preventDefault();
     if (userId) {
       let adjustment = upvoted.has(postId) ? -1 : 1;
-      setCurrentVote((prev) => (prev === 1 ? 0 : 1));
+      setCurrentVote((prev) => (prev === 1 || downvoted.has(postId) ? 0 : 1));
       setUpvoteCount((prev) => prev + adjustment);
       upvote({ postId, userId, voteCount: adjustment });
     }
