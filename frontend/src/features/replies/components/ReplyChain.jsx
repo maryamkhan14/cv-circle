@@ -1,7 +1,8 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { ReplyFormContextProvider } from "../context/ReplyFormContext";
 import Reply from "./Reply";
-
+import LoadingSvg from "../../posts/assets/LoadingSvg";
+const ReplyAuthor = lazy(() => import("./ReplyAuthor"));
 const ReplyChain = ({ reply, user }) => {
   const calculateIndent = () => {
     let level = reply?.level || 0;
@@ -22,10 +23,20 @@ const ReplyChain = ({ reply, user }) => {
     <>
       {/**Display the top-level reply of this chain */}
       <div
-        className={`flex flex-col w-full justify-between items-start pl-5 pt-3 ${
+        className={`flex w-full justify-between items-start pl-5 pt-3 ${
           !user && "mb-4"
-        } border-t-2 border-slate-300 min-h-3/4 ${calculateIndent()}`}
+        } border-t-2 border-slate-300 min-h-3/4 ${calculateIndent()} divide-x-2 divide-dashed divide-slate-300 divide`}
       >
+        <Suspense
+          fallback={
+            <div className="w-8 h-8">
+              <LoadingSvg />
+            </div>
+          }
+        >
+          <ReplyAuthor authorId={reply?.userId} currentUser={user} />
+        </Suspense>
+
         <ReplyFormContextProvider>
           <Reply reply={reply} user={user} />
         </ReplyFormContextProvider>
