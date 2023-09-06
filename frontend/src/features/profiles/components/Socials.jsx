@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import { StatusContext } from "../../notifications/context/StatusContext";
 import ProfileSection from "./ProfileSection";
-const Socials = () => {
+const Socials = ({ enabled }) => {
   const { profile, dispatch } = useContext(ProfileContext);
   const { status } = useContext(StatusContext);
   const handleChange = (e) =>
@@ -31,7 +31,7 @@ const Socials = () => {
               : "This user has not added their LinkedIn profile."
           }
           onChange={handleChange}
-          disabled={status === "success"}
+          disabled={!enabled}
         />
       </div>
       <div
@@ -52,7 +52,7 @@ const Socials = () => {
               : "This user has not added their Twitter profile."
           }
           onChange={handleChange}
-          disabled={status === "success"}
+          disabled={!enabled}
         />
       </div>
     </ProfileSection>
