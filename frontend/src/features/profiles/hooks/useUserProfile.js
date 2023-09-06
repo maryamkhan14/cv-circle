@@ -8,12 +8,12 @@ export default function useUserProfile(
   additionalInformation
 ) {
   const queryClient = useQueryClient();
-
   // by default: check toRetrieveId exists, is not the same as current user, and is numeric
   const fetchConditions =
     fetchConditionOverrides ??
     (!!toRetrieveId && currentUserId !== toRetrieveId && !isNaN(toRetrieveId));
   let willFetch = true;
+
   return useQuery({
     queryKey: ["profile", toRetrieveId],
     queryFn: async () => {
