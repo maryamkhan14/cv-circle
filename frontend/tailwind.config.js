@@ -17,6 +17,52 @@ export default {
       plainText: ["Barlow", "sans-serif"],
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            p: {
+              marginTop: ".75em",
+              marginBottom: ".75em",
+            },
+            h1: {
+              fontSize: "1.5em",
+              fontWeight: "medium",
+            },
+            h2: {
+              marginTop: "1em",
+              fontSize: "1.25em",
+              fontWeight: "medium",
+            },
+            "h1, h2": {
+              marginBottom: "0.6em",
+            },
+            h3: {
+              fontSize: "1.1em",
+              marginBottom: "0.4em",
+            },
+            hr: {
+              marginTop: "1.5em",
+              marginBottom: "1.5em",
+            },
+            "ul, ol": {
+              marginTop: "0",
+              marginBottom: "0",
+            },
+            "> ul > li > *:first-child": {
+              marginTop: "0",
+            },
+            "> ul > li > *:last-child": {
+              marginBottom: "0",
+            },
+            "> ol > li > *:first-child": {
+              marginTop: "0",
+            },
+            "> ol > li > *:last-child": {
+              marginBottom: "0",
+            },
+          },
+        },
+      },
       backgroundImage: {
         "hero-pattern": "url('./assets/Oreti.png')",
       },
@@ -28,5 +74,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };

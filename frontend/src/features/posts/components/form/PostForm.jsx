@@ -2,10 +2,10 @@ import React from "react";
 import { useEffect, useContext } from "react";
 import { usePostMutation } from "../../hooks";
 import { PostFormContext } from "../../context/PostFormContext";
-
 import StatusNotification from "../../../notifications/components/StatusNotification";
 import AttachmentInput from "./AttachmentInput";
 import { StatusContext } from "../../../notifications/context/StatusContext";
+import Textarea from "../../../../components/rich-textarea/Textarea";
 
 const PostForm = ({ toEditId, user, postToEdit }) => {
   const { post, dispatch: postFormDispatch } = useContext(PostFormContext);
@@ -67,15 +67,19 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
       });
     }
   };
-  const handleChange = (e) => {
+  const handleChange = (e, keyOverride, valueOverride) => {
+    let key = typeof keyOverride ? keyOverride : e.target.name;
+    let value = typeof valueOverride ? valueOverride : e.target.value;
     postFormDispatch({
       type: "UPDATE_POST",
-      payload: { ...post, [e.target.name]: e.target.value },
+      payload: {
+        ...post,
+        [key]: value,
+      },
     });
   };
-
   return (
-    <div className="flex items-stretch min-w-[80%] min-h-[80%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
+    <div className="flex items-stretch w-[90%] min-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <form className="rounded flex flex-col justify-between gap-5 p-3 min-h-full w-full">
         <h1 className="text-4xl font-semibold text-slate-900">
           {toEditId ? "Edit your post" : "Create a post"}
@@ -107,16 +111,14 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
             <label htmlFor="post-content" className="font-medium">
               Post*
             </label>
-            <textarea
-              id="post-content"
-              name="postContent"
-              rows="10"
-              cols="50"
-              value={post.postContent}
-              onChange={handleChange}
-              className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
-              disabled={status === "loading"}
-            ></textarea>
+            <div className="rounded border border-slate-800 flex w-full  flex-col">
+              <Textarea
+                onChange={(content) =>
+                  handleChange(null, "postContent", content)
+                }
+                initialContent={postToEdit?.postContent}
+              />
+            </div>
           </span>
 
           <AttachmentInput imgCdn={post.imgCdn} />
