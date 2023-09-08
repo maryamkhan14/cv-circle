@@ -1,6 +1,6 @@
 import { Suspense, useState } from "react";
 import PostAuthorDropdown from "./PostAuthorDropdown";
-import LoadingSvg from "../assets/LoadingSvg";
+import LoadingSvg from "../../../assets/LoadingSvg";
 import ErrorSvg from "../assets/ErrorSvg";
 const PostAuthorThumbnail = ({ profile, status }) => {
   const [showDropdown, setShowDropdown] = useState(false);
