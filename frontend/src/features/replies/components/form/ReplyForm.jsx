@@ -38,16 +38,6 @@ const ReplyForm = ({ original, user }) => {
         <label htmlFor="post-content" className="hidden">
           Reply
         </label>
-        {/*<textarea
-          id="post-content"
-          name="postContent"
-          rows="4"
-          cols="50"
-          value={post.postContent}
-          onChange={(e) => setPost({ ...post, postContent: e.target.value })}
-          className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
-        ></textarea>*/}
-
         <div className="rounded border border-slate-800 flex w-full  flex-col">
           <Textarea
             onChange={(content) => setPost({ ...post, postContent: content })}
