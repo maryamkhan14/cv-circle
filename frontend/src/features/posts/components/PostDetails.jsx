@@ -3,13 +3,13 @@ import { StatusContext } from "../../notifications/context/StatusContext";
 import { ReplyFormContext } from "../../replies/context/ReplyFormContext";
 import { usePost } from "../hooks";
 import { Link } from "react-router-dom";
-import VoteDisplay from "../../votes/components/VoteDisplay";
 import PostOptions from "./PostOptions";
 import ReplyForm from "../../replies/components/form/ReplyForm";
-import ReplyList from "../../replies/components/ReplyList";
 import StatusNotification from "../../notifications/components/StatusNotification";
 import PostSkeleton from "./PostSkeleton";
-import LoadingSvg from "../assets/LoadingSvg";
+import LoadingSvg from "../../../assets/LoadingSvg";
+const VoteDisplay = lazy(() => import("../../votes/components/VoteDisplay"));
+const ReplyList = lazy(() => import("../../replies/components/ReplyList"));
 const PostAuthor = lazy(() => import("./PostAuthor"));
 const PostDetails = ({ postId, updated, user }) => {
   let { status: postStatus, data: post, error } = usePost(postId);
@@ -37,10 +37,18 @@ const PostDetails = ({ postId, updated, user }) => {
           <>
             <span className="flex flex-col md:gap-5 ">
               <span className="flex flex-wrap md:flex-nowrap gap-5 pb-3 border-b border-slate-300 items-center w-full h-full justify-between">
-                <VoteDisplay
-                  postId={post.id}
-                  existingUpvoteCount={post.upvoteCount}
-                />
+                <Suspense
+                  fallback={
+                    <div className="w-8 h-8">
+                      <LoadingSvg />
+                    </div>
+                  }
+                >
+                  <VoteDisplay
+                    postId={post.id}
+                    existingUpvoteCount={post.upvoteCount}
+                  />
+                </Suspense>
                 <h1 className="text-4xl font-semibold text-slate-900 order-2 w-full md:grow md:order-none">
                   {post.title}
                 </h1>
@@ -87,11 +95,19 @@ const PostDetails = ({ postId, updated, user }) => {
             </span>
             <PostOptions post={post} user={user} />
             {replyForm.active && <ReplyForm original={post} user={user} />}
-            <ReplyList
-              replies={post?.replies}
-              user={user}
-              originalAuthorId={post.userId}
-            />
+            <Suspense
+              fallback={
+                <div className="self-center w-12 h-12">
+                  <LoadingSvg />
+                </div>
+              }
+            >
+              <ReplyList
+                replies={post?.replies}
+                user={user}
+                originalAuthorId={post.userId}
+              />
+            </Suspense>
           </>
         )
       )}

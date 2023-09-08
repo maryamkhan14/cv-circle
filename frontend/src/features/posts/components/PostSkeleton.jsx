@@ -3,7 +3,7 @@ import VoteDisplaySkeleton from "../../votes/components/VoteDisplaySkeleton";
 const PostSkeleton = () => {
   return (
     <>
-      <span className="flex flex-col md:gap-10 ">
+      <span className="flex flex-col md:gap-10 animate-pulse">
         <span className="flex flex-col md:flex-row gap-5 pb-3 border-b border-slate-300 items-center">
           <VoteDisplaySkeleton />
           <span className="h-5 rounded w-[70%] bg-gray-300"></span>
