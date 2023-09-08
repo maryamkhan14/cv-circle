@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { ReplyFormContextProvider } from "../context/ReplyFormContext";
 import Reply from "./Reply";
-import LoadingSvg from "../../posts/assets/LoadingSvg";
+import LoadingSvg from "../../../assets/LoadingSvg";
 const ReplyAuthor = lazy(() => import("./ReplyAuthor"));
 const ReplyChain = ({ reply, user, originalAuthorId }) => {
   const calculateIndent = () => {
