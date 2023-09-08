@@ -35,7 +35,7 @@ const PostDetails = ({ postId, updated, user }) => {
       ) : (
         post && (
           <>
-            <span className="flex flex-col md:gap-10 ">
+            <span className="flex flex-col md:gap-5 ">
               <span className="flex flex-wrap md:flex-nowrap gap-5 pb-3 border-b border-slate-300 items-center w-full h-full justify-between">
                 <VoteDisplay
                   postId={post.id}
@@ -55,14 +55,12 @@ const PostDetails = ({ postId, updated, user }) => {
                 </Suspense>
               </span>
               <span className="flex flex-col pt-3 md:pt-0 md:flex-row gap-3 justify-between">
-                <p
-                  className="text-lg flex-1 break-words whitespace-pre-wrap pr-5"
-                  lang="en"
-                >
-                  {post.postContent}
-                </p>
+                <div
+                  className="prose prose-li:marker:text-slate-700 md:max-w-[80%] mr-2"
+                  dangerouslySetInnerHTML={{ __html: post.postContent }}
+                />
 
-                <span className="flex flex-col pl-5 md:w-[25%] justify-center self-center">
+                <span className="flex flex-col md:pl-5 md:w-[25%] justify-center self-center">
                   <Link
                     to={
                       updated ? post.imgCdn + "?t=" + Date.now() : post.imgCdn
