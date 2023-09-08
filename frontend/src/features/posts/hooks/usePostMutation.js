@@ -8,7 +8,10 @@ export default function usePostMutation(toEditId) {
       toEditId ? updatePost(post, toEditId) : createPost(post),
     onSuccess: (data) => {
       if (toEditId) {
-        queryClient.setQueryData(["post", toEditId], (oldData) => data.updated);
+        console.log(data.updated);
+        queryClient.setQueryData(["post", toEditId], (oldData) => {
+          return { ...data.updated, replies: oldData.replies };
+        });
       } else {
         queryClient.setQueryData(
           ["post", data.posted.id],
