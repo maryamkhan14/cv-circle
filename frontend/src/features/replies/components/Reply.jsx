@@ -13,9 +13,10 @@ const Reply = ({ reply, user }) => {
           replyForm.active && replyForm.mode === "edit" ? "hidden" : ""
         } w-full`}
       >
-        <p className="flex-1 break-words whitespace-pre-wrap pr-5" lang="en">
-          {reply.postContent}
-        </p>
+        <div
+          className="prose prose-li:marker:text-slate-700 md:max-w-[80%] mr-2"
+          dangerouslySetInnerHTML={{ __html: reply.postContent }}
+        />
         {replyForm.active && replyForm.mode === "create" && (
           <ReplyForm original={reply} user={user} />
         )}

@@ -1,3 +1,4 @@
+import Textarea from "../../../../components/rich-textarea/Textarea";
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { ReplyFormContext } from "../../context/ReplyFormContext";
@@ -37,7 +38,7 @@ const ReplyForm = ({ original, user }) => {
         <label htmlFor="post-content" className="hidden">
           Reply
         </label>
-        <textarea
+        {/*<textarea
           id="post-content"
           name="postContent"
           rows="4"
@@ -45,7 +46,14 @@ const ReplyForm = ({ original, user }) => {
           value={post.postContent}
           onChange={(e) => setPost({ ...post, postContent: e.target.value })}
           className="border border-slate-800 w-full p-2 rounded whitespace-pre-wrap"
-        ></textarea>
+        ></textarea>*/}
+
+        <div className="rounded border border-slate-800 flex w-full  flex-col">
+          <Textarea
+            onChange={(content) => setPost({ ...post, postContent: content })}
+            initialContent={original?.postContent}
+          />
+        </div>
         <ReplyFormOptions clear={clear} post={post} />
       </span>
     </div>
