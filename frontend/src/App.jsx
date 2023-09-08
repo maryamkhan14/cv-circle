@@ -7,6 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./main.css";
+import "remixicon/fonts/remixicon.css";
 import useCurrentUser from "./features/authentication/hooks/useCurrentUser";
 import { useSessionStorage } from "./hooks/index";
 import Layout from "./layouts/Layout";

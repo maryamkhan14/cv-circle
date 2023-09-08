@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind theme;
+@tailwind colors;
 @layer base {
   html {
     @apply text-slate-800;
@@ -13,6 +15,9 @@
   h4 {
     @apply font-headings;
   }
+}
+.is-active {
+  background-color: theme("colors.gray.300");
 }
 
 html,
