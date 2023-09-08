@@ -1,5 +1,6 @@
 import "./main.css";
 import "remixicon/fonts/remixicon.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import React from "react";
 import { useState, useEffect, Suspense, lazy } from "react";
 import {
