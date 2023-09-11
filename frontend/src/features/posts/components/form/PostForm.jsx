@@ -51,10 +51,26 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
     });
   };
 
+  const validate = () => {
+    toast.dismiss();
+    if (!post.title?.trim()) {
+      toast.error("Please enter a title.");
+      return false;
+    }
+    if (!post.postContent?.trim()) {
+      toast.error("Please add content to your post.");
+      return false;
+    }
+    if (!toEditId && !post.file) {
+      toast.error("Please attach a file.");
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (toEditId || post.file) {
+    if (validate()) {
       toast.promise(submit({ ...post, id: toEditId }), {
         loading: "Preparing your post.",
         success: ({ posted, updated }) => {
@@ -74,8 +90,6 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
         },
         error: (error) => error.message,
       });
-    } else {
-      toast.error("Please attach a file.");
     }
   };
 
