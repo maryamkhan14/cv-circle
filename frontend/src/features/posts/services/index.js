@@ -1,22 +1,11 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
+import withErrorHandling from "../../../utils/withErrorHandling";
+
 const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
 
-const withErrorHandling = async (fn) => {
-  try {
-    return await fn();
-  } catch (e) {
-    console.log(e);
-    let { data, status } = e.response || {};
-    let errorMsg = data?.error;
-    throw {
-      message: errorMsg || "An unknown error has happened!",
-      status: status || e.code,
-    };
-  }
-};
 const getPost = async (postId) => {
   return await withErrorHandling(async () => {
     let { data } = await axios.get(`${DOMAIN}/api/posts/${postId}`, {
@@ -25,6 +14,7 @@ const getPost = async (postId) => {
     return data?.post;
   });
 };
+
 const getAllPosts = async () => {
   return await withErrorHandling(async () => {
     let { data } = await axios.get(`${DOMAIN}/api/posts/`, {
@@ -65,6 +55,7 @@ const votePost = async (vote) => {
     return voted;
   });
 };
+
 const deletePost = async (postId) => {
   return await withErrorHandling(async () => {
     let { data: deletedPost } = await axios.delete(
