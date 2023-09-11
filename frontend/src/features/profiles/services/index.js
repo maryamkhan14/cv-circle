@@ -1,22 +1,10 @@
 import axios from "axios";
+import withErrorHandling from "../../../utils/withErrorHandling";
 
 const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
 
-const withErrorHandling = async (fn) => {
-  try {
-    return await fn();
-  } catch (e) {
-    console.log(e);
-    let { data, status } = e.response || {};
-    let errorMsg = data?.error;
-    throw {
-      message: errorMsg || "An unknown error has happened!",
-      status: status || e.code,
-    };
-  }
-};
 const getUserProfile = async (userId) => {
   return await withErrorHandling(async () => {
     let { data } = await axios.get(`${DOMAIN}/api/users/identity/${userId}`, {

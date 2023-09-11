@@ -19,6 +19,7 @@ const PostAuthorThumbnail = ({ profile, status }) => {
           <img
             alt="Author profile picture"
             src={profile?.profilePic}
+            referrerPolicy="no-referrer"
             className="rounded-full w-full h-full "
           />
         )
