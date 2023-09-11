@@ -1,20 +1,23 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { usePostDeletion } from "../hooks";
 import { useInteractiveDispatch } from "../../../context/InteractiveContext";
 const DeletePrompt = ({ postId, cancel }) => {
+  const navigate = useNavigate();
   const { status, mutateAsync: remove } = usePostDeletion(postId);
   const interactiveDispatch = useInteractiveDispatch();
   const handleConfirmDelete = () => {
     toast.promise(remove(postId), {
       loading: "Post is being deleted.",
-      success: "Post has been deleted. Feel free to navigate away.",
+      success: "Post has been deleted.",
       error: (error) => error.message,
     });
   };
   useEffect(() => {
     if (status !== "idle")
       interactiveDispatch({ type: "UPDATE_INTERACTIVE", payload: status });
+    if (status === "success") navigate("/");
   }, [status]);
   return (
     <div className="flex gap-3 p-3 rounded text-red-800 border border-red-300 rounded-lg bg-red-50 mt-2 md:mt-0">
