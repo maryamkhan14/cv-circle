@@ -16,7 +16,7 @@ const SinglePost = () => {
         <ReplyFormContextProvider>
           <Suspense
             fallback={
-              <div className="w-full h-full">
+              <div className="w-full h-full p-3">
                 <PostSkeleton />
               </div>
             }
