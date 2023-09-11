@@ -1,11 +1,17 @@
-import { Suspense } from "react";
-import LoadingSvg from "../../notifications/assets/LoadingSvg";
-import ReplyChain from "./ReplyChain";
+import { Suspense, lazy } from "react";
+import LoadingSvg from "../../../assets/LoadingSvg";
+const ReplyChain = lazy(() => import("./ReplyChain"));
 const ReplyList = ({ replies, user, originalAuthorId }) => {
   return (
     <div className="flex flex-col border-t border-slate-300 py-3">
       {Object.keys(replies).length ? (
-        <Suspense fallback={<LoadingSvg />}>
+        <Suspense
+          fallback={
+            <div className="w-10 h-10">
+              <LoadingSvg />
+            </div>
+          }
+        >
           <div>
             <h3 className="text-3xl font-semibold text-slate-900 mb-5">
               Insights
