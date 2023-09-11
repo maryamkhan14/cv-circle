@@ -43,32 +43,52 @@ const AttachmentInput = ({ imgCdn }) => {
 
   return (
     <>
-      <span className="flex flex-wrap flex-col md:flex-row justify-center items-center">
-        <label
-          htmlFor="file"
-          className={`font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center disabled:bg-amber-800/50`}
-          disabled={!interactive}
+      <span className="flex flex-col md:flex-row gap-2  items-center">
+        <p className="font-medium text-start md:min-w-[5em]">Resume: </p>
+        <div
+          id="upload-file-input"
+          className="flex w-full justify-center mt-2 md:mt-0 md:justify-start  md:w-[90%] items-center gap-5 flex-wrap md:flex-nowrap"
         >
-          Attach your resume
-        </label>
+          <img
+            src={preview}
+            className={`h-[8em] ${!preview && "hidden"}`}
+            alt="A preview of your resume"
+          />
+          <label
+            htmlFor="file"
+            className={`font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center disabled:bg-amber-800/50 gap-2`}
+            disabled={!interactive}
+          >
+            Attach{" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15"
+              />
+            </svg>
+          </label>
 
-        <input
-          className="hidden"
-          type="file"
-          name="file"
-          id="file"
-          accept="image/png,image/jpg,image/jpeg,application/pdf"
-          onInput={handleSubmit}
-          onClick={(e) => {
-            e.target.value = "";
-          }}
-          disabled={!interactive}
-        />
-        <img
-          src={preview}
-          className={`m-2 h-[10em] ${!preview && "hidden"}`}
-          alt="A preview of your resume"
-        />
+          <input
+            className="hidden"
+            type="file"
+            name="file"
+            id="file"
+            accept="image/png,image/jpg,image/jpeg,application/pdf"
+            onInput={handleSubmit}
+            onClick={(e) => {
+              e.target.value = "";
+            }}
+            disabled={!interactive}
+          />
+        </div>
       </span>
     </>
   );

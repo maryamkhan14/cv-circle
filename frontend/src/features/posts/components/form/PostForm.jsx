@@ -109,8 +109,8 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
           } flex w-full h-full flex-col justify-between gap-5 md:gap-4 mr-1`}
         >
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
-            <label htmlFor="title" className="font-medium">
-              Title*
+            <label htmlFor="title" className="font-medium md:min-w-[5em]">
+              Title:
             </label>
             <input
               className="border border-slate-800 w-full p-2 rounded"
@@ -123,8 +123,11 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
             />
           </span>
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
-            <label htmlFor="post-content" className="font-medium">
-              Post*
+            <label
+              htmlFor="post-content"
+              className="font-medium w-fit md:min-w-[5em]"
+            >
+              Post:
             </label>
             <div className="rounded border border-slate-800 flex w-full  flex-col">
               <Textarea
