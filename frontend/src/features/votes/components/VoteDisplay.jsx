@@ -1,14 +1,24 @@
 import React from "react";
-import { useState } from "react";
-import { useParams, useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import UpvoteButton from "./UpvoteButton";
 import DownvoteButton from "./DownvoteButton";
 
 const VoteDisplay = ({ existingUpvoteCount }) => {
-  const [user] = useOutletContext();
+  const queryClient = useQueryClient();
   const { id: postId } = useParams();
   const [upvoteCount, setUpvoteCount] = useState(existingUpvoteCount);
   const [currentVote, setCurrentVote] = useState(0);
+  useEffect(() => {
+    queryClient.setQueryData(["posts"], (posts) =>
+      posts?.reduce((allPosts, currentPost) => {
+        if (currentPost.id.toString() === postId)
+          currentPost = { ...currentPost, upvoteCount };
+        return [...allPosts, currentPost];
+      }, [])
+    );
+  }, [upvoteCount]);
   return (
     <div className="flex flex-row md:flex-col w-1/5 gap-2 md:w-auto max-w-auto rounded-lg items-center md:gap-0 justify-between md:justify-center">
       <UpvoteButton
