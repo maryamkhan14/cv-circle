@@ -4,6 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { usePost } from "../features/posts/hooks";
 import PostForm from "../features/posts/components/form/PostForm";
 import { PostFormContextProvider } from "../features/posts/context/PostFormContext";
+import { InteractiveContextProvider } from "../context/InteractiveContext";
 
 const EditPost = () => {
   let { id: toEditId } = useParams(); //postId->toEditId
@@ -20,9 +21,11 @@ const EditPost = () => {
     }
   }, [data]);
   return (
-    <PostFormContextProvider>
-      <PostForm toEditId={toEditId} user={user} postToEdit={postToEdit} />
-    </PostFormContextProvider>
+    <InteractiveContextProvider>
+      <PostFormContextProvider>
+        <PostForm toEditId={toEditId} user={user} postToEdit={postToEdit} />
+      </PostFormContextProvider>
+    </InteractiveContextProvider>
   );
 };
 
