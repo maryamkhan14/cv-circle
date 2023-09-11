@@ -3,8 +3,10 @@ export const InteractiveContext = createContext();
 export const InteractiveDispatchContext = createContext();
 export const InteractiveContextReducer = (state, action) => {
   switch (action.type) {
+    case "DISABLE_INTERACTION":
+      return false;
     case "TOGGLE_INTERACTIVE":
-      return !state.interactive;
+      return !state;
     case "UPDATE_INTERACTIVE":
       return action.payload !== "loading" ? true : false;
     default:

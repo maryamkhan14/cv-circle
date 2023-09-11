@@ -18,12 +18,9 @@ const ProfileDetails = ({ user, self }) => {
       profileDispatch({ type: "UPDATE_PROFILE", payload: { ...user, self } });
     }
     if (!self) {
-      interactiveDispatch({ type: "TOGGLE_INTERACTIVE" });
+      interactiveDispatch({ type: "DISABLE_INTERACTION" });
     }
   }, []);
-  useEffect(() => {
-    console.log(interactive);
-  }, [interactive]);
   return (
     <form className="rounded flex shadow-md border m-3 w-11/12 md:w-11/12 bg-slate-100/50 flex-col items-center px-3 py-5 font-[700] text-center">
       <MainDetails user={user} />
