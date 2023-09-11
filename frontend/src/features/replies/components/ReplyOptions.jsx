@@ -49,7 +49,7 @@ const ReplyOptions = ({ user, reply }) => {
       <span
         className={`${
           replyForm.active && "hidden"
-        } flex self-center justify-center gap-5  md:gap-0 w-full md:w-auto md:self-end`}
+        } flex self-center justify-center gap-3 md:gap-0 w-full md:w-auto md:self-end`}
       >
         <button
           name="create"

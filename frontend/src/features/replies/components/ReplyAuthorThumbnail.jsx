@@ -1,5 +1,5 @@
 import { Suspense, useState } from "react";
-import PostAuthorDropdown from "../../posts/components/PostAuthorDropdown";
+import PostAuthorDropdown from "../../posts/components/author/PostAuthorDropdown";
 import LoadingSvg from "../../../assets/LoadingSvg";
 import ErrorSvg from "../../posts/assets/ErrorSvg";
 const PostAuthorThumbnail = ({ profile, status }) => {
