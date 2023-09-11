@@ -29,7 +29,7 @@ const ReplyChain = ({ reply, user, originalAuthorId }) => {
       >
         <Suspense
           fallback={
-            <div className="w-8 h-8">
+            <div className="w-8 h-8 mr-3">
               <LoadingSvg />
             </div>
           }
