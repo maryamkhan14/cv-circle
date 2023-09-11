@@ -51,10 +51,26 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
     });
   };
 
+  const validate = () => {
+    toast.dismiss();
+    if (!post.title?.trim()) {
+      toast.error("Please enter a title.");
+      return false;
+    }
+    if (!post.postContent?.trim()) {
+      toast.error("Please add content to your post.");
+      return false;
+    }
+    if (!toEditId && !post.file) {
+      toast.error("Please attach a file.");
+      return false;
+    }
+    return true;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (toEditId || post.file) {
+    if (validate()) {
       toast.promise(submit({ ...post, id: toEditId }), {
         loading: "Preparing your post.",
         success: ({ posted, updated }) => {
@@ -74,8 +90,6 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
         },
         error: (error) => error.message,
       });
-    } else {
-      toast.error("Please attach a file.");
     }
   };
 
@@ -95,8 +109,8 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
           } flex w-full h-full flex-col justify-between gap-5 md:gap-4 mr-1`}
         >
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
-            <label htmlFor="title" className="font-medium">
-              Title*
+            <label htmlFor="title" className="font-medium md:min-w-[5em]">
+              Title:
             </label>
             <input
               className="border border-slate-800 w-full p-2 rounded"
@@ -109,8 +123,11 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
             />
           </span>
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
-            <label htmlFor="post-content" className="font-medium">
-              Post*
+            <label
+              htmlFor="post-content"
+              className="font-medium w-fit md:min-w-[5em]"
+            >
+              Post:
             </label>
             <div className="rounded border border-slate-800 flex w-full  flex-col">
               <Textarea

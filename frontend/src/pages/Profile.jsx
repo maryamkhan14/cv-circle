@@ -15,10 +15,7 @@ const Profile = () => {
     status,
     error,
   } = useUserProfile(toRetrieveId, user?.userId);
-  /**
-   * if neither profile nor user exist, or if error fetching user, then
-   * use useEffect to toast error, navigate back home.
-   */
+
   useEffect(() => {
     if (error) {
       toast.error("Error loading profile.");
@@ -33,7 +30,7 @@ const Profile = () => {
         <ProfileContextProvider>
           <ProfileDetails
             user={profile || user}
-            self={user?.userId === toRetrieveId || (!profile && user?.userId)}
+            self={profile.userId === user?.userId}
           />
         </ProfileContextProvider>
       )}
