@@ -50,7 +50,7 @@ const ReplyFormOptions = ({ clear, post }) => {
         <button
           type="submit"
           aria-label="Submit"
-          className="text-slate-50 text-xs bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
+          className="text-slate-50 text-xs bg-amber-800 disabled:bg-amber-800/50 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
           onClick={handleSubmit}
           disabled={!interactive || replyStatus === "loading"}
         >
@@ -73,7 +73,7 @@ const ReplyFormOptions = ({ clear, post }) => {
         <button
           type="submit"
           aria-label="Cancel edit"
-          className="text-slate-50 text-xs bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
+          className="text-slate-50 text-xs bg-amber-800 disabled:bg-amber-800/50 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
           onClick={close}
           disabled={!interactive || replyStatus === "loading"}
         >
