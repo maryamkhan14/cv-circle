@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileSection from "./ProfileSection";
-import { StatusContext } from "../../notifications/context/StatusContext";
-const BasicInformation = ({ enabled }) => {
+import { useInteractive } from "../../../context/InteractiveContext";
+const BasicInformation = () => {
   const { profile, dispatch: profileDispatch } = useContext(ProfileContext);
-  const { status, dispatch: statusDispatch } = useContext(StatusContext);
+  const interactive = useInteractive();
   const [profilePic, setProfilePic] = useState("");
 
   const bufferToImage = (file) => {
@@ -32,14 +32,9 @@ const BasicInformation = ({ enabled }) => {
           payload: { ...profile, file },
         });
       } else {
-        statusDispatch({
-          type: "UPDATE_STATUS",
-          payload: {
-            status: "error",
-            statusMsg:
-              "Error: Please only attach .png, .jpg, or .jpeg files, and ensure your file is smaller than 1MB.",
-          },
-        });
+        toast.error(
+          "Please only attach .png, .jpg, .jpeg, or .pdf files, and ensure your file is smaller than 1MB."
+        );
       }
     } else {
       profileDispatch({
@@ -72,8 +67,7 @@ const BasicInformation = ({ enabled }) => {
               : profile.displayName || profile.name
           }
           name="displayName"
-          disabled={!enabled}
-          required="required"
+          disabled={!interactive}
           placeholder="By default, your full name is used."
           onChange={handleChange}
         />
@@ -89,7 +83,7 @@ const BasicInformation = ({ enabled }) => {
           className="border border-slate-800 md:w-[90%]  p-2 rounded bg-slate-50/50 focus:bg-slate-50 whitespace-pre-wrap disabled:bg-slate-50/50"
           name="bio"
           rows="5"
-          disabled={!enabled}
+          disabled={!interactive}
           maxLength={1000}
           value={profile.bio}
           onChange={handleChange}
@@ -118,7 +112,7 @@ const BasicInformation = ({ enabled }) => {
             <label
               htmlFor="file"
               className={`font-medium text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 rounded-lg px-5 py-2.5 flex items-center justify-center self-center ${
-                status === "loading" && "bg-amber-800/50 hover:bg-amber-800/50"
+                !interactive && "bg-amber-800/50 hover:bg-amber-800/50"
               }`}
             >
               <svg
@@ -145,7 +139,7 @@ const BasicInformation = ({ enabled }) => {
               id="file"
               accept="image/png,image/jpg,image/jpeg"
               onChange={handleChange}
-              disabled={!enabled}
+              disabled={!interactive}
             />
             <span className="flex self-center items-center">
               <svg
