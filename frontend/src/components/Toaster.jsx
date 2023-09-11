@@ -1,7 +1,6 @@
 import colors from "tailwindcss/colors";
 import { Toaster, ToastBar, toast } from "react-hot-toast";
 const DefaultToaster = () => {
-  console.log(colors);
   return (
     <Toaster
       position="bottom-right"
@@ -16,7 +15,6 @@ const DefaultToaster = () => {
         duration: 5000,
         className: "!rounded !md:max-w-[30%]",
         success: {
-          duration: 90909090,
           iconTheme: {
             primary: colors.blue[800],
             secondary: "white",
