@@ -1,50 +1,38 @@
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReplyDeletion } from "../hooks";
 import { ReplyFormContext } from "../context/ReplyFormContext";
-import { StatusContext } from "../../notifications/context/StatusContext";
-
+import {
+  useInteractive,
+  useInteractiveDispatch,
+} from "../../../context/InteractiveContext";
 const ReplyOptions = ({ user, reply }) => {
   // hide when reply form is active
   const { replyForm, dispatch: replyFormDispatch } =
     useContext(ReplyFormContext);
-  const { status, dispatch: statusDispatch } = useContext(StatusContext);
+  const interactive = useInteractive;
+  const interactiveDispatch = useInteractiveDispatch();
   const navigate = useNavigate();
-  const {
-    status: deleteStatus,
-    error,
-    mutateAsync: remove,
-  } = useReplyDeletion(reply.id);
+  const { status: deleteStatus, mutateAsync: remove } = useReplyDeletion(
+    reply.id
+  );
   const handleDeleteClick = async () => {
-    remove(reply.id);
+    toast.promise(remove(reply.id), {
+      loading: "Reply is being deleted.",
+      success: "Reply has been deleted.",
+      error: (error) => error.message,
+    });
   };
   useEffect(() => {
-    if (deleteStatus === "loading") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "loading",
-          statusMsg: "Reply is being deleted.",
-        },
+    if (deleteStatus !== "idle")
+      interactiveDispatch({
+        type: "UPDATE_INTERACTIVE",
+        payload: deleteStatus,
       });
-    } else if (deleteStatus === "success") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "success",
-          statusMsg: "Reply has been deleted.",
-        },
-      });
+    if (deleteStatus === "success") {
       navigate(".", { relative: "path" }); // force re-render
-    } else if (deleteStatus === "error") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: error.message,
-        },
-      });
     }
   }, [deleteStatus]);
   const handleReplyFormChange = (e) => {
@@ -69,7 +57,7 @@ const ReplyOptions = ({ user, reply }) => {
           aria-label="Create reply"
           className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
           onClick={handleReplyFormChange}
-          disabled={status === "loading"}
+          disabled={!interactive || deleteStatus === "loading"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +84,7 @@ const ReplyOptions = ({ user, reply }) => {
               aria-label="Edit reply"
               className="text-slate-50 bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
               onClick={handleReplyFormChange}
-              disabled={status === "loading"}
+              disabled={!interactive || deleteStatus === "loading"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +109,7 @@ const ReplyOptions = ({ user, reply }) => {
               aria-label="Delete reply"
               className="text-slate-50 bg-red-500 hover:bg-red-500/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
               onClick={handleDeleteClick}
-              disabled={status === "loading"}
+              disabled={!interactive || deleteStatus === "loading"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
