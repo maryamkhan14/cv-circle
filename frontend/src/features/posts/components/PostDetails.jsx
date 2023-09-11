@@ -88,13 +88,7 @@ const PostDetails = ({ postId, updated, user }) => {
             </span>
             <PostOptions post={post} user={user} />
             {replyForm.active && <ReplyForm original={post} user={user} />}
-            <Suspense
-              fallback={
-                <div className="self-center w-12 h-12">
-                  <LoadingSvg />
-                </div>
-              }
-            >
+            <Suspense>
               <ReplyList
                 replies={post?.replies}
                 user={user}
