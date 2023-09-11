@@ -1,13 +1,15 @@
+import { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { ProfileContextProvider } from "../features/profiles/context/ProfileContext";
-import { useOutletContext, useParams } from "react-router-dom";
-import { StatusContextProvider } from "../features/notifications/context/StatusContext";
+import { useOutletContext, useParams, useNavigate } from "react-router-dom";
 import { useUserProfile } from "../features/profiles/hooks";
 import ProfileDetails from "../features/profiles/components/ProfileDetails";
 import ProfileSkeleton from "../features/profiles/components/ProfileSkeleton";
+import { InteractiveContextProvider } from "../context/InteractiveContext";
 const Profile = () => {
   const [user] = useOutletContext();
   const { id: toRetrieveId } = useParams();
-
+  const navigate = useNavigate();
   const {
     data: profile,
     status,
@@ -17,9 +19,14 @@ const Profile = () => {
    * if neither profile nor user exist, or if error fetching user, then
    * use useEffect to toast error, navigate back home.
    */
-
+  useEffect(() => {
+    if (error) {
+      toast.error("Error loading profile.");
+      navigate("/");
+    }
+  }, [error]);
   return (
-    <StatusContextProvider>
+    <InteractiveContextProvider>
       {status === "loading" ? (
         <ProfileSkeleton />
       ) : (
@@ -30,7 +37,7 @@ const Profile = () => {
           />
         </ProfileContextProvider>
       )}
-    </StatusContextProvider>
+    </InteractiveContextProvider>
   );
 };
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Navbar = ({ user }) => {
   const [hidden, setHidden] = useState(true);
   return (
-    <div className="bg-slate-50/80 flex p-7 flex-col md:flex-row justify-between items-center gap-5 shadow-md w-full ">
+    <div className="bg-slate-50/80 flex p-7 flex-col md:flex-row justify-between items-center gap-5 shadow-md w-full md:h-5em">
       <Link to="/">
         <span className="flex items-center gap-3">
           <h1 className="text-blue-800 text-3xl font-[400] uppercase hover:cursor-pointer">
@@ -83,7 +83,7 @@ const Navbar = ({ user }) => {
                 <img
                   src={user.profilePic}
                   referrerPolicy="no-referrer"
-                  className="rounded-lg w-[3em] h-[3em]"
+                  className="rounded-lg md:w-[2.75em] aspect-square"
                 />
                 <h3 className="md:flex hidden font-medium truncate text-ellipsis mr-1">
                   {user.displayName}
@@ -94,7 +94,7 @@ const Navbar = ({ user }) => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-6 h-6 hidden md:block"
                 >
                   <path
                     strokeLinecap="round"
