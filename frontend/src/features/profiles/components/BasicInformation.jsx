@@ -49,7 +49,7 @@ const BasicInformation = () => {
     }
   }, [profile]);
   return (
-    <ProfileSection status={status}>
+    <ProfileSection>
       <h3 className="text-3xl">Basic information</h3>
       <div
         id="edit-name"
