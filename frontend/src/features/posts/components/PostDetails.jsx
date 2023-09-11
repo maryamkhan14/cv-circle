@@ -1,35 +1,28 @@
 import React, { lazy, Suspense, useEffect, useContext } from "react";
-import { StatusContext } from "../../notifications/context/StatusContext";
+import { toast } from "react-hot-toast";
 import { ReplyFormContext } from "../../replies/context/ReplyFormContext";
 import { usePost } from "../hooks";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PostOptions from "./PostOptions";
 import ReplyForm from "../../replies/components/form/ReplyForm";
-import StatusNotification from "../../notifications/components/StatusNotification";
 import PostSkeleton from "./PostSkeleton";
 import LoadingSvg from "../../../assets/LoadingSvg";
 const VoteDisplay = lazy(() => import("../../votes/components/VoteDisplay"));
 const ReplyList = lazy(() => import("../../replies/components/ReplyList"));
-const PostAuthor = lazy(() => import("./PostAuthor"));
+const PostAuthor = lazy(() => import("./author/PostAuthor"));
+
 const PostDetails = ({ postId, updated, user }) => {
+  const navigate = useNavigate();
   let { status: postStatus, data: post, error } = usePost(postId);
   const { replyForm } = useContext(ReplyFormContext);
-  const { dispatch } = useContext(StatusContext);
   useEffect(() => {
     if (error) {
-      dispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: error.message,
-        },
-      });
+      toast.error(error.message);
+      navigate("/network-error");
     }
-  }, [postStatus]);
+  }, [error]);
   return (
     <div className="rounded flex flex-col gap-5 p-3 max-h-full w-full">
-      <StatusNotification popup={"true"} />
-
       {postStatus === "loading" ? (
         <PostSkeleton />
       ) : (

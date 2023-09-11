@@ -1,31 +1,35 @@
+import { toast } from "react-hot-toast";
 import { ReplyFormContext } from "../../context/ReplyFormContext";
 import { useContext, useEffect } from "react";
 import { useReplyMutation } from "../../hooks";
 import { useNavigate } from "react-router-dom";
-import { StatusContext } from "../../../notifications/context/StatusContext";
+import {
+  useInteractive,
+  useInteractiveDispatch,
+} from "../../../../context/InteractiveContext";
 const ReplyFormOptions = ({ clear, post }) => {
-  const { replyForm, dispatch: replyFormDispatch } =
-    useContext(ReplyFormContext);
-  const { status, dispatch: statusDispatch } = useContext(StatusContext);
+  const { dispatch: replyFormDispatch } = useContext(ReplyFormContext);
+  const interactive = useInteractive();
+  const interactiveDispatch = useInteractiveDispatch();
   const navigate = useNavigate();
   const {
-    data,
     isLoading,
-    error,
     status: replyStatus,
     mutateAsync: submit,
   } = useReplyMutation(post.id);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(replyForm.mode);
-    submit(post);
+    toast.promise(submit(post), {
+      loading: "Reply is being saved.",
+      success: "Reply has been posted.",
+      error: (error) => error.message,
+    });
   };
   const close = () => {
     clear();
     replyFormDispatch({ type: "SWITCH_REPLY_FORM_ACTIVE" });
   };
   useEffect(() => {
-    console.log(post.path);
     replyFormDispatch({
       type: "SWITCH_REPLY_FORM_LOADING",
       payload: isLoading,
@@ -33,26 +37,9 @@ const ReplyFormOptions = ({ clear, post }) => {
   }, [isLoading]);
 
   useEffect(() => {
-    if (replyStatus === "loading") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "loading",
-          statusMsg: "Preparing your reply.",
-        },
-      });
-    } else if (replyStatus === "error") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: error.message,
-        },
-      });
-    } else if (replyStatus === "success") {
-      statusDispatch({
-        type: "RESET_STATUS",
-      });
+    if (replyStatus !== "idle")
+      interactiveDispatch({ type: "UPDATE_INTERACTIVE", payload: replyStatus });
+    if (replyStatus === "success") {
       navigate(".", { relative: "path" }); // force re-render
       close();
     }
@@ -65,7 +52,7 @@ const ReplyFormOptions = ({ clear, post }) => {
           aria-label="Submit"
           className="text-slate-50 text-xs bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
           onClick={handleSubmit}
-          disabled={status === "loading"}
+          disabled={!interactive || replyStatus === "loading"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +75,7 @@ const ReplyFormOptions = ({ clear, post }) => {
           aria-label="Cancel edit"
           className="text-slate-50 text-xs bg-amber-800 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center"
           onClick={close}
-          disabled={status === "loading"}
+          disabled={!interactive || replyStatus === "loading"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

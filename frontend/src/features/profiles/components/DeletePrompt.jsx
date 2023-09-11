@@ -1,14 +1,19 @@
+import { toast } from "react-hot-toast";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserDelete } from "../hooks";
-import { StatusContext } from "../../notifications/context/StatusContext";
 import { ProfileContext } from "../context/ProfileContext";
+import {
+  useInteractive,
+  useInteractiveDispatch,
+} from "../../../context/InteractiveContext";
 
-const DeletePrompt = ({ activeContext, disabled }) => {
+const DeletePrompt = ({ activeContext }) => {
   const [active, setActive] = activeContext;
+  const interactive = useInteractive();
+  const interactiveDispatch = useInteractiveDispatch();
   const navigate = useNavigate();
-  const { dispatch: statusDispatch } = useContext(StatusContext);
-  const { status: deleteStatus, mutateAsync: remove, error } = useUserDelete();
+  const { status, mutateAsync: remove } = useUserDelete();
 
   const [confirmation, setConfirmation] = useState("");
   const { profile } = useContext(ProfileContext);
@@ -16,37 +21,18 @@ const DeletePrompt = ({ activeContext, disabled }) => {
     e.preventDefault();
     if (confirmation === profile?.email) {
       setActive(!active);
-      await remove();
+      toast.promise(remove(), {
+        loading: "Account is being deleted.",
+        success: "Account has been deleted.",
+        error: (error) => error.message,
+      });
     }
   };
   useEffect(() => {
-    if (deleteStatus === "loading") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "loading",
-          statusMsg: "Account is being deleted.",
-        },
-      });
-    } else if (deleteStatus === "success") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "success",
-          statusMsg: "Account has been deleted. Feel free to log out.",
-        },
-      });
-      navigate("/logout");
-    } else if (deleteStatus === "error") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: error.message,
-        },
-      });
-    }
-  }, [deleteStatus]);
+    if (status !== "idle")
+      interactiveDispatch({ type: "UPDATE_INTERACTIVE", payload: status });
+    if (status === "success") navigate("/logout");
+  }, [status]);
   return (
     active && (
       <div className="flex flex-col gap-3 p-3 rounded text-red-800 border border-red-300 rounded-lg bg-red-50 mt-2 md:mt-0">
@@ -87,10 +73,10 @@ const DeletePrompt = ({ activeContext, disabled }) => {
             className="whitespace-nowrap text-slate-50 bg-red-500 hover:bg-red-500/90 disabled:bg-red-500/50  focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center self-center"
             onClick={handleConfirmDelete}
             disabled={
+              !interactive ||
               confirmation !== profile?.email ||
-              deleteStatus === "loading" ||
-              disabled === "true"
-            } //deleteStatus === "loading" || disabled === "true"
+              status === "loading"
+            }
           >
             Delete Anyway
           </button>

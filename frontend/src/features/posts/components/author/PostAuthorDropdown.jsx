@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import LoadingSvg from "../../../assets/LoadingSvg";
+import LoadingSvg from "../../../../assets/LoadingSvg";
 const PostAuthorDropdown = ({ author, status }) => {
   return status === "loading" ? (
     <LoadingSvg />

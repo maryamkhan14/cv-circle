@@ -27,7 +27,7 @@ const ReplyForm = ({ original, user }) => {
 
   // automatically populate fields if editing existing post
   useEffect(() => {
-    if (replyForm.mode == "edit") {
+    if (replyForm.mode === "edit") {
       setPost({ ...original });
     }
   }, []);

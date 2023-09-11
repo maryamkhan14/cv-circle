@@ -1,17 +1,17 @@
 import { useContext } from "react";
 import { ProfileContext } from "../context/ProfileContext";
-import { StatusContext } from "../../notifications/context/StatusContext";
 import ProfileSection from "./ProfileSection";
-const Socials = ({ enabled }) => {
+import { useInteractive } from "../../../context/InteractiveContext";
+const Socials = () => {
   const { profile, dispatch } = useContext(ProfileContext);
-  const { status } = useContext(StatusContext);
+  const interactive = useInteractive();
   const handleChange = (e) =>
     dispatch({
       type: "UPDATE_PROFILE",
       payload: { ...profile, [e.target.name]: e.target.value },
     });
   return (
-    <ProfileSection status={status}>
+    <ProfileSection>
       <h3 className="text-3xl">Socials</h3>
       <div
         id="edit-linkedin"
@@ -31,7 +31,7 @@ const Socials = ({ enabled }) => {
               : "This user has not added their LinkedIn profile."
           }
           onChange={handleChange}
-          disabled={!enabled}
+          disabled={!interactive}
         />
       </div>
       <div
@@ -52,7 +52,7 @@ const Socials = ({ enabled }) => {
               : "This user has not added their Twitter profile."
           }
           onChange={handleChange}
-          disabled={!enabled}
+          disabled={!interactive}
         />
       </div>
     </ProfileSection>

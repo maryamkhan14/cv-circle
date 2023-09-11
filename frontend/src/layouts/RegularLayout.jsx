@@ -1,8 +1,7 @@
+import Toaster from "../components/Toaster";
 import React, { Suspense, lazy } from "react";
 import LoadingSvg from "../assets/LoadingSvg";
-const Outlet = lazy(() =>
-  import("react-router-dom").then((module) => ({ default: module.Outlet }))
-);
+import { Outlet } from "react-router-dom";
 
 const RegularLayout = ({ user, setUser }) => {
   return (
@@ -17,6 +16,7 @@ const RegularLayout = ({ user, setUser }) => {
         }
       >
         <Outlet context={[user, setUser]} />
+        <Toaster />
       </Suspense>
     </div>
   );

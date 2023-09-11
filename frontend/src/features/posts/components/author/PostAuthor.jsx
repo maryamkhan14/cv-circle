@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useUserProfile } from "../../profiles/hooks";
+import { useUserProfile } from "../../../profiles/hooks";
 import PostAuthorThumbnail from "./PostAuthorThumbnail";
 const PostAuthor = ({ authorId, currentUser }) => {
   let { data: profile, status } = useUserProfile(authorId, currentUser?.userId);
