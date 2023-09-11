@@ -1,23 +1,21 @@
 import React from "react";
 import { useEffect, useContext } from "react";
 import { usePostMutation } from "../../hooks";
+import { Link } from "react-router-dom";
 import { PostFormContext } from "../../context/PostFormContext";
-import StatusNotification from "../../../notifications/components/StatusNotification";
 import AttachmentInput from "./AttachmentInput";
-import { StatusContext } from "../../../notifications/context/StatusContext";
 import Textarea from "../../../../components/rich-textarea/Textarea";
+import {
+  useInteractiveDispatch,
+  useInteractive,
+} from "../../../../context/InteractiveContext";
+import { toast } from "react-hot-toast";
 
 const PostForm = ({ toEditId, user, postToEdit }) => {
   const { post, dispatch: postFormDispatch } = useContext(PostFormContext);
-  const { status, dispatch: statusDispatch } = useContext(StatusContext);
-  const {
-    data,
-    isError,
-    isLoading,
-    error,
-    status: postStatus,
-    mutateAsync: submit,
-  } = usePostMutation(toEditId);
+  const interactiveDispatch = useInteractiveDispatch();
+  const interactive = useInteractive();
+  const { status: postStatus, mutateAsync: submit } = usePostMutation(toEditId);
   useEffect(() => {
     if (user) {
       postFormDispatch({
@@ -37,39 +35,13 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
   }, [postToEdit]);
 
   useEffect(() => {
-    if (postStatus !== "idle") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: postStatus,
-          statusMsg: isLoading
-            ? "Preparing your post."
-            : isError
-            ? error.message
-            : `Post ${toEditId ? "updated" : "created"} successfully.`,
-        },
-      });
-    }
+    if (postStatus !== "idle")
+      interactiveDispatch({ type: "UPDATE_INTERACTIVE", payload: postStatus });
   }, [postStatus]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (toEditId || post.file) {
-      submit({ ...post, id: toEditId });
-    } else {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: "Please attach a file.",
-        },
-      });
-    }
-  };
   const handleChange = (e, keyOverride, valueOverride) => {
-    let key = typeof keyOverride ? keyOverride : e.target.name;
-    let value = typeof valueOverride ? valueOverride : e.target.value;
+    let key = keyOverride !== undefined ? keyOverride : e.target.name;
+    let value = valueOverride !== undefined ? valueOverride : e.target.value;
     postFormDispatch({
       type: "UPDATE_POST",
       payload: {
@@ -78,6 +50,35 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
       },
     });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (toEditId || post.file) {
+      toast.promise(submit({ ...post, id: toEditId }), {
+        loading: "Preparing your post.",
+        success: ({ posted, updated }) => {
+          let id = posted?.id ?? updated?.id;
+          return (
+            <p>
+              Success! Click
+              <Link
+                className="text-blue-800 hover:text-blue-700 hover:underline-offset-4 font-medium underline underline-offset-2 decoration-1 decoration-dotted p-1"
+                to={`/post/${id}`}
+              >
+                here
+              </Link>
+              to view your {!!updated ? "updated" : "new"} post.
+            </p>
+          );
+        },
+        error: (error) => error.message,
+      });
+    } else {
+      toast.error("Please attach a file.");
+    }
+  };
+
   return (
     <div className="flex items-stretch w-[90%] min-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
       <form className="rounded flex flex-col justify-between gap-5 p-3 min-h-full w-full">
@@ -90,7 +91,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
         </p>
         <div
           className={`${
-            status === "loading" && "animate-pulse"
+            postStatus === "loading" && "animate-pulse"
           } flex w-full h-full flex-col justify-between gap-5 md:gap-4 mr-1`}
         >
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
@@ -104,7 +105,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
               value={post.title}
               onChange={handleChange}
               required="required"
-              disabled={status === "loading"}
+              disabled={!interactive}
             />
           </span>
           <span className="flex flex-col md:flex-row gap-2 justify-center items-center">
@@ -127,7 +128,7 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
               type="submit"
               className="text-slate-50 bg-amber-800 disabled:bg-amber-800/50 hover:bg-amber-800/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg px-5 py-2.5 flex items-center justify-center mr-2 mb-2"
               onClick={handleSubmit}
-              disabled={status === "loading"}
+              disabled={!interactive}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -146,8 +147,6 @@ const PostForm = ({ toEditId, user, postToEdit }) => {
               {toEditId ? "Update post" : "Create post"}
             </button>
           </span>
-
-          <StatusNotification popup="true" />
         </div>
       </form>
     </div>

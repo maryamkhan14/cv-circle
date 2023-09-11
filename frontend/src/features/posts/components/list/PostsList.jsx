@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { DateTime } from "luxon";
 import { Link } from "react-router-dom";
 import { usePostsListContext } from "../../context/PostsListContext";
-import { StatusContext } from "../../../notifications/context/StatusContext";
 const PostsList = ({ status, posts, error, loader }) => {
-  const { dispatch: statusDispatch } = useContext(StatusContext);
   const { dispatch: postsListDispatch, displayed } = usePostsListContext();
   const formatTimestamp = (timestamp) => {
     const luxonDateTime = DateTime.fromISO(timestamp);
@@ -16,21 +14,10 @@ const PostsList = ({ status, posts, error, loader }) => {
     }
   }, [posts]);
   useEffect(() => {
-    if (status !== "error") {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: { status: status, show: false },
-      });
-    } else {
-      statusDispatch({
-        type: "UPDATE_STATUS",
-        payload: {
-          status: "error",
-          statusMsg: error.message,
-        },
-      });
+    if (error) {
+      toast(error.message);
     }
-  }, [status]);
+  }, [error]);
   return status === "loading" ? (
     loader
   ) : (

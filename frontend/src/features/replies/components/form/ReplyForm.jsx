@@ -27,7 +27,7 @@ const ReplyForm = ({ original, user }) => {
 
   // automatically populate fields if editing existing post
   useEffect(() => {
-    if (replyForm.mode == "edit") {
+    if (replyForm.mode === "edit") {
       setPost({ ...original });
     }
   }, []);
@@ -41,7 +41,9 @@ const ReplyForm = ({ original, user }) => {
         <div className="rounded border border-slate-800 flex w-full  flex-col">
           <Textarea
             onChange={(content) => setPost({ ...post, postContent: content })}
-            initialContent={original?.postContent}
+            initialContent={
+              replyForm.mode === "edit" ? original?.postContent : null
+            }
           />
         </div>
         <ReplyFormOptions clear={clear} post={post} />

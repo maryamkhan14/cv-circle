@@ -5,7 +5,7 @@ const MenuBar = ({ editor }) => {
     return null;
   }
   return (
-    <div className="flex w-full gap-3 bg-slate-50 rounded-t menu-bar">
+    <div className="flex w-full gap-2 bg-slate-50 rounded-t menu-bar">
       <MenuBarButton
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -73,21 +73,21 @@ const MenuBar = ({ editor }) => {
       <MenuBarButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         activeArgs={["blockquote"]}
-        className="hidden md:block"
+        className="hidden lg:block"
         editor={editor}
       >
         <i className="ri-quote-text text-s"></i>
       </MenuBarButton>
       <MenuBarButton
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        className="hidden md:block"
+        className="hidden lg:block"
         editor={editor}
       >
         <i className="ri-separator text-s"></i>
       </MenuBarButton>
       <MenuBarButton
         onClick={() => editor.chain().focus().setHardBreak().run()}
-        className="hidden md:block"
+        className="hidden lg:block"
         editor={editor}
       >
         <i className="ri-text-wrap text-s"></i>{" "}
@@ -95,7 +95,7 @@ const MenuBar = ({ editor }) => {
       <MenuBarButton
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().chain().focus().undo().run()}
-        className="hidden md:block"
+        className="hidden lg:block"
         editor={editor}
       >
         <i className="ri-arrow-go-back-line text-s"></i>
@@ -104,7 +104,7 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().chain().focus().redo().run()}
         editor={editor}
-        className="hidden md:block disabled:bg-gray-200"
+        className="hidden lg:block disabled:bg-gray-200"
       >
         <i className="ri-arrow-go-forward-line text-s"></i>{" "}
       </MenuBarButton>

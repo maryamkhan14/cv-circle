@@ -66,11 +66,11 @@ export default {
       backgroundImage: {
         "hero-pattern": "url('./assets/Oreti.png')",
       },
-      padding: {
-        "lvl-1": "0.5em",
-        "lvl-2": "1.5em",
-        "lvl-3": "2em",
-        "lvl-4": "3em",
+      margin: {
+        "lvl-1": "0em",
+        "lvl-2": "2em",
+        "lvl-3": "3.5em",
+        "lvl-4": "5em",
       },
     },
   },
