@@ -1,9 +1,9 @@
 import { ProfileContextProvider } from "../features/profiles/context/ProfileContext";
 import { useOutletContext, useParams } from "react-router-dom";
-import { StatusContextProvider } from "../features/notifications/context/StatusContext";
 import { useUserProfile } from "../features/profiles/hooks";
 import ProfileDetails from "../features/profiles/components/ProfileDetails";
 import ProfileSkeleton from "../features/profiles/components/ProfileSkeleton";
+import { InteractiveContextProvider } from "../context/InteractiveContext";
 const Profile = () => {
   const [user] = useOutletContext();
   const { id: toRetrieveId } = useParams();
@@ -19,7 +19,7 @@ const Profile = () => {
    */
 
   return (
-    <StatusContextProvider>
+    <InteractiveContextProvider>
       {status === "loading" ? (
         <ProfileSkeleton />
       ) : (
@@ -30,7 +30,7 @@ const Profile = () => {
           />
         </ProfileContextProvider>
       )}
-    </StatusContextProvider>
+    </InteractiveContextProvider>
   );
 };
 

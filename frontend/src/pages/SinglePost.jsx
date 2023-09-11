@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { useParams, useOutletContext } from "react-router-dom";
 import { ReplyFormContextProvider } from "../features/replies/context/ReplyFormContext";
-import { StatusContextProvider } from "../features/notifications/context/StatusContext";
+import { InteractiveContextProvider } from "../context/InteractiveContext";
 import PostSkeleton from "../features/posts/components/PostSkeleton";
 const PostDetails = lazy(() =>
   import("../features/posts/components/PostDetails")
@@ -11,7 +11,7 @@ const SinglePost = () => {
   const { id: postId } = useParams();
 
   return (
-    <StatusContextProvider>
+    <InteractiveContextProvider>
       <div className="flex items-stretch w-11/12 max-h-[90%] m-3 gap-5 p-3 rounded shadow-md border bg-slate-100/50">
         <ReplyFormContextProvider>
           <Suspense
@@ -25,7 +25,7 @@ const SinglePost = () => {
           </Suspense>
         </ReplyFormContextProvider>
       </div>
-    </StatusContextProvider>
+    </InteractiveContextProvider>
   );
 };
 
