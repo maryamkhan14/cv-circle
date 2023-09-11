@@ -1,11 +1,11 @@
 import axios from "axios";
-
+import withErrorHandling from "../../../utils/withErrorHandling";
 const DOMAIN = import.meta.env.DEV
   ? "http://localhost"
   : "https://cv-circle.com";
 
 const getCurrentUser = async () => {
-  try {
+  return await withErrorHandling(async () => {
     let { data } = await axios.get(`${DOMAIN}/api/users/auth/success`, {
       withCredentials: true,
       headers: {
@@ -14,33 +14,18 @@ const getCurrentUser = async () => {
         "Access-Control-Allow-Credentials": true,
       },
     });
-    let { user } = data;
-    return user;
-  } catch (e) {
-    let errorMsg = e.response?.data?.error;
-    let status = e.response?.status;
-    throw {
-      message: errorMsg || "An unknown error has happened!",
-      status: status || e.code,
-    };
-  }
+    return data.user;
+  });
 };
 const postLogout = async () => {
-  try {
+  return await withErrorHandling(async () => {
     let { data: authStatus } = await axios.post(
       `${DOMAIN}/api/users/auth/logout`,
       {},
       { withCredentials: true }
     );
     return authStatus;
-  } catch (e) {
-    let errorMsg = e.response?.data?.error;
-    let status = e.response?.status;
-    throw {
-      message: errorMsg || "An unknown error has happened!",
-      status: status || e.code,
-    };
-  }
+  });
 };
 
 const AUTH_URL_GITHUB = `${DOMAIN}/api/users/auth/github`;
