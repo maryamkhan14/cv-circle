@@ -7,13 +7,34 @@ This web app allows users to exchange resumes and cover letters and receive feed
 ![Architectural Diagram](architectural-diagram.png "Architectural Diagram")
 _Made with Eraser_
 
+## Technologies used
+
+**Frontend**
+
+- React
+- React Query - client-side caching to reduce server requests
+- TailwindCSS
+
+  **Backend**
+
+- ExpressJS - NodeJS framework for building lightweight servers
+- Kafka - event streams to synchronize information across microservices while keeping them loosely coupled
+- Redis - caching for backend microservices
+- Nginx - reverse proxy for backend microservices
+- Docker - containerizing services
+- Vitest - testing services
+- Passport.js - OAuth authentication handling
+- Supabase - hosted PostgreSQL database
+
+## Design Decisions
+
+Throughout creating this project, I tried to make thoughtful design & architectural choices. For the backend, I used domain-driven design, so it is split by feature ("posts" and "users" in this case). Additionally, I implemented clean architecture principles as much as possible. The modules in each feature use parameter-based dependency injection and implement inversion of control. This also enables increased flexibility in unit tests.
+
+On the frontend, too, I organized the components by domain. I also used industry-standard technology like React Query for client-side caching, and React Suspense for asynchronous operation management.
+
 ## Video Demonstration
 
-Coming soon! Head over to [CV Circle](https://www.cv-circle.onrender.com) to try the app for yourself
-
-## Notes
-
-Describe any challenges encountered while building the app.
+Coming soon! Head over to [CV Circle](https://www.cv-circle.onrender.com) to try the app for yourself.
 
 ## License
 
