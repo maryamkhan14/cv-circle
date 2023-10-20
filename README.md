@@ -9,13 +9,13 @@ _Made with Eraser_
 
 ## Technologies used
 
-**Frontend**
+### Frontend
 
 - React
 - React Query - client-side caching to reduce server requests
 - TailwindCSS
 
-  **Backend**
+### Backend
 
 - ExpressJS - NodeJS framework for building lightweight servers
 - Kafka - event streams to synchronize information across microservices while keeping them loosely coupled
