@@ -15,6 +15,7 @@ const LoggedOut = () => {
   });
   useEffect(() => {
     if (user) {
+      console.log("Found user. Logging out...");
       mutateAsync(
         {},
         {
@@ -28,6 +29,7 @@ const LoggedOut = () => {
         }
       );
     } else {
+      console.log("No user found. Redirecting...");
       navigate("/");
     }
   }, []);
